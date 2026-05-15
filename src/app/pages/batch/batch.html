@@ -81,33 +81,6 @@
     </as-split-area>
 
     <as-split-area [size]="33" [minSize]="18">
-      <section class="split-panel" aria-labelledby="image-title">
-        <div class="panel-heading">
-          <h2 id="image-title">Image</h2>
-          @if (selectedObject()) {
-            <span>{{ selectedObject()?.model }}</span>
-          }
-        </div>
-
-        @if (loadingImage()) {
-          <mat-progress-bar mode="indeterminate" aria-label="Loading image" />
-        }
-
-        @if (imageError()) {
-          <p class="error-message panel-message">{{ imageError() }}</p>
-        }
-
-        <div class="image-viewer">
-          @if (imageUrl(); as imageUrl) {
-            <img [src]="imageUrl" [alt]="'Object image ' + selectedObject()?.uuid" />
-          } @else if (!loadingImage() && !imageError()) {
-            <p class="empty-message">No object selected.</p>
-          }
-        </div>
-      </section>
-    </as-split-area>
-
-    <as-split-area [size]="33" [minSize]="18">
       <section class="split-panel" aria-labelledby="metadata-title">
         <div class="panel-heading">
           <h2 id="metadata-title">Metadata</h2>
@@ -162,6 +135,33 @@
         } @else if (!loadingMetadata() && !metadataError()) {
           <p class="empty-message">No object selected.</p>
         }
+      </section>
+    </as-split-area>
+
+    <as-split-area [size]="33" [minSize]="18">
+      <section class="split-panel" aria-labelledby="image-title">
+        <div class="panel-heading">
+          <h2 id="image-title">Image</h2>
+          @if (selectedObject()) {
+            <span>{{ selectedObject()?.model }}</span>
+          }
+        </div>
+
+        @if (loadingImage()) {
+          <mat-progress-bar mode="indeterminate" aria-label="Loading image" />
+        }
+
+        @if (imageError()) {
+          <p class="error-message panel-message">{{ imageError() }}</p>
+        }
+
+        <div class="image-viewer">
+          @if (imageUrl(); as imageUrl) {
+            <img [src]="imageUrl" [alt]="'Object image ' + selectedObject()?.uuid" />
+          } @else if (!loadingImage() && !imageError()) {
+            <p class="empty-message">No object selected.</p>
+          }
+        </div>
       </section>
     </as-split-area>
   </as-split>
