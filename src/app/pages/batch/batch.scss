@@ -111,7 +111,7 @@ h2 {
 }
 
 .save-metadata-button.is-active {
-  color: var(--app-purple, #6d3bbf);
+  color: var(--app-purple, #2e4d94);
 }
 
 .save-metadata-button svg {
@@ -165,23 +165,23 @@ td {
 }
 
 :is(.object-row, .metadata-row).confidence-zero {
-  background: #2994e3;
+  background: #6FA8DC;
 }
 
 :is(.object-row, .metadata-row).confidence-low {
-  background: #e4304b;
+  background: #EE6C73;
 }
 
 :is(.object-row, .metadata-row).confidence-medium {
-  background: #eacb34;
+  background: #F4D35E;
 }
 
 :is(.object-row, .metadata-row).confidence-high {
-  background: #25b830;
+  background: #7EDFA1;
 }
 
 :is(.object-row, .metadata-row).confidence-perfect {
-  background: #8e24aa;
+  background: #B0B8C1;
 }
 
 .object-row:hover,
