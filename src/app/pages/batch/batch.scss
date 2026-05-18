@@ -142,10 +142,39 @@ td {
   cursor: pointer;
 }
 
+.object-row td,
+.metadata-row td {
+  background: inherit;
+}
+
+.object-row.confidence-zero,
+.metadata-row.confidence-zero {
+  background: #2994e3;
+}
+
+.object-row.confidence-low,
+.metadata-row.confidence-low {
+  background: #e4304b;
+}
+
+.object-row.confidence-medium,
+.metadata-row.confidence-medium {
+  background: #eacb34;
+}
+
+.object-row.confidence-high,
+.metadata-row.confidence-high {
+  background: #25b830;
+}
+
+.object-row.confidence-perfect,
+.metadata-row.confidence-perfect {
+  background: #8e24aa;
+}
+
 .object-row:hover,
-.object-row:focus-visible,
-.object-row.selected-row {
-  background: var(--app-purple-soft, #efe7fb);
+.object-row:focus-visible {
+  filter: saturate(1.08) brightness(0.98);
 }
 
 .object-row:focus-visible {

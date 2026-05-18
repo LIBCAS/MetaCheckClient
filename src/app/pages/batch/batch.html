@@ -63,6 +63,7 @@
               mat-row
               *matRowDef="let row; columns: displayedObjectColumns"
               class="object-row"
+              [ngClass]="confidenceRowClass(row.percentage)"
               [class.selected-row]="isSelectedObject(row)"
               [attr.aria-label]="'Select object ' + row.uuid"
               [attr.aria-selected]="isSelectedObject(row)"
@@ -129,7 +130,12 @@
               </ng-container>
 
               <tr mat-header-row *matHeaderRowDef="displayedMetadataColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedMetadataColumns"></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedMetadataColumns"
+                class="metadata-row"
+                [ngClass]="metadataConfidenceRowClass(row)"
+              ></tr>
             </table>
           </div>
         } @else if (!loadingMetadata() && !metadataError()) {

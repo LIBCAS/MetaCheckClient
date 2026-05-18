@@ -61,7 +61,7 @@ describe('Batch', () => {
       {
         uuid: '6d848d9c-0879-4f84-86db-9f49ea07fb99',
         model: 'page',
-        percentage: 95.5,
+        percentage: 0.955,
       },
     ]);
 
@@ -83,7 +83,13 @@ describe('Batch', () => {
           field: 'title',
           originalValue: 'Original title',
           editedValue: 'Edited title',
-          percentage: '99',
+          percentage: null,
+        },
+        {
+          field: 'author',
+          originalValue: 'Original author',
+          editedValue: null,
+          percentage: null,
         },
       ],
     });
@@ -97,6 +103,10 @@ describe('Batch', () => {
     expect(compiled.textContent).toContain('Batch 42');
     expect(compiled.textContent).toContain('6d848d9c-0879-4f84-86db-9f49ea07fb99');
     expect(compiled.textContent).toContain('page');
+    expect(compiled.querySelector('.object-row')?.classList).toContain('confidence-high');
+    const metadataRows = compiled.querySelectorAll('.metadata-row');
+    expect(metadataRows[0]?.classList).toContain('confidence-perfect');
+    expect(metadataRows[1]?.classList).toContain('confidence-zero');
     expect(compiled.querySelector('img')?.getAttribute('src')).toBe('blob:object-image');
     expect(compiled.textContent).toContain('Original title');
     expect(compiled.textContent).toContain('Edited title');

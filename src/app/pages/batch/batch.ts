@@ -1,4 +1,4 @@
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, NgClass } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,12 +8,18 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SplitAreaComponent, SplitComponent } from 'angular-split';
 import { finalize } from 'rxjs';
 
-import { MetadataResponse, MetacheckApiService, ObjectInfo } from '../../services/metacheck-api.service';
+import {
+  ElementInfo,
+  MetadataResponse,
+  MetacheckApiService,
+  ObjectInfo,
+} from '../../services/metacheck-api.service';
 
 @Component({
   selector: 'app-batch',
   imports: [
     DecimalPipe,
+    NgClass,
     MatButtonModule,
     MatProgressBarModule,
     MatTableModule,
@@ -90,6 +96,44 @@ export class Batch implements OnInit, OnDestroy {
 
   protected isSelectedObject(object: ObjectInfo): boolean {
     return this.selectedObject()?.uuid === object.uuid;
+  }
+
+  protected confidenceRowClass(percentage: number | null | undefined): string | null {
+    if (percentage === null || percentage === undefined) {
+      return null;
+    }
+
+    if (percentage <= 0) {
+      return 'confidence-zero';
+    }
+
+    if (percentage < 0.7) {
+      return 'confidence-low';
+    }
+
+    if (percentage < 0.9) {
+      return 'confidence-medium';
+    }
+
+    if (percentage < 1) {
+      return 'confidence-high';
+    }
+
+    return 'confidence-perfect';
+  }
+
+  protected metadataConfidenceRowClass(element: ElementInfo): string | null {
+    if (this.hasValue(element.editedValue)) {
+      return this.confidenceRowClass(1);
+    }
+
+    const percentage = this.parsePercentage(element.percentage);
+
+    if (percentage === null && this.hasValue(element.originalValue)) {
+      return this.confidenceRowClass(0);
+    }
+
+    return this.confidenceRowClass(percentage);
   }
 
   private loadObjects(batchId: number): void {
@@ -219,5 +263,18 @@ export class Batch implements OnInit, OnDestroy {
       URL.revokeObjectURL(imageUrl);
       this.imageUrl.set(null);
     }
+  }
+
+  private parsePercentage(value: string | number | null | undefined): number | null {
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
+
+    const percentage = Number(value);
+    return Number.isFinite(percentage) ? percentage : null;
+  }
+
+  private hasValue(value: string | null | undefined): boolean {
+    return value !== null && value !== undefined && value.trim() !== '';
   }
 }
