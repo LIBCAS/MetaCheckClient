@@ -91,6 +91,18 @@ describe('Batch', () => {
           editedValue: null,
           percentage: null,
         },
+        {
+          field: 'pageType',
+          originalValue: 'NormalPage',
+          editedValue: 'CustomPageType',
+          percentage: '0.8',
+        },
+        {
+          field: 'side',
+          originalValue: 'left',
+          editedValue: null,
+          percentage: '0.8',
+        },
       ],
     });
 
@@ -103,13 +115,94 @@ describe('Batch', () => {
     expect(compiled.textContent).toContain('Batch 42');
     expect(compiled.textContent).toContain('6d848d9c-0879-4f84-86db-9f49ea07fb99');
     expect(compiled.textContent).toContain('page');
+    expect(compiled.textContent).toContain('95,5 %');
+    expect(compiled.textContent).toContain('80 %');
     expect(compiled.querySelector('.object-row')?.classList).toContain('confidence-high');
     const metadataRows = compiled.querySelectorAll('.metadata-row');
     expect(metadataRows[0]?.classList).toContain('confidence-perfect');
     expect(metadataRows[1]?.classList).toContain('confidence-zero');
     expect(compiled.querySelector('img')?.getAttribute('src')).toBe('blob:object-image');
     expect(compiled.textContent).toContain('Original title');
-    expect(compiled.textContent).toContain('Edited title');
+    expect(compiled.querySelector<HTMLInputElement>('.metadata-edit-control')?.value).toBe(
+      'Edited title',
+    );
+    const metadataSelects = compiled.querySelectorAll<HTMLSelectElement>('select.metadata-edit-control');
+    expect(metadataSelects[0].value).toBe('CustomPageType');
+    expect([...metadataSelects[0].options].map((option) => option.value)).toContain('CustomPageType');
+    expect([...metadataSelects[1].options].map((option) => option.value)).toContain('right');
     expect(createObjectUrl).toHaveBeenCalledOnce();
+
+    const saveButton = compiled.querySelector<HTMLButtonElement>('.save-metadata-button');
+    expect(saveButton?.disabled).toBe(true);
+
+    const editedInput = compiled.querySelector<HTMLInputElement>('input.metadata-edit-control');
+    editedInput!.value = 'Changed title';
+    editedInput!.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    expect(saveButton?.disabled).toBe(false);
+    saveButton!.click();
+
+    const updateRequest = http.expectOne('/api/rest/v1/object/metadata');
+    expect(updateRequest.request.method).toBe('POST');
+    expect(updateRequest.request.body.get('batchId')).toBe('42');
+    expect(updateRequest.request.body.get('pid')).toBe('6d848d9c-0879-4f84-86db-9f49ea07fb99');
+    expect(JSON.parse(updateRequest.request.body.get('metadata'))).toEqual({
+      uuid: '6d848d9c-0879-4f84-86db-9f49ea07fb99',
+      model: 'page',
+      elementsInfoResponse: [
+        {
+          field: 'title',
+          originalValue: 'Original title',
+          editedValue: 'Changed title',
+          percentage: null,
+        },
+        {
+          field: 'author',
+          originalValue: 'Original author',
+          editedValue: null,
+          percentage: null,
+        },
+        {
+          field: 'pageType',
+          originalValue: 'NormalPage',
+          editedValue: 'CustomPageType',
+          percentage: '0.8',
+        },
+        {
+          field: 'side',
+          originalValue: 'left',
+          editedValue: null,
+          percentage: '0.8',
+        },
+      ],
+    });
+    updateRequest.flush({
+      uuid: '6d848d9c-0879-4f84-86db-9f49ea07fb99',
+      model: 'page',
+      elementsInfoResponse: [
+        {
+          field: 'title',
+          originalValue: 'Original title',
+          editedValue: 'Changed title',
+          percentage: null,
+        },
+      ],
+    });
+
+    const refreshRequest = http.expectOne('/api/rest/v1/object?batchId=42');
+    expect(refreshRequest.request.method).toBe('GET');
+    refreshRequest.flush([
+      {
+        uuid: '6d848d9c-0879-4f84-86db-9f49ea07fb99',
+        model: 'page',
+        percentage: 1,
+      },
+    ]);
+
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('.object-row')?.classList).toContain('selected-row');
   });
 });
