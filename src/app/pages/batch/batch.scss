@@ -45,6 +45,47 @@ h1 {
   font: var(--mat-sys-display-small);
 }
 
+.batch-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 0;
+}
+
+.batch-summary div {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  max-width: 18rem;
+  min-height: 22px;
+  padding: 2px 8px;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-extra-small);
+  background: var(--mat-sys-surface-container-low);
+}
+
+.batch-summary dt,
+.batch-summary dd {
+  margin: 0;
+  min-width: 0;
+  letter-spacing: 0;
+}
+
+.batch-summary dt {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-medium);
+  font-weight: 700;
+}
+
+.batch-summary dd {
+  overflow: hidden;
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-small);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 h2 {
   font: var(--mat-sys-title-medium);
   font-weight: 700;

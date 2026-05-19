@@ -55,6 +55,23 @@ describe('Batch', () => {
   it('should load objects and selected object details for the route batch ID', async () => {
     fixture.detectChanges();
 
+    const batchInfoRequest = http.expectOne('/api/rest/v1/batch?batchId=42&_size=1');
+    expect(batchInfoRequest.request.method).toBe('GET');
+    batchInfoRequest.flush({
+      status: 0,
+      startRow: 0,
+      endRow: 0,
+      total: 1,
+      data: [
+        {
+          batchId: 42,
+          state: 'GENERATED',
+          path: 'proarc_users/batch-1',
+          proarcBatchId: 7,
+        },
+      ],
+    });
+
     const request = http.expectOne('/api/rest/v1/object?batchId=42');
     expect(request.request.method).toBe('GET');
     request.flush([
@@ -113,9 +130,12 @@ describe('Batch', () => {
     expect(compiled.querySelector('as-split')).toBeTruthy();
     expect(compiled.querySelectorAll('as-split-area')).toHaveLength(3);
     expect(compiled.textContent).toContain('Batch 42');
+    expect(compiled.textContent).toContain('GENERATED');
+    expect(compiled.textContent).toContain('batch-1');
+    expect(compiled.textContent).not.toContain('proarc_users/batch-1');
     expect(compiled.textContent).toContain('6d848d9c-0879-4f84-86db-9f49ea07fb99');
     expect(compiled.textContent).toContain('page');
-    expect(compiled.textContent).toContain('95,5 %');
+    expect(compiled.textContent).toMatch(/95[,.]5 %/);
     expect(compiled.textContent).toContain('80 %');
     expect(compiled.querySelector('.object-row')?.classList).toContain('confidence-high');
     const metadataRows = compiled.querySelectorAll('.metadata-row');

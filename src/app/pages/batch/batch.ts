@@ -7,6 +7,7 @@ import {
   OnDestroy,
   OnInit,
   ViewChild,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -18,7 +19,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SplitAreaComponent, SplitComponent } from 'angular-split';
 import { finalize } from 'rxjs';
 
+import { AppStateService } from '../../services/app-state.service';
 import {
+  Batch as BatchInfo,
   ElementInfo,
   MetadataResponse,
   MetacheckApiService,
@@ -43,6 +46,7 @@ import {
 })
 export class Batch implements OnInit, OnDestroy {
   private readonly api = inject(MetacheckApiService);
+  private readonly appState = inject(AppStateService);
   private readonly route = inject(ActivatedRoute);
   private readonly percentFormatter = new Intl.NumberFormat(undefined, {
     maximumFractionDigits: 2,
@@ -113,6 +117,17 @@ export class Batch implements OnInit, OnDestroy {
   protected readonly metadataError = signal<string | null>(null);
   protected readonly metadataDirty = signal(false);
   protected readonly savingMetadata = signal(false);
+  protected readonly currentBatch = computed(() => {
+    const currentBatch = this.appState.currentBatch();
+    const batchId = this.batchId();
+
+    if (currentBatch?.batchId !== batchId) {
+      return null;
+    }
+
+    return currentBatch;
+  });
+  protected readonly currentBatchPathName = computed(() => this.pathName(this.currentBatch()?.path));
 
   ngOnInit(): void {
     const batchId = this.parseBatchId(this.route.snapshot.paramMap.get('batchId'));
@@ -123,6 +138,7 @@ export class Batch implements OnInit, OnDestroy {
     }
 
     this.batchId.set(batchId);
+    this.loadBatchInfo(batchId);
     this.loadObjects(batchId);
   }
 
@@ -304,6 +320,25 @@ export class Batch implements OnInit, OnDestroy {
       });
   }
 
+  private loadBatchInfo(batchId: number): void {
+    if (this.currentBatch()?.batchId === batchId) {
+      return;
+    }
+
+    this.api.listBatches({ batchId, size: 1 }).subscribe({
+      next: (response) => {
+        const batch = response.data.find((item) => item.batchId === batchId);
+
+        if (batch) {
+          this.appState.setCurrentBatch(batch);
+        }
+      },
+      error: () => {
+        // Batch objects can still be reviewed if the summary lookup fails.
+      },
+    });
+  }
+
   private refreshObjectsAfterMetadataSave(batchId: number, selectedUuid: string): void {
     const scrollState = this.captureObjectsScroll();
 
@@ -456,6 +491,16 @@ export class Batch implements OnInit, OnDestroy {
 
   private hasValue(value: string | null | undefined): boolean {
     return value !== null && value !== undefined && value.trim() !== '';
+  }
+
+  private pathName(path: BatchInfo['path']): string {
+    const normalizedPath = path?.trim().replace(/[\\/]+$/, '');
+
+    if (!normalizedPath) {
+      return '-';
+    }
+
+    return normalizedPath.split(/[\\/]/).pop() || normalizedPath;
   }
 
   private withCurrentValue(options: readonly string[], value: string | null | undefined): readonly string[] {

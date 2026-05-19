@@ -16,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { debounceTime, finalize } from 'rxjs';
 
+import { AppStateService } from '../../services/app-state.service';
 import {
   Batch,
   BatchState,
@@ -62,6 +63,7 @@ interface BatchFiltersForm {
 })
 export class Batches implements OnInit {
   private readonly api = inject(MetacheckApiService);
+  private readonly appState = inject(AppStateService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
 
@@ -145,6 +147,7 @@ export class Batches implements OnInit {
       return;
     }
 
+    this.appState.setCurrentBatch(batch);
     void this.router.navigate(['/batches', batch.batchId]);
   }
 
@@ -191,7 +194,8 @@ export class Batches implements OnInit {
   }
 
   private numberParam(value: string): number | undefined {
-    const trimmedValue = value.trim();
+    
+    const trimmedValue = (value+'').trim();
 
     if (!trimmedValue) {
       return undefined;

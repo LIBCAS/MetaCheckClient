@@ -3,6 +3,20 @@
     <div>
       <p class="eyebrow">Batch detail</p>
       <h1 id="batch-title">Batch {{ batchId() ?? '-' }}</h1>
+      <dl class="batch-summary" aria-label="Current batch summary">
+        <div>
+          <dt>Batch ID</dt>
+          <dd>{{ currentBatch()?.batchId ?? batchId() ?? '-' }}</dd>
+        </div>
+        <div>
+          <dt>State</dt>
+          <dd>{{ currentBatch()?.state ?? '-' }}</dd>
+        </div>
+        <div>
+          <dt>Path</dt>
+          <dd [title]="currentBatch()?.path ?? ''">{{ currentBatchPathName() }}</dd>
+        </div>
+      </dl>
     </div>
 
     <div class="actions">
