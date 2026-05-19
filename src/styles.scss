@@ -8,9 +8,17 @@ body {
   margin: 0;
 }
 
+html {
+  color: var(--mat-sys-on-background);
+  background: var(--mat-sys-background);
+}
+
 body {
   min-width: 320px;
-  overflow: hidden;
+  color: var(--mat-sys-on-background);
+  background: var(--mat-sys-background);
+  font: var(--mat-sys-body-large);
+  letter-spacing: 0;
 }
 
 button,
@@ -20,28 +28,6 @@ textarea {
   font: inherit;
 }
 
-.mat-mdc-table {
-  background: #ffffff;
-}
-
-.mat-mdc-header-row {
-  height: 32px;
-}
-
-.mat-mdc-row {
-  height: 32px;
-}
-
-.mat-mdc-header-cell {
-  color: #4f5663;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.mat-mdc-cell {
-  font-size: 13px;
-}
-
-.mat-mdc-paginator {
-  border-top: 1px solid var(--app-border, #d7d9df);
+a {
+  color: var(--mat-sys-primary);
 }

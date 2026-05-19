@@ -4,8 +4,8 @@
 
 .eyebrow {
   margin: 0 0 0.85rem;
-  color: #a0631f;
-  font-size: 0.85rem;
+  color: var(--mat-sys-primary);
+  font: var(--mat-sys-label-large);
   font-weight: 800;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -13,18 +13,17 @@
 
 h1 {
   margin: 0;
-  color: #10211f;
-  font-size: clamp(2.4rem, 7vw, 4.8rem);
-  line-height: 1;
+  color: var(--mat-sys-on-background);
+  font: var(--mat-sys-display-large);
   letter-spacing: 0;
 }
 
 .lede {
   max-width: 620px;
   margin: 1.25rem 0 0;
-  color: #536066;
-  font-size: clamp(1.05rem, 2vw, 1.25rem);
-  line-height: 1.7;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-large);
+  letter-spacing: 0;
 }
 
 .feature-grid {
@@ -34,24 +33,24 @@ h1 {
   margin-top: clamp(2rem, 5vw, 4rem);
 }
 
-article {
+mat-card {
   min-height: 10rem;
-  padding: 1.25rem;
-  border: 1px solid rgba(23, 32, 38, 0.12);
-  border-radius: 0.5rem;
-  background: rgba(255, 255, 255, 0.72);
+  border-radius: var(--mat-sys-corner-small);
+  background: var(--mat-sys-surface-container-lowest);
+  box-shadow: var(--mat-sys-level1);
 }
 
-h2 {
-  margin: 0;
-  color: #172026;
-  font-size: 1.2rem;
+mat-card-title {
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-title-large);
+  letter-spacing: 0;
 }
 
-article p {
+mat-card-content p {
   margin: 0.75rem 0 0;
-  color: #536066;
-  line-height: 1.6;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-medium);
+  letter-spacing: 0;
 }
 
 @media (max-width: 680px) {

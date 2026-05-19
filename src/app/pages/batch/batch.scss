@@ -26,9 +26,9 @@
 }
 
 .eyebrow {
-  margin: 0;
-  color: var(--app-text-muted, #5f6673);
-  font-size: 0.78rem;
+  margin: 0 0 0.5rem;
+  color: var(--mat-sys-primary);
+  font: var(--mat-sys-label-large);
   font-weight: 800;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -37,17 +37,17 @@
 h1,
 h2 {
   margin: 0;
-  color: #202124;
+  color: var(--mat-sys-on-background);
   letter-spacing: 0;
 }
 
 h1 {
-  font-size: 1.35rem;
-  line-height: 1.2;
+  font: var(--mat-sys-display-small);
 }
 
 h2 {
-  font-size: 1.05rem;
+  font: var(--mat-sys-title-medium);
+  font-weight: 700;
 }
 
 .actions {
@@ -61,15 +61,16 @@ h2 {
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  border: 1px solid var(--app-border, #d7d9df);
-  border-radius: 0;
-  background: #ffffff;
-  --as-gutter-background-color: var(--app-border, #d7d9df);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-small);
+  background: var(--mat-sys-surface-container-lowest);
+  box-shadow: var(--mat-sys-level1);
+  --as-gutter-background-color: var(--mat-sys-outline-variant);
 }
 
-.batch-split as-split-area {
-  min-width: 0;
-  min-height: 0;
+.batch-split-2 {
+  height: 100%;
+  min-height: unset;
 }
 
 .split-panel {
@@ -77,47 +78,27 @@ h2 {
   grid-template-rows: auto auto minmax(0, 1fr) auto;
   height: 100%;
   min-height: 0;
-  min-width: 0;
-  background: #ffffff;
+  border: 0;
+  border-radius: 0;
+  background: var(--mat-sys-surface-container-lowest);
+  box-shadow: none;
 }
 
 .panel-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  min-height: 36px;
-  padding: 0 10px;
-  border-bottom: 1px solid var(--app-border, #d7d9df);
-  background: #eeeeee;
+  gap: 1rem;
+  min-height: 3.25rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
 }
 
 .panel-heading span {
-  color: var(--app-text-muted, #5f6673);
-  font-size: 0.9rem;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-medium);
   font-weight: 700;
-}
-
-.panel-heading-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.save-metadata-button {
-  width: 30px;
-  height: 30px;
-  color: #9aa0a6;
-}
-
-.save-metadata-button.is-active {
-  color: var(--app-purple, #2e4d94);
-}
-
-.save-metadata-button svg {
-  width: 19px;
-  height: 19px;
-  fill: currentColor;
+  letter-spacing: 0;
 }
 
 .table-scroll {
@@ -141,12 +122,12 @@ h2 {
 }
 
 th {
-  color: #4f5663;
+  color: var(--mat-sys-on-surface-variant);
   font-weight: 800;
 }
 
 td {
-  color: #172026;
+  color: var(--mat-sys-on-surface);
 }
 
 .uuid-cell {
@@ -185,12 +166,13 @@ td {
 }
 
 .object-row:hover,
-.object-row:focus-visible {
-  filter: saturate(1.08) brightness(0.98);
+.object-row:focus-visible,
+.object-row.selected-row {
+  background: color-mix(in srgb, var(--mat-sys-primary) 8%, var(--mat-sys-surface));
 }
 
 .object-row:focus-visible {
-  outline: 2px solid rgba(109, 59, 191, 0.45);
+  outline: 3px solid color-mix(in srgb, var(--mat-sys-primary) 42%, transparent);
   outline-offset: -3px;
 }
 
@@ -214,7 +196,7 @@ td {
 }
 
 .selected-row td:first-child {
-  border-inline-start: 4px solid var(--app-purple, #6d3bbf);
+  border-inline-start: 4px solid var(--mat-sys-primary);
 }
 
 .image-viewer {
@@ -230,10 +212,26 @@ td {
   scrollbar-gutter: stable;
   padding: 1rem;
   background:
-    linear-gradient(45deg, rgba(109, 59, 191, 0.05) 25%, transparent 25%),
-    linear-gradient(-45deg, rgba(109, 59, 191, 0.05) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, rgba(109, 59, 191, 0.05) 75%),
-    linear-gradient(-45deg, transparent 75%, rgba(109, 59, 191, 0.05) 75%);
+    linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--mat-sys-on-surface) 4%, transparent) 25%,
+      transparent 25%
+    ),
+    linear-gradient(
+      -45deg,
+      color-mix(in srgb, var(--mat-sys-on-surface) 4%, transparent) 25%,
+      transparent 25%
+    ),
+    linear-gradient(
+      45deg,
+      transparent 75%,
+      color-mix(in srgb, var(--mat-sys-on-surface) 4%, transparent) 75%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 75%,
+      color-mix(in srgb, var(--mat-sys-on-surface) 4%, transparent) 75%
+    );
   background-position:
     0 0,
     0 0.75rem,
@@ -249,7 +247,7 @@ td {
   max-width: 100%;
   max-height: none;
   object-fit: contain;
-  box-shadow: 0 1rem 2.5rem rgba(32, 33, 36, 0.18);
+  box-shadow: var(--mat-sys-level3);
 }
 
 .metadata-value {
@@ -287,12 +285,12 @@ td {
 
 .error-message {
   border-radius: 0.5rem;
-  color: #8a1d18;
-  background: #fbe9e7;
+  color: var(--mat-sys-on-error-container);
+  background: var(--mat-sys-error-container);
 }
 
 .empty-message {
-  color: var(--app-text-muted, #5f6673);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 @media (max-width: 720px) {

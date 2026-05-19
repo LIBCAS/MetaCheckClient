@@ -15,7 +15,7 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/batches/batches').then((m) => m.Batches),
   },
   {
-    path: 'batch/:batchId',
+    path: 'batches/:batchId',
     loadComponent: () => import('./pages/batch/batch').then((m) => m.Batch),
   },
   {

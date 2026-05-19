@@ -4,6 +4,8 @@ import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -43,6 +45,8 @@ interface BatchFiltersForm {
   imports: [
     DatePipe,
     MatButtonModule,
+    MatCardModule,
+    MatChipsModule,
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
@@ -141,7 +145,7 @@ export class Batches implements OnInit {
       return;
     }
 
-    void this.router.navigate(['/batch', batch.batchId]);
+    void this.router.navigate(['/batches', batch.batchId]);
   }
 
   protected openBatchFromKeyboard(event: Event, batch: Batch): void {

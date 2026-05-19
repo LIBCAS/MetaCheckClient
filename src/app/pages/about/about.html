@@ -6,14 +6,22 @@
     application shell so future pages inherit the same structure.
   </p>
 
-  <dl>
-    <div>
-      <dt>Route</dt>
-      <dd>/about</dd>
-    </div>
-    <div>
-      <dt>Layout</dt>
-      <dd>Header, routed content, footer</dd>
-    </div>
-  </dl>
+  <div class="detail-grid" role="list">
+    <mat-card appearance="outlined" role="listitem">
+      <mat-card-header>
+        <mat-card-title>Route</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="detail-value">/about</p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card appearance="outlined" role="listitem">
+      <mat-card-header>
+        <mat-card-title>Layout</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="detail-value">Header, routed content, footer</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </section>
