@@ -32,7 +32,7 @@
 }
 
 .route-content {
-  width: min(1120px, calc(100% - 2rem));
+  width: calc(100% - 2rem);
   margin-inline: auto;
   padding-block: clamp(2rem, 4vw, 4rem);
 }

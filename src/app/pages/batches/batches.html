@@ -111,7 +111,7 @@
         <ng-container matColumnDef="log">
           <th mat-header-cell *matHeaderCellDef>Log</th>
           <td mat-cell *matCellDef="let batch" class="log-cell" [title]="batch.log ?? ''">
-            {{ batch.log ?? '-' }}
+            <mat-icon [title]="batch.log ?? '-'">info</mat-icon>
           </td>
         </ng-container>
 

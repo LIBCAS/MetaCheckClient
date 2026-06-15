@@ -10,7 +10,7 @@ export const METACHECK_API_BASE_URL = new InjectionToken<string>('METACHECK_API_
 export type BatchState =
   | 'EMPTY'
   | 'PLANNED'
-  | 'GENERAING'
+  | 'GENERATING'
   | 'GENERATED'
   | 'EDITING'
   | 'EDITED'
@@ -231,6 +231,10 @@ export class MetacheckApiService {
   }
 
   private url(path: string): string {
+    return `${this.baseUrl}${path}`;
+  }
+
+  public getApiUrl(path: string): string {
     return `${this.baseUrl}${path}`;
   }
 

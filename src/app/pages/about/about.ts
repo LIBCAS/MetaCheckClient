@@ -8,4 +8,13 @@ import { MatCardModule } from '@angular/material/card';
   styleUrl: './about.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class About {}
+export class About {
+
+  info = {
+    "applicationName": "Metacheck",
+    "version": "1.0.1",
+    "database": "POSTGRES",
+    "databaseSchemaVersion": "2",
+    "status": "Active"
+  };
+}

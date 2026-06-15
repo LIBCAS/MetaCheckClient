@@ -4,11 +4,15 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'home',
+    redirectTo: 'batches',
   },
+  // {
+  //   path: 'home',
+  //   loadComponent: () => import('./pages/home/home').then((m) => m.Home),
+  // },
   {
-    path: 'home',
-    loadComponent: () => import('./pages/home/home').then((m) => m.Home),
+    path: 'import',
+    loadComponent: () => import('./pages/import/import').then((m) => m.Import),
   },
   {
     path: 'batches',

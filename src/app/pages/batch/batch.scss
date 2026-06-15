@@ -349,3 +349,25 @@ td {
     min-height: 38rem;
   }
 }
+
+.img-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  div {
+    
+    margin: 5px;
+    padding: 5px;
+  }
+  
+  .selected-row {
+    background: color-mix(in srgb, var(--mat-sys-primary) 8%, var(--mat-sys-surface));
+    border:#000 1px solid;
+  }
+}
+
+.img-element {
+  width: 48px;
+  box-shadow: var(--mat-sys-level1);
+}

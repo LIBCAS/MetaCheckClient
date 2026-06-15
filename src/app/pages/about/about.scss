@@ -21,16 +21,17 @@ h1 {
 p {
   max-width: 660px;
   margin: 1.25rem 0 0;
-  color: var(--mat-sys-on-surface-variant);
   font: var(--mat-sys-body-large);
   letter-spacing: 0;
 }
 
 .detail-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin: clamp(2rem, 5vw, 3.5rem) 0 0;
+  // display: grid;
+  // grid-template-columns: repeat(1, minmax(0, 1fr));
+  // gap: 1rem;
+  // margin: clamp(2rem, 5vw, 3.5rem) 0 0;
+  align-items: center;
+  width: 100%;
 }
 
 mat-card {
@@ -49,10 +50,14 @@ mat-card-title {
 
 .detail-value {
   margin: 0.55rem 0 0;
-  color: var(--mat-sys-on-surface);
+  color: var(--mat-sys-on-surface-variant);
   font: var(--mat-sys-title-medium);
   font-weight: 800;
   letter-spacing: 0;
+}
+
+.detail-label {
+  color: var(--mat-sys-on-surface);
 }
 
 @media (max-width: 680px) {

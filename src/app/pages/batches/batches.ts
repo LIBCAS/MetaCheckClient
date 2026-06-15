@@ -24,6 +24,7 @@ import {
   MetacheckApiService,
   SortOrder,
 } from '../../services/metacheck-api.service';
+import { MatIconModule } from "@angular/material/icon";
 
 type BatchSortColumn =
   | 'batchId'
@@ -56,7 +57,8 @@ interface BatchFiltersForm {
     MatSortModule,
     MatTableModule,
     ReactiveFormsModule,
-  ],
+    MatIconModule
+],
   templateUrl: './batches.html',
   styleUrl: './batches.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -79,7 +81,7 @@ export class Batches implements OnInit {
   protected readonly batchStates: readonly BatchState[] = [
     'EMPTY',
     'PLANNED',
-    'GENERAING',
+    'GENERATING',
     'GENERATED',
     'EDITING',
     'EDITED',

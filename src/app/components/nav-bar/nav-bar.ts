@@ -18,8 +18,8 @@ interface NavItem {
 })
 export class NavBar {
   protected readonly navItems: readonly NavItem[] = [
-    { label: 'Home', path: '/home', exact: true },
     { label: 'Batches', path: '/batches', exact: false },
+    { label: 'Import', path: '/import', exact: true },
     { label: 'About', path: '/about', exact: false },
   ];
 }

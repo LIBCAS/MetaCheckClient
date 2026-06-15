@@ -35,13 +35,46 @@
       <mat-card class="split-panel" appearance="outlined" aria-labelledby="objects-title">
         <div class="panel-heading">
           <h2 id="objects-title">Objects</h2>
-          <span>{{ objects().length }} total</span>
+          <div class="panel-heading-actions">
+
+            <span>{{ objects().length }} total</span>
+
+            <mat-button-toggle-group name="viewType" aria-label="View" [(ngModel)]="viewType"
+              hideSingleSelectionIndicator="true">
+              <mat-button-toggle value="list"><mat-icon>density_small</mat-icon></mat-button-toggle>
+              <mat-button-toggle value="images"><mat-icon>image</mat-icon></mat-button-toggle>
+            </mat-button-toggle-group>
+
+
+            <!-- <button
+              matIconButton 
+              [class.is-active]="viewType === 'list'"
+              [disabled]="viewType === 'list'"
+              aria-label="Show list"
+              title="Show list"
+              (click)="setViewType('list')"
+            >
+              <mat-icon>density_small</mat-icon>
+            </button>
+            <button
+              matIconButton 
+              [class.is-active]="viewType === 'images'"
+              [disabled]="viewType === 'images'"
+              aria-label="Show list"
+              title="Show list"
+              (click)="setViewType('images')"
+            >
+              <mat-icon>image</mat-icon>
+            </button> -->
+          </div>
+
         </div>
 
         @if (loadingObjects()) {
         <mat-progress-bar mode="indeterminate" aria-label="Loading objects" />
         }
-
+        @switch (viewType) {
+        @case ('list') {
         <div class="table-scroll" #objectsScroll>
           <table mat-table [dataSource]="objects()" class="objects-table">
             <ng-container matColumnDef="model">
@@ -64,21 +97,24 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedObjectColumns"></tr>
-            <tr
-              mat-row
-              *matRowDef="let row; columns: displayedObjectColumns"
-              class="object-row"
-              [ngClass]="confidenceRowClass(row.percentage)"
-              [class.selected-row]="isSelectedObject(row)"
-              [attr.aria-label]="'Select object ' + row.uuid"
-              [attr.aria-selected]="isSelectedObject(row)"
-              tabindex="0"
-              (click)="selectObject(row)"
-              (keydown.enter)="selectObject(row)"
-              (keydown.space)="selectObjectFromKeyboard($event, row)"
-            ></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedObjectColumns" class="object-row"
+              [ngClass]="confidenceRowClass(row.percentage)" [class.selected-row]="isSelectedObject(row)"
+              [attr.aria-label]="'Select object ' + row.uuid" [attr.aria-selected]="isSelectedObject(row)" tabindex="0"
+              (click)="selectObject(row)" (keydown.enter)="selectObject(row)"
+              (keydown.space)="selectObjectFromKeyboard($event, row)"></tr>
           </table>
         </div>
+        }
+        @case ('images') {
+        <div class="img-grid">
+          @for (img of objects(); track img) {
+            <div [class.selected-row]="isSelectedObject(img)" class="image-title" (click)="selectObject(img)"><img [src]="getThumbUrl(img.uuid)" [alt]="'no image'" [title]="img.uuid" /></div>
+          }
+          
+        </div>
+        }
+        }
+
 
         @if (!loadingObjects() && objects().length === 0 && !error()) {
         <p class="empty-message">No objects found for this batch.</p>
@@ -88,98 +124,77 @@
 
     <as-split-area [size]="33" [minSize]="18">
       <section class="split-panel" aria-labelledby="metadata-title">
+          <h2>{{selectedObject()?.uuid}} | {{selectedObject()?.model}} | {{formatConfidence(selectedObject()?.percentage)}}</h2>
         <div class="panel-heading">
           <h2 id="metadata-title">Metadata</h2>
           <div class="panel-heading-actions">
             @if (metadata()) {
-              <span>{{ metadata()?.elementsInfoResponse?.length ?? 0 }} fields</span>
+            <span>{{ metadata()?.elementsInfoResponse?.length ?? 0 }} fields</span>
             }
-            <button
-              mat-icon-button
-              type="button"
-              class="save-metadata-button"
-              [class.is-active]="metadataDirty()"
-              [disabled]="!metadataDirty() || savingMetadata()"
-              aria-label="Save metadata"
-              title="Save metadata"
-              (click)="saveMetadata()"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path
-                  d="M5 3h12l2 2v16H5V3Zm2 2v5h9V5H7Zm0 14h10v-6H7v6Zm7-14v3h2V5h-2Z"
-                />
-              </svg>
+            <button mat-icon-button type="button" class="save-metadata-button" [class.is-active]="metadataDirty()"
+              [disabled]="!metadataDirty() || savingMetadata()" aria-label="Save metadata" title="Save metadata"
+              (click)="saveMetadata()">
+              <mat-icon>save</mat-icon>
             </button>
           </div>
         </div>
 
         @if (loadingMetadata() || savingMetadata()) {
-          <mat-progress-bar mode="indeterminate" aria-label="Loading metadata" />
+        <mat-progress-bar mode="indeterminate" aria-label="Loading metadata" />
         }
 
-            @if (metadataError()) {
-            <p class="error-message panel-message">{{ metadataError() }}</p>
-            }
+        @if (metadataError()) {
+        <p class="error-message panel-message">{{ metadataError() }}</p>
+        }
 
-            @if (metadata(); as metadata) {
-            <div class="table-scroll">
-              <table mat-table [dataSource]="metadata.elementsInfoResponse" class="metadata-table">
-                <ng-container matColumnDef="field">
-                  <th mat-header-cell *matHeaderCellDef>Field</th>
-                  <td mat-cell *matCellDef="let element">{{ element.field ?? '-' }}</td>
-                </ng-container>
+        @if (metadata(); as metadata) {
+        <div class="table-scroll">
+          <table mat-table [dataSource]="metadata.elementsInfoResponse" class="metadata-table">
+            <ng-container matColumnDef="field">
+              <th mat-header-cell *matHeaderCellDef>Field</th>
+              <td mat-cell *matCellDef="let element">{{ element.field ?? '-' }}</td>
+            </ng-container>
 
-                <ng-container matColumnDef="originalValue">
-                  <th mat-header-cell *matHeaderCellDef>Original</th>
-                  <td mat-cell *matCellDef="let element" class="metadata-value">
-                    {{ element.originalValue ?? '-' }}
-                  </td>
-                </ng-container>
+            <ng-container matColumnDef="originalValue">
+              <th mat-header-cell *matHeaderCellDef>Original</th>
+              <td mat-cell *matCellDef="let element" class="metadata-value">
+                {{ element.originalValue ?? '-' }}
+              </td>
+            </ng-container>
 
-              <ng-container matColumnDef="editedValue">
-                <th mat-header-cell *matHeaderCellDef>Edited</th>
-                <td mat-cell *matCellDef="let element" class="metadata-value">
-                  @if (metadataEditOptions(element); as options) {
-                    <select
-                      class="metadata-edit-control"
-                      [value]="element.editedValue ?? ''"
-                      (change)="updateEditedValue(element, $any($event.target).value)"
-                    >
-                      @for (option of options; track option) {
-                        <option [value]="option" [selected]="option === editedValue(element)">
-                          {{ option || '-' }}
-                        </option>
-                      }
-                    </select>
-                  } @else {
-                    <input
-                      class="metadata-edit-control"
-                      type="text"
-                      [value]="editedValue(element)"
-                      (input)="updateEditedValue(element, $any($event.target).value)"
-                    />
+            <ng-container matColumnDef="editedValue">
+              <th mat-header-cell *matHeaderCellDef>Edited</th>
+              <td mat-cell *matCellDef="let element" class="metadata-value">
+                @if (metadataEditOptions(element); as options) {
+                <select class="metadata-edit-control" [value]="element.editedValue ?? ''"
+                  (change)="updateEditedValue(element, $any($event.target).value)">
+                  @for (option of options; track option) {
+                  <option [value]="option" [selected]="option === editedValue(element)">
+                    {{ option || '-' }}
+                  </option>
                   }
-                </td>
-              </ng-container>
+                </select>
+                } @else {
+                <input class="metadata-edit-control" type="text" [value]="editedValue(element)"
+                  (input)="updateEditedValue(element, $any($event.target).value)" />
+                }
+              </td>
+            </ng-container>
 
-              <ng-container matColumnDef="percentage">
-                <th mat-header-cell *matHeaderCellDef>Confidence</th>
-                <td mat-cell *matCellDef="let element">
-                  {{ formatConfidence(element.percentage) }}
-                </td>
-              </ng-container>
+            <ng-container matColumnDef="percentage">
+              <th mat-header-cell *matHeaderCellDef>Confidence</th>
+              <td mat-cell *matCellDef="let element">
+                {{ formatConfidence(element.percentage) }}
+              </td>
+            </ng-container>
 
-              <tr mat-header-row *matHeaderRowDef="displayedMetadataColumns"></tr>
-              <tr
-                mat-row
-                *matRowDef="let row; columns: displayedMetadataColumns"
-                class="metadata-row"
-                [ngClass]="metadataConfidenceRowClass(row)"
-              ></tr>
-            </table>
-          </div>
+            <tr mat-header-row *matHeaderRowDef="displayedMetadataColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedMetadataColumns" class="metadata-row"
+              [ngClass]="metadataConfidenceRowClass(row)"></tr>
+          </table>
+        </div>
         } @else if (!loadingMetadata() && !metadataError()) {
-          <p class="empty-message">No object selected.</p>
+        <p class="empty-message">No object selected.</p>
         }
       </section>
     </as-split-area>
@@ -189,23 +204,23 @@
         <div class="panel-heading">
           <h2 id="image-title">Image</h2>
           @if (selectedObject()) {
-            <span>{{ selectedObject()?.model }}</span>
+          <span>{{ selectedObject()?.model }}</span>
           }
         </div>
 
         @if (loadingImage()) {
-          <mat-progress-bar mode="indeterminate" aria-label="Loading image" />
+        <mat-progress-bar mode="indeterminate" aria-label="Loading image" />
         }
 
         @if (imageError()) {
-          <p class="error-message panel-message">{{ imageError() }}</p>
+        <p class="error-message panel-message">{{ imageError() }}</p>
         }
 
         <div class="image-viewer">
           @if (imageUrl(); as imageUrl) {
-            <img [src]="imageUrl" [alt]="'Object image ' + selectedObject()?.uuid" />
+          <img [src]="imageUrl" [alt]="'Object image ' + selectedObject()?.uuid" />
           } @else if (!loadingImage() && !imageError()) {
-            <p class="empty-message">No object selected.</p>
+          <p class="empty-message">No object selected.</p>
           }
         </div>
       </section>

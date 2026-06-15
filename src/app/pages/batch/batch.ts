@@ -12,6 +12,8 @@ import {
   signal,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableModule } from '@angular/material/table';
@@ -27,12 +29,16 @@ import {
   MetacheckApiService,
   ObjectInfo,
 } from '../../services/metacheck-api.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-batch',
   imports: [
+    FormsModule,
     NgClass,
     MatButtonModule,
+    MatIconModule,
+    MatButtonToggleModule, 
     MatCardModule,
     MatProgressBarModule,
     MatTableModule,
@@ -45,7 +51,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Batch implements OnInit, OnDestroy {
-  private readonly api = inject(MetacheckApiService);
+  public readonly api = inject(MetacheckApiService);
   private readonly appState = inject(AppStateService);
   private readonly route = inject(ActivatedRoute);
   private readonly percentFormatter = new Intl.NumberFormat(undefined, {
@@ -129,6 +135,8 @@ export class Batch implements OnInit, OnDestroy {
   });
   protected readonly currentBatchPathName = computed(() => this.pathName(this.currentBatch()?.path));
 
+  viewType: string = 'list'; // list || images
+
   ngOnInit(): void {
     const batchId = this.parseBatchId(this.route.snapshot.paramMap.get('batchId'));
 
@@ -144,6 +152,10 @@ export class Batch implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.revokeImageUrl();
+  }
+
+  setViewType(type: string) {
+    this.viewType = type;
   }
 
   protected refreshObjects(): void {
@@ -378,6 +390,11 @@ export class Batch implements OnInit, OnDestroy {
     }
 
     this.clearSelectedObject();
+  }
+
+  public getThumbUrl(pid: string) {
+    const url = `/object/image?typ=thumbnail&batchId=${this.batchId()}&pid=${pid}`
+    return this.api.getApiUrl(url)
   }
 
   private loadObjectImage(batchId: number, pid: string): void {
