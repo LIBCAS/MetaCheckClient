@@ -18,7 +18,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  width: min(1120px, calc(100% - 2rem));
+  width: calc(100% - 2rem);
   margin-inline: auto;
 }
 
