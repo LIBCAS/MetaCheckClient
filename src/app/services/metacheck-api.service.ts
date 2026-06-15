@@ -48,8 +48,17 @@ export type ElementInfoType =
   | 'title'
   | 'translator';
 
+export interface Engine {
+  name: string | null;
+  description: string | null
+  version: string | null
+  defaultEngine: boolean | null
+  active: boolean | null
+}
+
 export interface AddBatchForm {
   path: string;
+  engine?: string | null; 
   proarcBatchId?: number | null;
 }
 
@@ -294,5 +303,9 @@ export class MetacheckApiService {
     }
 
     return body;
+  }
+
+  getEngines(): Observable<Engine[]> {
+    return this.http.get<Engine[]>(this.url('/batch/engines'));
   }
 }

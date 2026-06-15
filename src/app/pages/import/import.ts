@@ -9,7 +9,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { finalize } from 'rxjs';
 
-import { MetacheckApiService } from '../../services/metacheck-api.service';
+import { Engine, MetacheckApiService } from '../../services/metacheck-api.service';
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSelect, MatSelectModule } from "@angular/material/select";
+import { FormsModule } from '@angular/forms';
 
 interface FolderFlatTreeNode {
   name: string;
@@ -25,13 +28,16 @@ interface FolderFlatTreeNode {
 @Component({
   selector: 'app-import',
   imports: [
+    FormsModule,
     MatButtonModule,
     MatCardModule,
     MatIconModule,
     MatProgressBarModule,
     MatTooltipModule,
     MatTreeModule,
-  ],
+    MatFormFieldModule,
+    MatSelectModule
+],
   templateUrl: './import.html',
   styleUrl: './import.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,8 +55,12 @@ export class Import implements OnInit {
   protected readonly trackByPath = (_: number, node: FolderFlatTreeNode): string => node.path;
   protected readonly hasChild = (_: number, node: FolderFlatTreeNode): boolean => node.expandable;
 
+  protected readonly engines = signal<Engine[]>([]);
+  selectedEngine: Engine | null = null;
+
   ngOnInit(): void {
     this.loadRootFolders();
+    this.getEngines();
   }
 
   protected refresh(): void {
@@ -110,6 +120,25 @@ export class Import implements OnInit {
           node.error = this.describeError(error);
         },
       });
+  }
+
+  private getEngines() {
+
+    this.api
+      .getEngines()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        next: (engines) => {
+          this.engines.set(engines);
+        },
+        error: (error: unknown) => {
+          this.engines.set([]);
+          this.error.set(this.describeError(error));
+        },
+      });
+    
   }
 
   private loadRootFolders(): void {
@@ -247,7 +276,7 @@ export class Import implements OnInit {
     this.api
       .addNewBatch({
         path: this.selectedPath()!,
-        proarcBatchId: null
+        engine: this.selectedEngine?.name
       })
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({

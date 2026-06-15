@@ -33,8 +33,9 @@
 
 .route-content {
   width: calc(100% - 2rem);
+  position: relative;
   margin-inline: auto;
-  padding-block: clamp(2rem, 4vw, 4rem);
+  padding-block: clamp(2rem, 1vw, 4rem);
 }
 
 .site-footer {
