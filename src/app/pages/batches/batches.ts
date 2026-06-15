@@ -158,6 +158,47 @@ export class Batches implements OnInit {
     this.openBatch(batch);
   }
 
+  restartBatch(batchId: number) {
+    if (batchId === null) {
+      return;
+    }
+
+    this.loading.set(true);
+    
+    this.api
+      .restartBatch(batchId)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
+        next: (updatedMetadata) => {
+          this.loadBatches()
+        },
+        error: (error: unknown) => {
+          alert(this.describeError(error));
+        },
+      });
+  }
+
+  stopBatch(batchId: number) {
+
+    if (batchId === null) {
+      return;
+    }
+
+    this.loading.set(true);
+    
+    this.api
+      .stopBatch(batchId)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
+        next: (updatedMetadata) => {
+          this.loadBatches()
+        },
+        error: (error: unknown) => {
+          alert(this.describeError(error));
+        },
+      });
+  }
+
   private loadBatches(): void {
     this.loading.set(true);
     this.error.set(null);

@@ -216,6 +216,28 @@ export class MetacheckApiService {
     );
   }
 
+  stopBatch(batchId: number): Observable<MetadataResponse> {
+
+    return this.http.post<MetadataResponse>(
+      this.url('/batch/stop'),
+      this.formBody({
+        batchId: batchId
+      }),
+      { headers: this.formHeaders },
+    );
+  }
+
+  restartBatch(batchId: number): Observable<MetadataResponse> {
+
+    return this.http.post<MetadataResponse>(
+      this.url('/batch/restart'),
+      this.formBody({
+        batchId: batchId
+      }),
+      { headers: this.formHeaders },
+    );
+  }
+
   getObjectAlto(batchId: number, pid: string): Observable<string> {
     return this.http.get(this.url('/object/alto'), {
       params: this.queryParams({ batchId, pid }),

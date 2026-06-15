@@ -112,6 +112,12 @@
           <th mat-header-cell *matHeaderCellDef>Log</th>
           <td mat-cell *matCellDef="let batch" class="log-cell" [title]="batch.log ?? ''">
             <mat-icon [title]="batch.log ?? '-'">info</mat-icon>
+            @if(batch.state === 'GENERATED' || batch.state === 'STOPPED') {
+            <mat-icon (click)="restartBatch(batch)" title="Obnovit dávku">replay</mat-icon>
+            }
+            @if(batch.state === 'PLANNED' || batch.state === 'GENERATING') {
+            <mat-icon (click)="stopBatch(batch)" title="Zastavit dávku">pause</mat-icon>
+            }
           </td>
         </ng-container>
 
