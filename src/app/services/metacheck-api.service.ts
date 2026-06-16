@@ -176,7 +176,7 @@ export class MetacheckApiService {
     return this.http.post<Batch>(
       this.url('/batch'),
       this.formBody({
-        path: form.path,
+        folder: form.path,
         proarcBatchId: form.proarcBatchId,
       }),
       { headers: this.formHeaders },
