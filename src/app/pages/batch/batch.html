@@ -108,7 +108,8 @@
         @case ('images') {
         <div class="img-grid">
           @for (img of objects(); track img) {
-            <div [class.selected-row]="isSelectedObject(img)" class="image-title" (click)="selectObject(img)"><img [src]="getThumbUrl(img.uuid)" [alt]="'no image'" [title]="img.uuid" /></div>
+            <div class="image-title" [ngClass]="confidenceRowClass(img.percentage)" [class.selected-row]="isSelectedObject(img)" (click)="selectObject(img)">
+              <img [src]="getThumbUrl(img.uuid)" [alt]="'no image'" [title]="img.uuid" /></div>
           }
           
         </div>
