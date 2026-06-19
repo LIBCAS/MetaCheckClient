@@ -63,11 +63,13 @@ export interface AddBatchForm {
 }
 
 export interface ApplicationInfo {
-  applicationName?: string | null;
-  version?: string | null;
-  database?: string | null;
-  status?: string | null;
+  applicationName: string;
+  version: string;
+  database: string ;
+  databaseSchemaVersion: string;
+  status: string;
 }
+
 
 export interface Batch {
   batchId?: number | null;

@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { ApplicationInfo, MetacheckApiService } from '../../services/metacheck-api.service';
 
 @Component({
   selector: 'app-about',
@@ -10,11 +11,25 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class About {
 
-  info = {
-    "applicationName": "Metacheck",
-    "version": "1.0.1",
-    "database": "POSTGRES",
-    "databaseSchemaVersion": "2",
-    "status": "Active"
-  };
+  public readonly api = inject(MetacheckApiService);
+  info = signal<ApplicationInfo | null>(null);
+
+  ngOnInit(): void {
+    this.getData();
+  }
+
+  getData() {
+    this.api
+      .getApplicationInfo()
+      .subscribe({
+        next: (info) => {
+          this.info.set(info);
+        },
+        error: (error: unknown) => {
+          console.log(error)
+        },
+      });
+
+  }
+
 }
