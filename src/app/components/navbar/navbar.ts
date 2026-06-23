@@ -10,10 +10,10 @@ interface NavItem {
 }
 
 @Component({
-  selector: 'app-nav-bar',
+  selector: 'app-navbar',
   imports: [MatButtonModule, MatToolbarModule, RouterLink, RouterLinkActive],
-  templateUrl: './nav-bar.html',
-  styleUrl: './nav-bar.scss',
+  templateUrl: './navbar.html',
+  styleUrl: './navbar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavBar {
