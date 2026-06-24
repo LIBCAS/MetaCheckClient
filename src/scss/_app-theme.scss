@@ -147,3 +147,8 @@ $tertiary-palette: map.merge(map.get($_palettes, tertiary), $_rest);
     density: 0,
   )
 );
+
+// test
+// :root {
+//   --app-testik: #{map.get($_palettes, secondary, 35)};
+// }
