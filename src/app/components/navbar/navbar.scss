@@ -1,0 +1,6 @@
+.mat-mdc-button {
+  &.app-active {
+    background-color: rgb(var(--app-color-lightnes));
+    color: var(--app-color-secondary);
+  }
+}
