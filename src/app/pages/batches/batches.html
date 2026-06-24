@@ -5,6 +5,42 @@
     <strong>batches</strong>
   </div>
 </section>
+<section class="app-container-fluid app-formbar">
+  <form [formGroup]="filterForm" aria-label="Batch filters" class="app-fxLayout app-row app-baseline-v app-gap-2">
+    <mat-form-field appearance="outline">
+      <mat-label>Batch ID</mat-label>
+      <input matInput formControlName="batchId" type="number" inputmode="numeric" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>State</mat-label>
+      <mat-select formControlName="state">
+        <mat-option value="">All states</mat-option>
+        @for (state of batchStates; track state) {
+          <mat-option [value]="state">{{ state }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Path</mat-label>
+      <input matInput formControlName="path" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>ProArc batch ID</mat-label>
+      <input matInput formControlName="proarcBatchId" type="number" inputmode="numeric" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Log</mat-label>
+      <input matInput formControlName="log" />
+    </mat-form-field>
+
+    <button mat-stroked-button type="button" (click)="clearFilters()">Clear</button>
+    <button mat-flat-button type="button" (click)="refresh()">Refresh</button>
+  </form>
+</section>
 
 
 <!-- <section class="batches-page" aria-labelledby="batches-title">
