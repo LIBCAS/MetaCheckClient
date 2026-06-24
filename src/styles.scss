@@ -1,59 +1,13 @@
-@use '@angular/material' as mat;
-@use './theme-colors' as theme-colors;
+@use 'scss/app-theme';
+@use 'scss/app-variables';
+@use 'scss/app-layout';
+@use 'scss/app-gap';
 @use 'scss/app-flex-layout';
+@use 'scss/app-global';
+@use 'scss/app-mat-override';
 
-/* * {
-  box-sizing: border-box;
-}
 
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-
-html {
-  @include mat.theme(
-    (
-      color: (
-        theme-type: light,
-        primary: theme-colors.$primary-palette,
-        tertiary: theme-colors.$tertiary-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
-
-  color: var(--mat-sys-on-background);
-  background: var(--mat-sys-background);
-}
-
-body {
-  min-width: 320px;
-  color: var(--mat-sys-on-background);
-  background: var(--mat-sys-background);
-  font: var(--mat-sys-body-large);
-  letter-spacing: 0;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-a {
-  color: var(--mat-sys-primary);
-}
-
-.mat-mdc-outlined-button:not(:disabled) {
-  --mat-button-outlined-outline-color: var(--mat-sys-primary);
-}
-
-.mat-mdc-icon-button:not(:disabled) {
-  --mat-icon-button-icon-color: var(--mat-sys-primary);
-  --mat-icon-button-state-layer-color: var(--mat-sys-primary);
-}
- */
+// do not delete
+// indigo: #87508a
+// green: #24776B
+// background: linear-gradient(90deg, #87508a, color-mix(in srgb, var(--mat-sys-primary) 82%, var(--mat-sys-tertiary)));

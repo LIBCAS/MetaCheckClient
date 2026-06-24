@@ -1,23 +1,15 @@
-<header class="nav-shell">
-  <mat-toolbar class="nav-toolbar">
-    <a mat-button class="brand" routerLink="/" aria-label="Metacheck home">
-      <span class="brand-name">Metacheck</span>
-    </a>
+<mat-toolbar class="app-fxLayout app-row app-center-y">
+  <a mat-button class="brand" routerLink="/" aria-label="Metacheck home">
+    Metacheck
+  </a>
+  <span class="app-fxFlex" aria-hidden="true"></span>
+  <nav>
+    @for (item of navItems; track item.path) {
+      <a mat-button [routerLink]="item.path" routerLinkActive="app-active" [routerLinkActiveOptions]="{ exact: item.exact }" ariaCurrentWhenActive="page">
+        {{ item.label }}
+      </a>
+    }
+  </nav>
+</mat-toolbar> 
 
-    <span class="spacer" aria-hidden="true"></span>
 
-    <nav class="nav-links" aria-label="Primary navigation">
-      @for (item of navItems; track item.path) {
-        <a
-          mat-button
-          [routerLink]="item.path"
-          routerLinkActive="active-link"
-          [routerLinkActiveOptions]="{ exact: item.exact }"
-          ariaCurrentWhenActive="page"
-        >
-          {{ item.label }}
-        </a>
-      }
-    </nav>
-  </mat-toolbar>
-</header>
