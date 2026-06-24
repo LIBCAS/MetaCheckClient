@@ -112,3 +112,12 @@ ul {
 .app-w-100 {
   width: 100%;
 }
+
+// breadcrumbbar
+.app-breadcrumbsbar {
+  border-bottom: 1px solid var(--app-border-color-default);
+
+  .app-separator {
+    color: var(--app-color-gray-5);
+  }
+}
