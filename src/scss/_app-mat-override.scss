@@ -33,6 +33,17 @@ $alerts: (
   )
 );
 
+$states: (
+  EMPTY: #616161,
+  PLANNED: #0288D1,
+  GENERATING: #689F38,
+  GENERATED: #388E3C,
+  EDITING: #00796B,
+  EDITED: #455A64,
+  STOPPED: #E64A19,
+  FAILED: #D32F2F,
+);
+
 @mixin setCheckBoxDensity($val: null) {
   @if ($val != null) {
     .mat-mdc-checkbox {
@@ -74,6 +85,18 @@ $alerts: (
           color: map.get( $item , icon-color );
         }
       }
+    }
+  }
+}
+
+@mixin setStateColor() {
+  @each $state, $color in $states {
+    .app-#{$state} {
+      @include mat.chips-overrides((
+        outline-color: rgba($color, .3),
+        label-text-color: $color,
+        elevated-container-color: rgba($color, .1)
+      ));
     }
   }
 }
@@ -244,11 +267,18 @@ $alerts: (
 
   // --- chips ---
   @include mat.chips-overrides((
-    container-height: 20px,
-    container-shape-radius: 20px,
-    label-text-size: 12px
+    container-height: var(--app-chip-height),
+    container-shape-radius: var(--app-chip-height),
+    label-text-line-height: var(--app-chip-height),
+    label-text-size: 11px,
+    label-text-weight: 600
   ));
-
+  @include setStateColor();
+  .mat-mdc-chip-set {
+    .mdc-evolution-chip {
+      margin: 0;
+    }
+  }
 
   // --- checkbox ---
   @include setCheckBoxDensity(2);

@@ -5,7 +5,7 @@
 
 :root {
   --app-testik: #{map.get(appTheme.$primary-palette, secondary, 90)};
-  
+
   // colors
   --app-color-primary: var(--mat-sys-primary);
   --app-color-primary-rgb: 22, 121, 155;
@@ -52,6 +52,8 @@
   // material
   --app-menu-item-height: 32px; 
   --app-button-height: 36px;
+
+  --app-chip-height: 18px;
   
   --mat-icon-button-touch-target-size: 20px;
 }
