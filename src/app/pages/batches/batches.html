@@ -3,7 +3,7 @@
     <div class="app-fxLayout app-row app-center-v app-gap-2">
       <a routerLink="/home">Home</a>
       <span class="app-separator">/</span>
-      <strong>batches</strong>
+      <strong>Batches</strong>
     </div>
   </section>
 
@@ -40,8 +40,8 @@
         <input matInput formControlName="log" />
       </mat-form-field>
 
-      <button mat-stroked-button type="button" (click)="clearFilters()">Clear</button>
-      <button mat-flat-button type="button" (click)="refresh()">Refresh</button>
+      <button matButton="outlined" (click)="clearFilters()">Clear</button>
+      <button matButton="filled" (click)="refresh()">Refresh</button>
     </form>
   </section>
 
@@ -58,7 +58,7 @@
         </mat-card-content>
       </mat-card>
     }
-    <div class="app-table-wrapper app-maxh-100 app-oa-y">
+    <div class="app-border-wrapper app-maxh-100 app-oa-y">
       <table mat-table matSort [dataSource]="batches()" [matSortActive]="sortActive()" [matSortDirection]="sortDirection()" (matSortChange)="onSortChange($event)">
         <ng-container matColumnDef="batchId">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch ID</th>
@@ -126,7 +126,6 @@
                 </button>
               }
             </div>
-            
           </td>
         </ng-container>
 
@@ -135,7 +134,7 @@
       </table>
 
       @if (!loading() && batches().length === 0 && !error()) {
-        <mat-card class="app-alert app-warn" appearance="outlined">
+        <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
           <mat-card-content>
              <mat-icon></mat-icon>No batches match the current filters.
           </mat-card-content>

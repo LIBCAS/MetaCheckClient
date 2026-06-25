@@ -145,7 +145,6 @@ $states: (
         }
       }
     }
-
     .mat-mdc-card-actions {
       padding: 8px 16px 16px 16px;
     }
@@ -263,22 +262,37 @@ $states: (
     selected-state-text-color: var(--mat-sys-primary),
     shape: var(--app-radius-default)
   ));
+  .app-toolbar {
+    @include mat.button-toggle-overrides((
+      shape: 0,
+      divider-color: 0
+    ));
+  }
 
 
   // --- chips ---
   @include mat.chips-overrides((
-    container-height: var(--app-chip-height),
-    container-shape-radius: var(--app-chip-height),
-    label-text-line-height: var(--app-chip-height),
-    label-text-size: 11px,
-    label-text-weight: 600
+    container-shape-radius: 32px,
+    outline-color: rgba(#616161, .3),
+    label-text-color: #616161,
+    elevated-container-color: rgba(#616161, .1)
   ));
   @include setStateColor();
-  .mat-mdc-chip-set {
-    .mdc-evolution-chip {
-      margin: 0;
+  .mat-mdc-table {
+    @include mat.chips-overrides((
+      container-height: var(--app-chip-table-height),
+      container-shape-radius: var(--app-chip-table-height),
+      label-text-line-height: var(--app-chip-table-height),
+      label-text-size: 11px,
+      label-text-weight: 600
+    ));
+    .mat-mdc-chip-set {
+      .mdc-evolution-chip {
+        margin: 0;
+      }
     }
   }
+
 
   // --- checkbox ---
   @include setCheckBoxDensity(2);
@@ -455,9 +469,9 @@ $states: (
   
 
   // --- progress bar ---
-  .mat-mdc-progress-bar {
+  /* .mat-mdc-progress-bar {
     position: absolute;
-  }
+  } */
 
 
   // --- snack bar ---

@@ -30,6 +30,7 @@ import {
   ObjectInfo,
 } from '../../services/metacheck-api.service';
 import { FormsModule } from '@angular/forms';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-batch',
@@ -45,6 +46,7 @@ import { FormsModule } from '@angular/forms';
     RouterLink,
     SplitAreaComponent,
     SplitComponent,
+    MatChipsModule
   ],
   templateUrl: './batch.html',
   styleUrl: './batch.scss',
