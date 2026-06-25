@@ -329,7 +329,7 @@ $states: (
   ));
   .mat-mdc-table {
     .mat-mdc-header-row {
-      background-color: var(--app-color-gray-1);
+      background-color: rgb(var(--app-color-lightnes));
     }
 
     &.app-striped {
