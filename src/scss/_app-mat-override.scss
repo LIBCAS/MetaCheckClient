@@ -267,7 +267,7 @@ $alerts: (
 
   // --- paginator ---
   @include mat.paginator-overrides((
-    container-background-color: transparent,
+    container-background-color: rgb(var(--app-color-lightnes)),
     form-field-container-height: 36px,
     form-field-container-vertical-padding: 4px
   ));
