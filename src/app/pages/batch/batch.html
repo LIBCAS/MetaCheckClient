@@ -114,7 +114,39 @@
         col 2
       </as-split-area>
       <as-split-area [size]="34" [minSize]="24">
-        col 3
+        <div class="app-fxLayout app-column app-fill">
+          <div class="app-fxLayout app-row app-center-v app-toolbar app-pr-2">
+            <div class="app-fxFlex">
+              <strong>Image</strong>
+            </div>
+            <div>
+              Model: <strong>{{ selectedObject()?.model }}</strong>
+            </div>
+          </div>
+          <div class="app-fxFlex app-oh">
+            @if (loadingImage()) {
+              <mat-progress-bar mode="indeterminate" aria-label="Loading image" />
+            }
+            @if (imageError()) {
+              <mat-card class="app-alert app-error app-mb-4" appearance="outlined">
+                <mat-card-content>
+                  <mat-icon></mat-icon>{{ imageError() }}
+                </mat-card-content>
+              </mat-card>
+            }
+            @if (imageUrl(); as imageUrl) {
+              <div class="app-img-viewer app-oa-y">
+                <img [src]="imageUrl" [alt]="'Object image ' + selectedObject()?.uuid" />
+              </div>   
+            } @else if (!loadingImage() && !imageError()) {
+              <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
+                <mat-card-content>
+                  <mat-icon></mat-icon>No object selected.
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        </div>         
       </as-split-area>
     </as-split> 
     </div>
