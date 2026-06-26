@@ -31,6 +31,7 @@ import {
 } from '../../services/metacheck-api.service';
 import { FormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltip, MatTooltipModule } from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-batch',
@@ -39,15 +40,16 @@ import { MatChipsModule } from '@angular/material/chips';
     NgClass,
     MatButtonModule,
     MatIconModule,
-    MatButtonToggleModule, 
+    MatButtonToggleModule,
     MatCardModule,
     MatProgressBarModule,
     MatTableModule,
     RouterLink,
     SplitAreaComponent,
     SplitComponent,
-    MatChipsModule
-  ],
+    MatChipsModule,
+    MatTooltipModule
+],
   templateUrl: './batch.html',
   styleUrl: './batch.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

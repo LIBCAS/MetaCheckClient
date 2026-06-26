@@ -298,7 +298,8 @@ $confidences: (
   .app-toolbar {
     @include mat.button-toggle-overrides((
       shape: 0,
-      divider-color: 0
+      divider-color: 0,
+      selected-state-background-color: var(--app-color-gray-3)
     ));
   }
 

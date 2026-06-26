@@ -125,6 +125,27 @@ ul {
   cursor: pointer;
 }
 
+.app-pipe {
+  margin: 0 8px 0 8px;
+  border-left: 1px solid var(--app-color-gray-4);
+}
+
+.app-text-cutter {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-text-cutter-wrapper {
+  position: relative;
+  min-height: 20px;
+
+  .app-text-cutter {
+    position: absolute;
+    max-width: 100%;
+  }
+}
+
 // breadcrumbbar
 .app-breadcrumbsbar {
   border-bottom: 1px solid var(--app-border-color-default);
@@ -139,4 +160,10 @@ ul {
   padding-left: 8px;
   border-bottom: 1px solid var(--app-border-color-default);
   height: 35px;
+  background-color: var(--app-color-gray-1);
+
+  &.app-desc {
+    background-color: var(--app-color-lightnes);
+    color: var(--app-color-gray-6);
+  }
 }
