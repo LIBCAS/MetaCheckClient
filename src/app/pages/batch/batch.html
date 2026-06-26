@@ -128,7 +128,7 @@
               <mat-progress-bar mode="indeterminate" aria-label="Loading image" />
             }
             @if (imageError()) {
-              <mat-card class="app-alert app-error app-mb-4" appearance="outlined">
+              <mat-card class="app-alert app-error app-mb-4 app-clean-border" appearance="outlined">
                 <mat-card-content>
                   <mat-icon></mat-icon>{{ imageError() }}
                 </mat-card-content>
@@ -139,7 +139,7 @@
                 <img [src]="imageUrl" [alt]="'Object image ' + selectedObject()?.uuid" />
               </div>   
             } @else if (!loadingImage() && !imageError()) {
-              <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
+              <mat-card class="app-alert app-warn app-clean-border app-clean-border" appearance="outlined">
                 <mat-card-content>
                   <mat-icon></mat-icon>No object selected.
                 </mat-card-content>
