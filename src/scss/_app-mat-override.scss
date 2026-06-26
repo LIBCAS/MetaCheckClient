@@ -203,6 +203,13 @@ $confidences: (
       height: 12px;
     }
   }
+  .mat-mdc-form-field {
+    &.app-clean-bottom {
+      .mat-mdc-form-field-subscript-wrapper {
+        height: 0px;
+      }
+    }
+  }
 
 
   // --- date picker ---
