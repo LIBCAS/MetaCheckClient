@@ -57,7 +57,7 @@
             @switch (viewType) {
               @case ('list') {
                 <div class="app-maxh-100 app-oa-y" #objectsScroll>
-                  <table mat-table [dataSource]="objects()" class="app-striped app-hover">
+                  <table mat-table [dataSource]="objects()" class="app-hover">
                     <ng-container matColumnDef="model">
                       <th mat-header-cell *matHeaderCellDef>Model</th>
                       <td mat-cell *matCellDef="let object">{{ object.model }}</td>
@@ -87,12 +87,14 @@
                 </div>
               }
               @case ('images') {
-                <div class="app-fxLayout app-row app-wrap app-img-wrapper">
-                  @for (img of objects(); track img) {
-                    <div  [ngClass]="confidenceRowClass(img.percentage)" [class.selected-row]="isSelectedObject(img)" (click)="selectObject(img)" class="app-item app-fxFlex">
-                      <img [src]="getThumbUrl(img.uuid)" [alt]="'no image'" [title]="img.uuid" />
-                    </div>
-                  }  
+                <div class="app-maxh-100 app-oa-y">
+                  <div class="app-img-grid">
+                     @for (img of objects(); track img) {
+                      <button type="button" class="app-img-tile" [ngClass]="confidenceRowClass(img.percentage)" [class.selected-row]="isSelectedObject(img)" (click)="selectObject(img)">
+                        <img class="app-img-thumb" [src]="getThumbUrl(img.uuid)" [alt]="'no image'" [title]="img.uuid" loading="lazy"/>
+                      </button>
+                    }  
+                  </div>
                 </div>
               }
             }

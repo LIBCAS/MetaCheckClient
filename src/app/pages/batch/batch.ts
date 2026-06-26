@@ -200,22 +200,22 @@ export class Batch implements OnInit, OnDestroy {
     }
 
     if (percentage <= 0) {
-      return 'confidence-zero';
+      return 'app-confidence-zero';
     }
 
     if (percentage < 0.7) {
-      return 'confidence-low';
+      return 'app-confidence-low';
     }
 
     if (percentage < 0.9) {
-      return 'confidence-medium';
+      return 'app-confidence-medium';
     }
 
     if (percentage < 1) {
-      return 'confidence-high';
+      return 'app-confidence-high';
     }
 
-    return 'confidence-perfect';
+    return 'app-confidence-perfect';
   }
 
   protected metadataConfidenceRowClass(element: ElementInfo): string | null {

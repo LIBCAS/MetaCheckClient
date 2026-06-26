@@ -1,5 +1,6 @@
 // --- MATERIAL OVERRIDE ---
 @use 'sass:map';
+@use 'sass:color';
 @use '@angular/material' as mat;
 
 $alerts: (
@@ -42,6 +43,14 @@ $states: (
   EDITED: #455A64,
   STOPPED: #E64A19,
   FAILED: #D32F2F,
+);
+
+$confidences: (
+  app-confidence-zero: #6fa8dc,
+  app-confidence-low: #f59a9f,
+  app-confidence-medium: #f4d35e,
+  app-confidence-high: #7edfa1,
+  app-confidence-perfect: #b0b8c1
 );
 
 @mixin setCheckBoxDensity($val: null) {
@@ -97,6 +106,30 @@ $states: (
         label-text-color: $color,
         elevated-container-color: rgba($color, .1)
       ));
+    }
+  }
+}
+
+@mixin setConfidenceColor($view: null) {
+  @each $confidence, $color in $confidences {
+    @if ($view == 'grid') {
+      .app-img-grid {
+        .app-img-tile{
+          &.#{$confidence} {
+            &:before {
+              border-color: $color transparent transparent transparent;
+            }
+          }
+        }
+      }
+    } @else {
+      &.#{$confidence} {
+        background-color: $color !important;
+
+        &:hover {
+          background-color: color.change($color, $alpha: 0.4) !important;
+        }
+      }
     }
   }
 }
@@ -332,6 +365,10 @@ $states: (
       background-color: rgb(var(--app-color-lightnes));
     }
 
+    .mat-mdc-row {
+      @include setConfidenceColor();
+    }
+
     &.app-striped {
       .mat-mdc-row {
         &:nth-child(odd) {
@@ -489,6 +526,10 @@ $states: (
       supporting-text-color: rgb(var(--app-color-lightnes))
     ));
   }
+
+
+  // --- custom ---
+  @include setConfidenceColor(grid);
 
 
 
