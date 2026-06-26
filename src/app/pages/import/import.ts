@@ -13,6 +13,7 @@ import { Engine, MetacheckApiService } from '../../services/metacheck-api.servic
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelect, MatSelectModule } from "@angular/material/select";
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 interface FolderFlatTreeNode {
   name: string;
@@ -36,7 +37,8 @@ interface FolderFlatTreeNode {
     MatTooltipModule,
     MatTreeModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    RouterModule
 ],
   templateUrl: './import.html',
   styleUrl: './import.scss',
