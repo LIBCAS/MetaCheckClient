@@ -236,6 +236,9 @@ $confidences: (
         filled-container-color: rgb(var(--app-color-error-light))
       ));
     }
+    &.app-selected-folder {
+      background-color: color-mix(in srgb, var(--app-color-primary) 15%, transparent);
+    }
   }
   .mat-mdc-form-field {
     .mat-mdc-form-field-icon-suffix {
