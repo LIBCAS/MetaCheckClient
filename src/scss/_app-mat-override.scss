@@ -539,6 +539,13 @@ $confidences: (
   }
 
 
+  // tree
+  @include mat.tree-overrides((
+    //container-background-color: var(--app-color-lightnes)
+  ));
+
+
+
   // --- custom ---
   @include setConfidenceColor(grid);
 
