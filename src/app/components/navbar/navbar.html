@@ -5,9 +5,15 @@
   <span class="app-fxFlex" aria-hidden="true"></span>
   <nav>
     @for (item of navItems; track item.path) {
-      <a mat-button [routerLink]="item.path" routerLinkActive="app-active" [routerLinkActiveOptions]="{ exact: item.exact }" ariaCurrentWhenActive="page">
-        {{ item.label }}
-      </a>
+      @if (item.label == 'O aplikaci') {
+         <a mat-button (click)="openAboutDialog()">
+           {{ item.label }}
+         </a>
+      } @else {
+        <a mat-button [routerLink]="item.path" routerLinkActive="app-active" [routerLinkActiveOptions]="{ exact: item.exact }" ariaCurrentWhenActive="page">
+          {{ item.label }}
+        </a>
+      }  
     }
   </nav>
 </mat-toolbar> 
