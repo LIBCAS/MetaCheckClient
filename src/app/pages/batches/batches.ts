@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal, computed } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -14,7 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { debounceTime, finalize } from 'rxjs';
+import { debounceTime, finalize, map, startWith } from 'rxjs';
 
 import { AppStateService } from '../../services/app-state.service';
 import {
@@ -128,6 +128,25 @@ export class Batches implements OnInit {
       proarcBatchId: '',
     });
   }
+
+  protected readonly filterValues = toSignal(
+    this.filterForm.valueChanges.pipe(
+      startWith(this.filterForm.getRawValue()),
+      map(() => this.filterForm.getRawValue()),
+    ),
+    { initialValue: this.filterForm.getRawValue() },
+  );
+
+  protected readonly hasActiveFilters = computed(() => {
+    const filters = this.filterValues();
+    return Boolean(
+      filters.batchId.trim() ||
+      filters.state ||
+      filters.path.trim() ||
+      filters.log.trim() ||
+      filters.proarcBatchId.trim()
+    );
+  });
 
   protected onSortChange(sort: Sort): void {
     if (this.isBatchSortColumn(sort.active)) {

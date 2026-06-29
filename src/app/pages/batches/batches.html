@@ -8,8 +8,8 @@
   </section>
 
 
-  <section class="app-formbar app-container-fluid app-pb-1 app-fxLayout app-row app-baseline-v">
-    <form [formGroup]="filterForm" aria-label="Filtry dávek" class="app-fxFlex app-fxLayout app-row app-baseline-v app-gap-2">
+  <section class="app-formbar app-container-fluid app-pb-1 app-fxLayout app-row">
+    <form [formGroup]="filterForm" aria-label="Filtry dávek" class="app-fxFlex app-fxLayout app-row app-gap-2">
       <mat-form-field appearance="outline">
         <mat-label>ID dávky</mat-label>
         <input matInput formControlName="batchId" type="number" inputmode="numeric" />
@@ -39,8 +39,9 @@
         <mat-label>Log</mat-label>
         <input matInput formControlName="log" />
       </mat-form-field>
-
-      <button matButton="outlined" (click)="clearFilters()">Zrušit filtry</button>
+      @if (hasActiveFilters()) {
+        <button  matIconButton (click)="clearFilters()" class="app-color-warn" matTooltip="Zrusit všechny filtry"><mat-icon>close</mat-icon></button>
+      }
     </form>
 
     <button matButton="filled" (click)="refresh()">Obnovit</button>
