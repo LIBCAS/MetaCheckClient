@@ -3,22 +3,22 @@
     <div class="app-fxLayout app-row app-center-v app-gap-2">
       <a routerLink="/">Home</a>
       <span class="app-separator">/</span>
-      <strong>Batches</strong>
+      <strong>Dávky</strong>
     </div>
   </section>
 
 
   <section class="app-formbar app-container-fluid app-pb-1">
-    <form [formGroup]="filterForm" aria-label="Batch filters" class="app-fxLayout app-row app-baseline-v app-gap-2">
+    <form [formGroup]="filterForm" aria-label="Filtry dávek" class="app-fxLayout app-row app-baseline-v app-gap-2">
       <mat-form-field appearance="outline">
-        <mat-label>Batch ID</mat-label>
+        <mat-label>ID dávky</mat-label>
         <input matInput formControlName="batchId" type="number" inputmode="numeric" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>State</mat-label>
+        <mat-label>Stavy</mat-label>
         <mat-select formControlName="state">
-          <mat-option value="">All states</mat-option>
+          <mat-option value="">Všechny stavy</mat-option>
           @for (state of batchStates; track state) {
             <mat-option [value]="state">{{ state }}</mat-option>
           }
@@ -26,12 +26,12 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Path</mat-label>
+        <mat-label>Cesta</mat-label>
         <input matInput formControlName="path" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>ProArc batch ID</mat-label>
+        <mat-label>ProArc ID dávky</mat-label>
         <input matInput formControlName="proarcBatchId" type="number" inputmode="numeric" />
       </mat-form-field>
 
@@ -40,8 +40,8 @@
         <input matInput formControlName="log" />
       </mat-form-field>
 
-      <button matButton="outlined" (click)="clearFilters()">Clear</button>
-      <button matButton="filled" (click)="refresh()">Refresh</button>
+      <button matButton="outlined" (click)="clearFilters()">Zrušit filtry</button>
+      <button matButton="filled" (click)="refresh()">Obnovit</button>
     </form>
   </section>
 
@@ -61,12 +61,12 @@
     <div class="app-border-wrapper app-maxh-100 app-oa-y">
       <table mat-table matSort [dataSource]="batches()" [matSortActive]="sortActive()" [matSortDirection]="sortDirection()" (matSortChange)="onSortChange($event)" class="app-striped app-hover">
         <ng-container matColumnDef="batchId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Batch ID</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID dávky</th>
           <td mat-cell *matCellDef="let batch">{{ batch.batchId ?? '-' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="state">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Stav</th>
           <td mat-cell *matCellDef="let batch">
             <mat-chip-set aria-label="Batch state">
               <mat-chip [class]="'app-' + batch.state">{{ batch.state ?? '-' }}</mat-chip>
@@ -75,7 +75,7 @@
         </ng-container>
 
         <ng-container matColumnDef="path">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Path</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cesta</th>
           <td mat-cell *matCellDef="let batch" class="path-cell" [title]="batch.path ?? ''">
             {{ batch.path ?? '-' }}
           </td>
@@ -87,7 +87,7 @@
         </ng-container>
 
         <ng-container matColumnDef="createDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Created</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Vytvořeno</th>
           <td mat-cell *matCellDef="let batch">
             @if (batch.createDate) {
               {{ batch.createDate | date: 'yyyy-MM-dd HH:mm' }}
@@ -98,7 +98,7 @@
         </ng-container>
 
         <ng-container matColumnDef="updateDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Updated</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Upraveno</th>
           <td mat-cell *matCellDef="let batch">
             @if (batch.updateDate) {
               {{ batch.updateDate | date: 'yyyy-MM-dd HH:mm' }}
