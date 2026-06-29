@@ -224,9 +224,9 @@ $confidences: (
   @include mat.button-overrides((
     outlined-outline-color: var(--app-color-gray-3),
     outlined-container-height: var(--app-button-height),
-    outlined-container-shape: var(--app-radius-default),
+    //outlined-container-shape: var(--app-radius-default),
     filled-container-height: var(--app-button-height),
-    filled-container-shape: var(--app-radius-default),
+    //filled-container-shape: var(--app-radius-default),
     //text-container-shape: var(--app-radius-default),
     text-container-height: var(--app-button-height)
   ));

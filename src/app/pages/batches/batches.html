@@ -8,8 +8,8 @@
   </section>
 
 
-  <section class="app-formbar app-container-fluid app-pb-1">
-    <form [formGroup]="filterForm" aria-label="Filtry dávek" class="app-fxLayout app-row app-baseline-v app-gap-2">
+  <section class="app-formbar app-container-fluid app-pb-1 app-fxLayout app-row app-baseline-v">
+    <form [formGroup]="filterForm" aria-label="Filtry dávek" class="app-fxFlex app-fxLayout app-row app-baseline-v app-gap-2">
       <mat-form-field appearance="outline">
         <mat-label>ID dávky</mat-label>
         <input matInput formControlName="batchId" type="number" inputmode="numeric" />
@@ -41,8 +41,9 @@
       </mat-form-field>
 
       <button matButton="outlined" (click)="clearFilters()">Zrušit filtry</button>
-      <button matButton="filled" (click)="refresh()">Obnovit</button>
     </form>
+
+    <button matButton="filled" (click)="refresh()">Obnovit</button>
   </section>
 
 
