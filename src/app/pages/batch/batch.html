@@ -3,9 +3,9 @@
     <div class="app-fxLayout app-row app-center-v app-gap-2">
       <a routerLink="/">Home</a>
       <span class="app-separator">/</span>
-      <a routerLink="/batches">Batches</a>
+      <a routerLink="/batches">Dávky</a>
       <span class="app-separator">/</span>
-      <strong>Batch {{ batchId() ?? '-' }}</strong>
+      <strong>Dávka {{ batchId() ?? '-' }}</strong>
     </div>
   </section>
 
@@ -14,13 +14,13 @@
     <div class="app-fxLayout app-row app-baseline-v">
       <div class="app-fxFlex">
         <mat-chip-set>
-          <mat-chip>Batch ID: <strong>{{ currentBatch()?.batchId ?? batchId() ?? '-' }}</strong></mat-chip>
+          <mat-chip>ID dávky: <strong>{{ currentBatch()?.batchId ?? batchId() ?? '-' }}</strong></mat-chip>
           <mat-chip [class]="'app-' + currentBatch()?.state">{{ currentBatch()?.state ?? '-' }}</mat-chip>
-          <mat-chip>Path: <strong>{{ currentBatchPathName() }}</strong></mat-chip>
+          <mat-chip>Cesta: <strong>{{ currentBatchPathName() }}</strong></mat-chip>
         </mat-chip-set>
       </div>
       <div>
-        <button matButton="filled" (click)="refreshObjects()">Refresh</button>
+        <button matButton="filled" (click)="refreshObjects()">Obnovit</button>
       </div>
     </div>
   </section>
@@ -41,7 +41,7 @@
           <div class="app-fxLayout app-column app-fill">
             <div class="app-fxLayout app-row app-center-v app-toolbar">
               <div class="app-fxFlex">
-                Objects: <strong>{{ objects().length }} total</strong>
+                Objektů: <strong>{{ objects().length }} celkem</strong>
               </div>
               <div>
                 <mat-button-toggle-group name="viewType" aria-label="View" [(ngModel)]="viewType" hideSingleSelectionIndicator="true">
@@ -58,24 +58,24 @@
                 @case ('list') {
                   <div class="app-maxh-100 app-oa-y" #objectsScroll>
                     <table mat-table [dataSource]="objects()">
-                      <ng-container matColumnDef="model">
-                        <th mat-header-cell *matHeaderCellDef>Model</th>
-                        <td mat-cell *matCellDef="let object">{{ object.model }}</td>
-                      </ng-container>
-
-                      <ng-container matColumnDef="percentage">
-                        <th mat-header-cell *matHeaderCellDef>Confidence</th>
-                        <td mat-cell *matCellDef="let object">
-                          {{ formatConfidence(object.percentage) }}
-                        </td>
-                      </ng-container>
-
                       <ng-container matColumnDef="uuid">
                         <th mat-header-cell *matHeaderCellDef>UUID</th>
                         <td mat-cell *matCellDef="let object" [title]="object.uuid">
                           <div class="app-text-cutter-wrapper">
                             <div class="app-text-cutter" [matTooltip]="object.uuid">{{ object.uuid }}</div>
                           </div>
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="model">
+                        <th mat-header-cell *matHeaderCellDef>Model</th>
+                        <td mat-cell *matCellDef="let object">{{ object.model }}</td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="percentage">
+                        <th mat-header-cell *matHeaderCellDef>Důvěrnost</th>
+                        <td mat-cell *matCellDef="let object">
+                          {{ formatConfidence(object.percentage) }}
                         </td>
                       </ng-container>
 
@@ -92,7 +92,7 @@
                   <div class="app-maxh-100 app-oa-y">
                     <div class="app-img-grid">
                       @for (img of objects(); track img) {
-                        <button type="button" class="app-img-tile" [ngClass]="confidenceRowClass(img.percentage)" [class.selected-row]="isSelectedObject(img)" (click)="selectObject(img)">
+                        <button type="button" class="app-img-tile" [ngClass]="confidenceRowClass(img.percentage)" [class.app-tile-selected]="isSelectedObject(img)" (click)="selectObject(img)">
                           <img class="app-img-thumb" [src]="getThumbUrl(img.uuid)" [alt]="'no image'" [title]="img.uuid" loading="lazy"/>
                         </button>
                       }  
@@ -103,7 +103,7 @@
               @if (!loadingObjects() && objects().length === 0 && !error()) {
                 <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
                   <mat-card-content>
-                    <mat-icon></mat-icon>No objects found for this batch.
+                    <mat-icon></mat-icon>Pro tuto dávku nebyly nalezeny žádné objekty.
                   </mat-card-content>
                 </mat-card>
               }
@@ -117,7 +117,7 @@
               <div class="app-fxFlex">
                 Metadata: 
                  @if (metadata()) {
-                  <strong>{{ metadata()?.elementsInfoResponse?.length ?? 0 }} fields</strong>
+                  <strong>{{ metadata()?.elementsInfoResponse?.length ?? 0 }} polí</strong>
                 }
               </div>
               <div>
@@ -146,23 +146,12 @@
                 <div class="app-maxh-100 app-oa-y">
                   <table mat-table [dataSource]="metadata.elementsInfoResponse">
                     <ng-container matColumnDef="field">
-                      <th mat-header-cell *matHeaderCellDef>Field</th>
+                      <th mat-header-cell *matHeaderCellDef>Pole</th>
                       <td mat-cell *matCellDef="let element">{{ element.field ?? '-' }}</td>
                     </ng-container>
 
-                    <ng-container matColumnDef="originalValue">
-                      <th mat-header-cell *matHeaderCellDef>Original</th>
-                      <td mat-cell *matCellDef="let element">
-                        <div class="app-text-cutter-wrapper">
-                          <div class="app-text-cutter" [matTooltip]="element.originalValue">
-                            {{ element.originalValue ?? '-' }}
-                          </div>
-                        </div>
-                      </td>
-                    </ng-container>
-
                     <ng-container matColumnDef="editedValue">
-                      <th mat-header-cell *matHeaderCellDef>Edited</th>
+                      <th mat-header-cell *matHeaderCellDef>Editován</th>
                       <td mat-cell *matCellDef="let element">
                         @if (metadataEditOptions(element); as options) {
                         <select class="metadata-edit-control" [value]="element.editedValue ?? ''"
@@ -180,8 +169,19 @@
                       </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="originalValue">
+                      <th mat-header-cell *matHeaderCellDef>Originál</th>
+                      <td mat-cell *matCellDef="let element">
+                        <div class="app-text-cutter-wrapper">
+                          <div class="app-text-cutter" [matTooltip]="element.originalValue">
+                            {{ element.originalValue ?? '-' }}
+                          </div>
+                        </div>
+                      </td>
+                    </ng-container>
+
                     <ng-container matColumnDef="percentage">
-                      <th mat-header-cell *matHeaderCellDef>Confidence</th>
+                      <th mat-header-cell *matHeaderCellDef>Důvěrnost</th>
                       <td mat-cell *matCellDef="let element">
                         {{ formatConfidence(element.percentage) }}
                       </td>
@@ -194,7 +194,7 @@
               } @else if (!loadingMetadata() && !metadataError()) {
                 <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
                   <mat-card-content>
-                    <mat-icon></mat-icon>No object selected.
+                    <mat-icon></mat-icon>Žádný objekt není vybrán.
                   </mat-card-content>
                 </mat-card>
               }
@@ -230,7 +230,7 @@
               } @else if (!loadingImage() && !imageError()) {
                 <mat-card class="app-alert app-warn app-clean-border app-clean-border" appearance="outlined">
                   <mat-card-content>
-                    <mat-icon></mat-icon>No object selected.
+                    <mat-icon></mat-icon>Není vybrán žádný objekt.
                   </mat-card-content>
                 </mat-card>
               }

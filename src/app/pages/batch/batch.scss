@@ -34,6 +34,15 @@
     background-color: var(--app-color-gray-3);
     position: relative;
 
+    &.app-tile-selected {
+      outline: 4px solid var(--app-color-gray-8);
+      outline-offset: -4px; 
+    }
+
+    &:hover {
+      opacity: .9;
+    }
+
     &::before {
       content: "";
       width: 0px;
