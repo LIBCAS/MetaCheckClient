@@ -19,7 +19,7 @@
     <div class="app-fxFlex"></div>
     <div class="app-fxLayout app-row app-center-v app-gap-2">
       <mat-form-field appearance="outline" class="app-clean-bottom">
-        <mat-label>Engine</mat-label>
+        <mat-label>Model</mat-label>
         <mat-select [(ngModel)]="selectedEngine">
           <mat-option [value]="null">--</mat-option>
           @for (engine of engines(); track engine) {
@@ -28,7 +28,7 @@
         </mat-select>
       </mat-form-field>
       <button mat-flat-button type="button" [disabled]="!selectedPath()" (click)="addNewBatch()">Zpracovat</button>
-      <button mat-flat-button type="button" (click)="refresh()">Refresh</button>
+      <button mat-flat-button type="button" (click)="refresh()">Obnovit</button>
     </div>
   </section>
 
@@ -37,7 +37,7 @@
       <mat-card-content class="app-p-0">
         <mat-tree [dataSource]="folders()" [levelAccessor]="levelAccessor" [trackBy]="trackByPath">
         <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding [matTreeNodePaddingIndent]="24" [isExpandable]="node.expandable">
-          <button mat-icon-button type="button" [disabled]="!node.expandable && !node.loading" [attr.aria-label]="node.expanded ? 'Collapse ' + node.name : 'Expand ' + node.name" [matTooltip]="node.expanded ? 'Collapse' : 'Expand'" (click)="toggleFolder(node)">
+          <button mat-icon-button type="button" [disabled]="!node.expandable && !node.loading" [attr.aria-label]="node.expanded ? 'Collapse ' + node.name : 'Expand ' + node.name" [matTooltip]="node.expanded ? 'Zbalit' : 'Rozbalit'" (click)="toggleFolder(node)">
             <mat-icon aria-hidden="true">
               @if (node.loading) {
                 hourglass_empty
