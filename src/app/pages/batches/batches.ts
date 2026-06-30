@@ -12,6 +12,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { debounceTime, finalize, map, startWith } from 'rxjs';
@@ -54,6 +55,7 @@ interface BatchFiltersForm {
     MatPaginatorModule,
     MatProgressBarModule,
     MatSelectModule,
+    MatSnackBarModule,
     MatSortModule,
     MatTableModule,
     ReactiveFormsModule,
@@ -68,6 +70,7 @@ export class Batches implements OnInit {
   private readonly appState = inject(AppStateService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
 
   protected readonly displayedColumns = [
     'batchId',
@@ -103,6 +106,7 @@ export class Batches implements OnInit {
   protected readonly sortDirection = signal<SortDirection>('desc');
   protected readonly pageIndex = signal(0);
   protected readonly pageSize = signal(25);
+  private readonly editableBatchStates: readonly BatchState[] = ['GENERATED', 'EDITING', 'EDITED'];
 
   ngOnInit(): void {
     this.filterForm.valueChanges
@@ -168,6 +172,15 @@ export class Batches implements OnInit {
       return;
     }
 
+    if (!this.isEditableBatch(batch)) {
+      this.snackBar.open('Tento stav nepodporuje editaci.', 'Zavrit', {
+        duration: 10000,
+        panelClass: ['app-snackbar-error'],
+        verticalPosition: 'top',
+      });
+      return;
+    }
+
     this.appState.setCurrentBatch(batch);
     void this.router.navigate(['/batches', batch.batchId]);
   }
@@ -183,7 +196,7 @@ export class Batches implements OnInit {
     }
 
     this.loading.set(true);
-    
+
     this.api
       .restartBatch(batchId)
       .pipe(finalize(() => this.loading.set(false)))
@@ -204,7 +217,7 @@ export class Batches implements OnInit {
     }
 
     this.loading.set(true);
-    
+
     this.api
       .stopBatch(batchId)
       .pipe(finalize(() => this.loading.set(false)))
@@ -256,7 +269,7 @@ export class Batches implements OnInit {
   }
 
   private numberParam(value: string): number | undefined {
-    
+
     const trimmedValue = (value+'').trim();
 
     if (!trimmedValue) {
@@ -278,6 +291,10 @@ export class Batches implements OnInit {
 
   private isBatchSortColumn(value: string): value is BatchSortColumn {
     return ['batchId', 'state', 'path', 'proarcBatchId', 'createDate', 'updateDate'].includes(value);
+  }
+
+  private isEditableBatch(batch: Batch): boolean {
+    return batch.state !== null && batch.state !== undefined && this.editableBatchStates.includes(batch.state);
   }
 
   private describeError(error: unknown): string {
