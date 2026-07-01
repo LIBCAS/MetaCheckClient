@@ -4,7 +4,7 @@
 @use 'app-theme' as appTheme;
 
 :root {
-  --app-testik: #{map.get(appTheme.$primary-palette, secondary, 90)};
+  //--app-testik: #{map.get(appTheme.$primary-palette, secondary, 90)};
 
   // colors
   --app-color-primary: var(--mat-sys-primary);
