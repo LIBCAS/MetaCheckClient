@@ -1,12 +1,16 @@
 // --- VARIABLES ---
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use 'app-theme' as appTheme;
 
 :root {
+  --app-testik: #{map.get(appTheme.$primary-palette, secondary, 90)};
+
   // colors
   --app-color-primary: var(--mat-sys-primary);
-  --app-color-primary-rgb: 22, 121, 155;
+  --app-color-primary-rgb: 129, 74, 132;
   --app-color-secondary: var(--mat-sys-secondary);
+  --app-color-secondary-rgb: 17, 106, 96;
   --app-color-lightnes: 255, 255, 255;
   --app-color-darknes: 0, 0, 0;
 
@@ -49,6 +53,8 @@
   // material
   --app-menu-item-height: 32px; 
   --app-button-height: 36px;
+
+  --app-chip-table-height: 18px;
   
   --mat-icon-button-touch-target-size: 20px;
 }

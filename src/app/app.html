@@ -1,12 +1,13 @@
-<div class="app-shell">
-  <app-navbar />
+<div class="app-fxLayout app-column app-fill">
+  <header>
+    <app-navbar></app-navbar>
+  </header>
 
-  <main class="route-content">
+  <main class="app-fxFlex">
     <router-outlet />
   </main>
 
-  <footer class="site-footer">
-    <p>Metacheck client</p>
-    <a routerLink="/about">About this app</a>
+  <footer>
+    <app-footer></app-footer> 
   </footer>
 </div>

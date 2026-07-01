@@ -1,19 +1,23 @@
 import { DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal, computed } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { debounceTime, finalize } from 'rxjs';
+import { debounceTime, finalize, map, startWith } from 'rxjs';
 
+import { AppStateService } from '../../services/app-state.service';
 import {
   Batch,
   BatchState,
@@ -21,6 +25,8 @@ import {
   MetacheckApiService,
   SortOrder,
 } from '../../services/metacheck-api.service';
+import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 type BatchSortColumn =
   | 'batchId'
@@ -43,23 +49,30 @@ interface BatchFiltersForm {
   imports: [
     DatePipe,
     MatButtonModule,
+    MatCardModule,
+    MatChipsModule,
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
     MatProgressBarModule,
     MatSelectModule,
+    MatSnackBarModule,
     MatSortModule,
     MatTableModule,
     ReactiveFormsModule,
-  ],
+    MatIconModule,
+    MatTooltipModule
+],
   templateUrl: './batches.html',
   styleUrl: './batches.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Batches implements OnInit {
   private readonly api = inject(MetacheckApiService);
+  private readonly appState = inject(AppStateService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
 
   protected readonly displayedColumns = [
     'batchId',
@@ -73,7 +86,7 @@ export class Batches implements OnInit {
   protected readonly batchStates: readonly BatchState[] = [
     'EMPTY',
     'PLANNED',
-    'GENERAING',
+    'GENERATING',
     'GENERATED',
     'EDITING',
     'EDITED',
@@ -95,6 +108,7 @@ export class Batches implements OnInit {
   protected readonly sortDirection = signal<SortDirection>('desc');
   protected readonly pageIndex = signal(0);
   protected readonly pageSize = signal(25);
+  private readonly editableBatchStates: readonly BatchState[] = ['GENERATED', 'EDITING', 'EDITED'];
 
   ngOnInit(): void {
     this.filterForm.valueChanges
@@ -121,6 +135,25 @@ export class Batches implements OnInit {
     });
   }
 
+  protected readonly filterValues = toSignal(
+    this.filterForm.valueChanges.pipe(
+      startWith(this.filterForm.getRawValue()),
+      map(() => this.filterForm.getRawValue()),
+    ),
+    { initialValue: this.filterForm.getRawValue() },
+  );
+
+  protected readonly hasActiveFilters = computed(() => {
+    const filters = this.filterValues();
+    return Boolean(
+      filters.batchId.trim() ||
+      filters.state ||
+      filters.path.trim() ||
+      filters.log.trim() ||
+      filters.proarcBatchId.trim()
+    );
+  });
+
   protected onSortChange(sort: Sort): void {
     if (this.isBatchSortColumn(sort.active)) {
       this.sortActive.set(sort.active);
@@ -141,12 +174,63 @@ export class Batches implements OnInit {
       return;
     }
 
-    void this.router.navigate(['/batch', batch.batchId]);
+    if (!this.isEditableBatch(batch)) {
+      this.snackBar.open('Tento stav nepodporuje editaci.', 'Zavrit', {
+        duration: 10000,
+        panelClass: ['app-snackbar-error'],
+        verticalPosition: 'top',
+      });
+      return;
+    }
+
+    this.appState.setCurrentBatch(batch);
+    void this.router.navigate(['/batches', batch.batchId]);
   }
 
   protected openBatchFromKeyboard(event: Event, batch: Batch): void {
     event.preventDefault();
     this.openBatch(batch);
+  }
+
+  restartBatch(batchId: number) {
+    if (batchId === null) {
+      return;
+    }
+
+    this.loading.set(true);
+
+    this.api
+      .restartBatch(batchId)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
+        next: (updatedMetadata) => {
+          this.loadBatches()
+        },
+        error: (error: unknown) => {
+          alert(this.describeError(error));
+        },
+      });
+  }
+
+  stopBatch(batchId: number) {
+
+    if (batchId === null) {
+      return;
+    }
+
+    this.loading.set(true);
+
+    this.api
+      .stopBatch(batchId)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
+        next: (updatedMetadata) => {
+          this.loadBatches()
+        },
+        error: (error: unknown) => {
+          alert(this.describeError(error));
+        },
+      });
   }
 
   private loadBatches(): void {
@@ -187,7 +271,8 @@ export class Batches implements OnInit {
   }
 
   private numberParam(value: string): number | undefined {
-    const trimmedValue = value.trim();
+
+    const trimmedValue = (value+'').trim();
 
     if (!trimmedValue) {
       return undefined;
@@ -208,6 +293,10 @@ export class Batches implements OnInit {
 
   private isBatchSortColumn(value: string): value is BatchSortColumn {
     return ['batchId', 'state', 'path', 'proarcBatchId', 'createDate', 'updateDate'].includes(value);
+  }
+
+  private isEditableBatch(batch: Batch): boolean {
+    return batch.state !== null && batch.state !== undefined && this.editableBatchStates.includes(batch.state);
   }
 
   private describeError(error: unknown): string {

@@ -1,0 +1,16 @@
+.app-footer-wrapper {
+  background-color: rgb(var(--app-color-darknes));
+  padding: 16px;
+  color: var(--app-color-gray-5);
+
+  .app-pipe {
+    opacity: 0.6;
+  }
+
+  .app-right {
+    img {
+      height: 15px;
+      vertical-align: middle;
+    }
+  }
+}

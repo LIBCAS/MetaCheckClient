@@ -1,20 +1,13 @@
-* {
-  box-sizing: border-box;
-}
+@use 'scss/app-theme';
+@use 'scss/app-variables';
+@use 'scss/app-layout';
+@use 'scss/app-gap';
+@use 'scss/app-flex-layout';
+@use 'scss/app-global';
+@use 'scss/app-mat-override';
 
-html,
-body {
-  min-height: 100%;
-  margin: 0;
-}
 
-body {
-  min-width: 320px;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
+// do not delete
+// indigo: #87508a
+// green: #24776B
+// background: linear-gradient(90deg, #87508a, color-mix(in srgb, var(--mat-sys-primary) 82%, var(--mat-sys-tertiary)));

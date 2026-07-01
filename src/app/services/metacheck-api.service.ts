@@ -10,7 +10,7 @@ export const METACHECK_API_BASE_URL = new InjectionToken<string>('METACHECK_API_
 export type BatchState =
   | 'EMPTY'
   | 'PLANNED'
-  | 'GENERAING'
+  | 'GENERATING'
   | 'GENERATED'
   | 'EDITING'
   | 'EDITED'
@@ -48,17 +48,28 @@ export type ElementInfoType =
   | 'title'
   | 'translator';
 
+export interface Engine {
+  name: string | null;
+  description: string | null
+  version: string | null
+  defaultEngine: boolean | null
+  active: boolean | null
+}
+
 export interface AddBatchForm {
   path: string;
+  engine?: string | null; 
   proarcBatchId?: number | null;
 }
 
 export interface ApplicationInfo {
-  applicationName?: string | null;
-  version?: string | null;
-  database?: string | null;
-  status?: string | null;
+  applicationName: string;
+  version: string;
+  database: string ;
+  databaseSchemaVersion: string;
+  status: string;
 }
+
 
 export interface Batch {
   batchId?: number | null;
@@ -167,7 +178,7 @@ export class MetacheckApiService {
     return this.http.post<Batch>(
       this.url('/batch'),
       this.formBody({
-        path: form.path,
+        folder: form.path,
         proarcBatchId: form.proarcBatchId,
       }),
       { headers: this.formHeaders },
@@ -216,6 +227,28 @@ export class MetacheckApiService {
     );
   }
 
+  stopBatch(batchId: number): Observable<MetadataResponse> {
+
+    return this.http.post<MetadataResponse>(
+      this.url('/batch/stop'),
+      this.formBody({
+        batchId: batchId
+      }),
+      { headers: this.formHeaders },
+    );
+  }
+
+  restartBatch(batchId: number): Observable<MetadataResponse> {
+
+    return this.http.post<MetadataResponse>(
+      this.url('/batch/restart'),
+      this.formBody({
+        batchId: batchId
+      }),
+      { headers: this.formHeaders },
+    );
+  }
+
   getObjectAlto(batchId: number, pid: string): Observable<string> {
     return this.http.get(this.url('/object/alto'), {
       params: this.queryParams({ batchId, pid }),
@@ -231,6 +264,10 @@ export class MetacheckApiService {
   }
 
   private url(path: string): string {
+    return `${this.baseUrl}${path}`;
+  }
+
+  public getApiUrl(path: string): string {
     return `${this.baseUrl}${path}`;
   }
 
@@ -268,5 +305,9 @@ export class MetacheckApiService {
     }
 
     return body;
+  }
+
+  getEngines(): Observable<Engine[]> {
+    return this.http.get<Engine[]>(this.url('/batch/engines'));
   }
 }
