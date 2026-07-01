@@ -1,4 +1,4 @@
-<div class="app-fxLayout app-column app-fill">
+<!-- <div class="app-fxLayout app-column app-fill">
   <section class="app-breadcrumbsbar app-container-fluid">
     <div class="app-fxLayout app-row app-center-v app-gap-2">
       <a routerLink="/">Home</a>
@@ -76,91 +76,4 @@
       </mat-card-content>
     </mat-card>
   </section>
-</div>
-
-
-<!-- <section class="import-page" aria-labelledby="import-title">
-  <div class="page-heading">
-    <div>
-      <h1 id="import-title">Import</h1>
-    </div>
-
-    <button mat-flat-button type="button" (click)="refresh()">Refresh</button>
-  </div>
-
-  <mat-card class="tree-shell" appearance="outlined" aria-live="polite">
-    @if (loading()) {
-    <mat-progress-bar mode="indeterminate" aria-label="Loading folders" />
-    }
-
-    <div class="panel-heading">
-      <div>
-        <h2>Folders</h2>
-        @if (selectedPath()) {
-        <p class="selected-path" [title]="selectedPath() ?? ''">{{ selectedPath() }}</p>
-        } @else {
-        <p class="selected-path">No folder selected</p>
-        }
-      </div>
-      <div>
-      </div>
-      <div>
-        <mat-form-field appearance="outline">
-          <mat-label>Engine</mat-label>
-          <mat-select [(ngModel)]="selectedEngine">
-            <mat-option [value]="null">--</mat-option>
-            @for (engine of engines(); track engine) {
-            <mat-option [value]="engine">{{ engine.name }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>&#160;
-        <button mat-flat-button type="button" [disabled]="!selectedPath()" (click)="addNewBatch()">Zpracovat</button>
-      </div>
-    </div>
-
-    @if (error()) {
-    <p class="error-message">{{ error() }}</p>
-    }
-
-    <div class="tree-scroll">
-      <mat-tree [dataSource]="folders()" [levelAccessor]="levelAccessor" [trackBy]="trackByPath" class="folder-tree">
-        <mat-tree-node *matTreeNodeDef="let node" class="folder-node" matTreeNodePadding [matTreeNodePaddingIndent]="24"
-          [isExpandable]="node.expandable">
-          <div class="folder-row" [class.selected-folder]="selectedPath() === node.path">
-            <button mat-icon-button type="button" class="toggle-button" [disabled]="!node.expandable && !node.loading"
-              [attr.aria-label]="
-                node.expanded ? 'Collapse ' + node.name : 'Expand ' + node.name
-              " [matTooltip]="node.expanded ? 'Collapse' : 'Expand'" (click)="toggleFolder(node)">
-              <mat-icon aria-hidden="true">
-                @if (node.loading) {
-                hourglass_empty
-                } @else if (node.expandable) {
-                {{ node.expanded ? 'expand_more' : 'chevron_right' }}
-                }
-              </mat-icon>
-            </button>
-
-            <button mat-button type="button" class="folder-label"
-              [attr.aria-current]="selectedPath() === node.path ? 'true' : null" [title]="node.path"
-              (click)="selectFolder(node)">
-              <mat-icon aria-hidden="true">folder</mat-icon>
-              <span>{{ node.name }}</span>
-            </button>
-
-            @if (node.loading) {
-            <mat-progress-bar mode="indeterminate" aria-label="Loading child folders" />
-            }
-          </div>
-
-          @if (node.error) {
-          <p class="node-error">{{ node.error }}</p>
-          }
-        </mat-tree-node>
-      </mat-tree>
-
-      @if (!loading() && folders().length === 0 && !error()) {
-      <p class="empty-message">No folders are available.</p>
-      }
-    </div>
-  </mat-card>
-</section> -->
+</div> -->

@@ -33,17 +33,26 @@
     border: 0;
     background-color: var(--app-color-gray-3);
     position: relative;
+    cursor: pointer;
 
     &.app-tile-selected {
       outline: 4px solid var(--app-color-gray-8);
       outline-offset: -4px; 
+
+      &:after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.3);
+        pointer-events: none;
+      }
     }
 
     &:hover {
       opacity: .9;
     }
 
-    &::before {
+    &:before {
       content: "";
       width: 0px;
       height: 0px;
