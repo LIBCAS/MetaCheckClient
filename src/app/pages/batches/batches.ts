@@ -26,6 +26,7 @@ import {
   SortOrder,
 } from '../../services/metacheck-api.service';
 import { MatIconModule } from "@angular/material/icon";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 type BatchSortColumn =
   | 'batchId'
@@ -59,7 +60,8 @@ interface BatchFiltersForm {
     MatSortModule,
     MatTableModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule
 ],
   templateUrl: './batches.html',
   styleUrl: './batches.scss',

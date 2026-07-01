@@ -39,7 +39,7 @@
         <input matInput formControlName="log" />
       </mat-form-field>
       @if (hasActiveFilters()) {
-        <button  matIconButton (click)="clearFilters()" class="app-color-warn" matTooltip="Zrusit všechny filtry"><mat-icon>close</mat-icon></button>
+        <button  matIconButton (click)="clearFilters()" class="app-color-warn" [matTooltip]="'Zrušit všechny filtry'"><mat-icon>close</mat-icon></button>
       }
     </form>
     <button matButton="filled" (click)="refresh()">Obnovit</button>
