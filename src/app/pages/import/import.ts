@@ -14,6 +14,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatSelect, MatSelectModule } from "@angular/material/select";
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 interface FolderFlatTreeNode {
   name: string;
@@ -38,7 +39,8 @@ interface FolderFlatTreeNode {
     MatTreeModule,
     MatFormFieldModule,
     MatSelectModule,
-    RouterModule
+    RouterModule,
+    TranslatePipe
 ],
   templateUrl: './import.html',
   styleUrl: './import.scss',
@@ -47,6 +49,7 @@ interface FolderFlatTreeNode {
 export class Import implements OnInit {
   private readonly api = inject(MetacheckApiService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly translator = inject(TranslateService);
 
   protected readonly folders = signal<FolderFlatTreeNode[]>([]);
   protected readonly loading = signal(false);
@@ -265,7 +268,7 @@ export class Import implements OnInit {
       return error.message;
     }
 
-    return 'Unable to load folders.';
+    return this.translator.instant('import.error.loadFolders');
   }
 
   addNewBatch() {
@@ -283,7 +286,7 @@ export class Import implements OnInit {
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (batch) => {
-          alert('Added');
+          alert(this.translator.instant('import.message.batchAdded'));
           //this.refreshFolders();
         },
         error: (error: unknown) => {

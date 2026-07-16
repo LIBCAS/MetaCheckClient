@@ -1,0 +1,241 @@
+{
+  "common": {
+    "close": "Close",
+    "collapse": "Collapse",
+    "empty": "-",
+    "expand": "Expand",
+    "refresh": "Refresh"
+  },
+  "navbar": {
+    "about": "About",
+    "batches": "Batches",
+    "home": "Home",
+    "import": "Imports",
+    "lang": {
+      "code": {
+        "cs": "CZ",
+        "en": "EN"
+      },
+      "desc": {
+        "cs": "Czech",
+        "en": "English"
+      }
+    }
+  },
+  "footer": {
+    "client": "Metacheck client",
+    "developedBy": "Developed by",
+    "version": "Version"
+  },
+  "about": {
+    "applicationName": "Application name",
+    "database": "Database",
+    "databaseSchemaVersion": "Database schema version",
+    "status": "Status",
+    "title": "About"
+  },
+  "import": {
+    "a11y": {
+      "collapseFolder": "Collapse folder {{ name }}",
+      "expandFolder": "Expand folder {{ name }}",
+      "loadingChildFolders": "Loading child folders"
+    },
+    "directory": "Directory",
+    "engine": "Model",
+    "error": {
+      "loadFolders": "Unable to load folders."
+    },
+    "message": {
+      "batchAdded": "Batch was added."
+    },
+    "noFolderSelected": "No folder selected",
+    "noFolders": "No folders are available.",
+    "process": "Process"
+  },
+  "batches": {
+    "a11y": {
+      "batchState": "Batch state",
+      "loading": "Loading batches",
+      "openBatch": "Open batch {{ id }}",
+      "pageSelection": "Batch page selection"
+    },
+    "actions": {
+      "restartBatch": "Restart batch",
+      "showLog": "Show log",
+      "stopBatch": "Stop batch"
+    },
+    "empty": "No batches match the current filters.",
+    "error": {
+      "loadBatches": "Unable to load batches."
+    },
+    "field": {
+      "batchId": "Batch ID",
+      "createDate": "Created",
+      "log": "Log",
+      "path": "Path",
+      "proarcBatchId": "ProArc batch ID",
+      "proarcId": "ProArc ID",
+      "state": "State",
+      "states": "States",
+      "updateDate": "Updated"
+    },
+    "filters": {
+      "allStates": "All states",
+      "clear": "Clear all filters",
+      "label": "Batch filters"
+    },
+    "message": {
+      "stateNotEditable": "This state does not support editing."
+    }
+  },
+  "batchDetail": {
+    "a11y": {
+      "editMetadataValue": "Edit value of {{ field }}",
+      "loadingImage": "Loading image",
+      "loadingMetadata": "Loading metadata",
+      "loadingObjects": "Loading objects",
+      "objectImage": "Object image {{ uuid }}",
+      "objectThumbnail": "Object thumbnail {{ uuid }}",
+      "pageMetadata": "Page metadata for {{ uuid }}",
+      "resizeSections": "Resize batch sections",
+      "selectObject": "Select object {{ uuid }}",
+      "viewType": "Object view"
+    },
+    "actions": {
+      "saveMetadata": "Save metadata"
+    },
+    "empty": {
+      "noObjectSelected": "No object is selected.",
+      "objects": "No objects were found for this batch."
+    },
+    "error": {
+      "invalidBatchId": "Invalid batch ID.",
+      "loadObjects": "Unable to load batch objects."
+    },
+    "field": {
+      "confidence": "Confidence",
+      "editedValue": "Edited",
+      "field": "Field",
+      "model": "Model",
+      "originalValue": "Original"
+    },
+    "fieldCount": "{{ count }} fields",
+    "image": "Image",
+    "metadata": "Metadata",
+    "objects": "Objects",
+    "short": {
+      "pageIndex": "idx",
+      "pageNumber": "no."
+    },
+    "title": "Batch {{ id }}",
+    "totalCount": "{{ count }} total",
+    "view": {
+      "images": "Images",
+      "list": "List"
+    }
+  },
+  "batch": {
+    "state": {
+      "EMPTY": "Empty",
+      "PLANNED": "Planned",
+      "GENERATING": "Generating",
+      "GENERATED": "Generated",
+      "EDITING": "Editing",
+      "EDITED": "Edited",
+      "STOPPED": "Stopped",
+      "FAILED": "Failed"
+    }
+  },
+  "metadata": {
+    "field": {
+      "abstrakt": "Abstract",
+      "author": "Author",
+      "dateIssued": "Date issued",
+      "edition": "Edition",
+      "editor": "Editor",
+      "endDate": "End date",
+      "illustrator": "Illustrator",
+      "keywords": "Keywords",
+      "manufacturePlaceTerm": "Manufacture place",
+      "manufacturePublisher": "Manufacturer",
+      "pageIndex": "Page index",
+      "pageIndexEnd": "End page index",
+      "pageIndexStart": "Start page index",
+      "pageNumber": "Page number",
+      "pageType": "Page type",
+      "partName": "Part name",
+      "partNumber": "Part number",
+      "placeTerm": "Place of publication",
+      "publisher": "Publisher",
+      "redaktor": "Redactor",
+      "seriesName": "Series name",
+      "seriesNumber": "Series number",
+      "side": "Side",
+      "startDate": "Start date",
+      "subTitle": "Subtitle",
+      "title": "Title",
+      "translator": "Translator",
+      "uuid": "UUID"
+    },
+    "value": {
+      "pageType": {
+        "Abstract": "Abstract",
+        "Advertisement": "Advertisement",
+        "Appendix": "Appendix",
+        "BackCover": "Back cover",
+        "BackEndPaper": "Back endpaper",
+        "BackEndSheet": "Back endsheet",
+        "Bibliography": "Bibliography",
+        "Blank": "Blank page",
+        "CalibrationTable": "Calibration table",
+        "Cover": "Cover",
+        "CustomInclude": "Custom include",
+        "Dedication": "Dedication",
+        "Edge": "Edge",
+        "Errata": "Errata",
+        "FlyLeaf": "Flyleaf",
+        "FragmentsOfBookbinding": "Fragments of bookbinding",
+        "FrontCover": "Front cover",
+        "FrontEndPaper": "Front endpaper",
+        "FrontEndSheet": "Front endsheet",
+        "FrontJacket": "Front jacket",
+        "Frontispiece": "Frontispiece",
+        "Illustration": "Illustration",
+        "Impressum": "Impressum",
+        "Imprimatur": "Imprimatur",
+        "Index": "Index",
+        "Jacket": "Jacket",
+        "ListOfIllustrations": "List of illustrations",
+        "ListOfMaps": "List of maps",
+        "ListOfTables": "List of tables",
+        "Map": "Map",
+        "NormalPage": "Normal page",
+        "Obituary": "Obituary",
+        "Preface": "Preface",
+        "SheetMusic": "Sheet music",
+        "Spine": "Spine",
+        "Table": "Table",
+        "TableOfContents": "Table of contents",
+        "TitlePage": "Title page"
+      },
+      "side": {
+        "left": "Left",
+        "right": "Right",
+        "single_page": "Single page"
+      }
+    }
+  },
+  "object": {
+    "model": {
+      "page": "Page",
+      "monograph": "Monograph",
+      "periodical": "Periodical",
+      "periodicalvolume": "Periodical volume",
+      "periodicalitem": "Periodical issue",
+      "article": "Article",
+      "map": "Map",
+      "graphic": "Graphic",
+      "soundrecording": "Sound recording"
+    }
+  }
+}

@@ -27,6 +27,8 @@ import {
 } from '../../services/metacheck-api.service';
 import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { batchStateKey } from '../../i18n/metacheck-translation-keys';
 
 type BatchSortColumn =
   | 'batchId'
@@ -61,7 +63,8 @@ interface BatchFiltersForm {
     MatTableModule,
     ReactiveFormsModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    TranslatePipe
 ],
   templateUrl: './batches.html',
   styleUrl: './batches.scss',
@@ -73,6 +76,7 @@ export class Batches implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly translator = inject(TranslateService);
 
   protected readonly displayedColumns = [
     'batchId',
@@ -108,6 +112,7 @@ export class Batches implements OnInit {
   protected readonly sortDirection = signal<SortDirection>('desc');
   protected readonly pageIndex = signal(0);
   protected readonly pageSize = signal(25);
+  protected readonly batchStateKey = batchStateKey;
   private readonly editableBatchStates: readonly BatchState[] = ['GENERATED', 'EDITING', 'EDITED'];
 
   ngOnInit(): void {
@@ -175,11 +180,15 @@ export class Batches implements OnInit {
     }
 
     if (!this.isEditableBatch(batch)) {
-      this.snackBar.open('Tento stav nepodporuje editaci.', 'Zavrit', {
+      this.snackBar.open(
+        this.translator.instant('batches.message.stateNotEditable'),
+        this.translator.instant('common.close'),
+        {
         duration: 10000,
         panelClass: ['app-snackbar-error'],
         verticalPosition: 'top',
-      });
+        },
+      );
       return;
     }
 
@@ -308,6 +317,6 @@ export class Batches implements OnInit {
       return error.message;
     }
 
-    return 'Unable to load batches.';
+    return this.translator.instant('batches.error.loadBatches');
   }
 }

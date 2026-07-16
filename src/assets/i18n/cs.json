@@ -1,0 +1,241 @@
+{
+  "common": {
+    "close": "Zavřít",
+    "collapse": "Zbalit",
+    "empty": "-",
+    "expand": "Rozbalit",
+    "refresh": "Obnovit"
+  },
+  "navbar": {
+    "about": "O aplikaci",
+    "batches": "Dávky",
+    "home": "Domů",
+    "import": "Importy",
+    "lang": {
+      "code": {
+        "cs": "CZ",
+        "en": "EN"
+      },
+      "desc": {
+        "cs": "Čeština",
+        "en": "Angličtina"
+      }
+    }
+  },
+  "footer": {
+    "client": "Metacheck klient",
+    "developedBy": "Vyvinula společnost",
+    "version": "Verze"
+  },
+  "about": {
+    "applicationName": "Jméno aplikace",
+    "database": "Databáze",
+    "databaseSchemaVersion": "Verze schématu databáze",
+    "status": "Stav",
+    "title": "O aplikaci"
+  },
+  "import": {
+    "a11y": {
+      "collapseFolder": "Zbalit složku {{ name }}",
+      "expandFolder": "Rozbalit složku {{ name }}",
+      "loadingChildFolders": "Načítání podsložek"
+    },
+    "directory": "Adresář",
+    "engine": "Model",
+    "error": {
+      "loadFolders": "Složky se nepodařilo načíst."
+    },
+    "message": {
+      "batchAdded": "Dávka byla přidána."
+    },
+    "noFolderSelected": "Není vybrána žádná složka",
+    "noFolders": "Nejsou k dispozici žádné složky.",
+    "process": "Zpracovat"
+  },
+  "batches": {
+    "a11y": {
+      "batchState": "Stav dávky",
+      "loading": "Načítání dávek",
+      "openBatch": "Otevřít dávku {{ id }}",
+      "pageSelection": "Výběr stránky dávek"
+    },
+    "actions": {
+      "restartBatch": "Obnovit dávku",
+      "showLog": "Zobrazit log",
+      "stopBatch": "Zastavit dávku"
+    },
+    "empty": "Žádné dávky neodpovídají aktuálním filtrům.",
+    "error": {
+      "loadBatches": "Dávky se nepodařilo načíst."
+    },
+    "field": {
+      "batchId": "ID dávky",
+      "createDate": "Vytvořeno",
+      "log": "Log",
+      "path": "Cesta",
+      "proarcBatchId": "ProArc ID dávky",
+      "proarcId": "ProArc ID",
+      "state": "Stav",
+      "states": "Stavy",
+      "updateDate": "Upraveno"
+    },
+    "filters": {
+      "allStates": "Všechny stavy",
+      "clear": "Zrušit všechny filtry",
+      "label": "Filtry dávek"
+    },
+    "message": {
+      "stateNotEditable": "Tento stav nepodporuje editaci."
+    }
+  },
+  "batchDetail": {
+    "a11y": {
+      "editMetadataValue": "Upravit hodnotu pole {{ field }}",
+      "loadingImage": "Načítání obrázku",
+      "loadingMetadata": "Načítání metadat",
+      "loadingObjects": "Načítání objektů",
+      "objectImage": "Obrázek objektu {{ uuid }}",
+      "objectThumbnail": "Náhled objektu {{ uuid }}",
+      "pageMetadata": "Metadata strany {{ uuid }}",
+      "resizeSections": "Změnit velikost sekcí dávky",
+      "selectObject": "Vybrat objekt {{ uuid }}",
+      "viewType": "Zobrazení objektů"
+    },
+    "actions": {
+      "saveMetadata": "Uložit metadata"
+    },
+    "empty": {
+      "noObjectSelected": "Není vybrán žádný objekt.",
+      "objects": "Pro tuto dávku nebyly nalezeny žádné objekty."
+    },
+    "error": {
+      "invalidBatchId": "Neplatné ID dávky.",
+      "loadObjects": "Objekty dávky se nepodařilo načíst."
+    },
+    "field": {
+      "confidence": "Důvěrnost",
+      "editedValue": "Editováno",
+      "field": "Pole",
+      "model": "Model",
+      "originalValue": "Originál"
+    },
+    "fieldCount": "{{ count }} polí",
+    "image": "Obrázek",
+    "metadata": "Metadata",
+    "objects": "Objektů",
+    "short": {
+      "pageIndex": "idx",
+      "pageNumber": "č."
+    },
+    "title": "Dávka {{ id }}",
+    "totalCount": "{{ count }} celkem",
+    "view": {
+      "images": "Obrázky",
+      "list": "Seznam"
+    }
+  },
+  "batch": {
+    "state": {
+      "EMPTY": "Prázdná",
+      "PLANNED": "Naplánovaná",
+      "GENERATING": "Generuje se",
+      "GENERATED": "Vygenerovaná",
+      "EDITING": "Upravuje se",
+      "EDITED": "Upravená",
+      "STOPPED": "Zastavená",
+      "FAILED": "Chyba"
+    }
+  },
+  "metadata": {
+    "field": {
+      "abstrakt": "Abstrakt",
+      "author": "Autor",
+      "dateIssued": "Datum vydání",
+      "edition": "Vydání",
+      "editor": "Editor",
+      "endDate": "Datum ukončení",
+      "illustrator": "Ilustrátor",
+      "keywords": "Klíčová slova",
+      "manufacturePlaceTerm": "Místo výroby",
+      "manufacturePublisher": "Výrobce",
+      "pageIndex": "Pořadí strany",
+      "pageIndexEnd": "Konečné pořadí strany",
+      "pageIndexStart": "Počáteční pořadí strany",
+      "pageNumber": "Číslo strany",
+      "pageType": "Typ strany",
+      "partName": "Název části",
+      "partNumber": "Číslo části",
+      "placeTerm": "Místo vydání",
+      "publisher": "Vydavatel",
+      "redaktor": "Redaktor",
+      "seriesName": "Název edice",
+      "seriesNumber": "Číslo edice",
+      "side": "Strana",
+      "startDate": "Počáteční datum",
+      "subTitle": "Podnázev",
+      "title": "Název",
+      "translator": "Překladatel",
+      "uuid": "UUID"
+    },
+    "value": {
+      "pageType": {
+        "Abstract": "Abstrakt (Abstract)",
+        "Advertisement": "Reklama (Advertisement)",
+        "Appendix": "Dodatek (Appendix)",
+        "BackCover": "Zadní desky (BackCover)",
+        "BackEndPaper": "Zadní předsádka (BackEndPaper)",
+        "BackEndSheet": "Zadní přídeští (BackEndSheet)",
+        "Bibliography": "Bibliografie (Bibliography)",
+        "Blank": "Prázdná strana (Blank)",
+        "CalibrationTable": "Kalibrační tabulka (CalibrationTable)",
+        "Cover": "Desky (Cover)",
+        "CustomInclude": "Vlastní vložená strana",
+        "Dedication": "Dedikace (Dedication)",
+        "Edge": "Ořízka (Edge)",
+        "Errata": "Errata (Errata)",
+        "FlyLeaf": "Volný list (FlyLeaf)",
+        "FragmentsOfBookbinding": "Část vazby (FragmentsOfBookbinding)",
+        "FrontCover": "Přední desky (FrontCover)",
+        "FrontEndPaper": "Přední předsádka (FrontEndPaper)",
+        "FrontEndSheet": "Přední přídeští (FrontEndSheet)",
+        "FrontJacket": "Reprezentativní obálka knihy (FrontJacket)",
+        "Frontispiece": "Frontispis (Frontispiece)",
+        "Illustration": "Ilustrace (Illustration)",
+        "Impressum": "Impressum (Impressum)",
+        "Imprimatur": "Povolení k tisku (Imprimatur)",
+        "Index": "Rejstřík (Index)",
+        "Jacket": "Obálka (Jacket)",
+        "ListOfIllustrations": "Seznam ilustrací (ListOfIllustrations)",
+        "ListOfMaps": "Seznam map (ListOfMaps)",
+        "ListOfTables": "Seznam tabulek (ListOfTables)",
+        "Map": "Mapa (Map)",
+        "NormalPage": "Normální strana (NormalPage)",
+        "Obituary": "Nekrolog (Obituary)",
+        "Preface": "Předmluva (Preface)",
+        "SheetMusic": "Notový zápis (SheetMusic)",
+        "Spine": "Hřbet (Spine)",
+        "Table": "Tabulka (Table)",
+        "TableOfContents": "Obsah (TableOfContents)",
+        "TitlePage": "Titulní strana (TitlePage)"
+      },
+      "side": {
+        "left": "Levá",
+        "right": "Pravá",
+        "single_page": "Samostatná strana"
+      }
+    }
+  },
+  "object": {
+    "model": {
+      "page": "Strana",
+      "monograph": "Monografie",
+      "periodical": "Periodikum",
+      "periodicalvolume": "Ročník periodika",
+      "periodicalitem": "Číslo periodika",
+      "article": "Článek",
+      "map": "Mapa",
+      "graphic": "Grafika",
+      "soundrecording": "Zvukový záznam"
+    }
+  }
+}

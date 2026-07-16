@@ -27,11 +27,19 @@ import {
   ElementInfo,
   MetadataResponse,
   MetacheckApiService,
+  ObjectElementInfo,
   ObjectInfo,
 } from '../../services/metacheck-api.service';
 import { FormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltip, MatTooltipModule } from "@angular/material/tooltip";
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import {
+  batchStateKey,
+  elementFieldKey,
+  metadataValueKey,
+  objectModelKey,
+} from '../../i18n/metacheck-translation-keys';
 
 @Component({
   selector: 'app-batch',
@@ -48,7 +56,8 @@ import { MatTooltip, MatTooltipModule } from "@angular/material/tooltip";
     SplitAreaComponent,
     SplitComponent,
     MatChipsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    TranslatePipe
 ],
   templateUrl: './batch.html',
   styleUrl: './batch.scss',
@@ -58,6 +67,7 @@ export class Batch implements OnInit, OnDestroy {
   public readonly api = inject(MetacheckApiService);
   private readonly appState = inject(AppStateService);
   private readonly route = inject(ActivatedRoute);
+  private readonly translator = inject(TranslateService);
   private readonly percentFormatter = new Intl.NumberFormat(undefined, {
     maximumFractionDigits: 2,
     minimumFractionDigits: 0,
@@ -127,6 +137,9 @@ export class Batch implements OnInit, OnDestroy {
   protected readonly metadataError = signal<string | null>(null);
   protected readonly metadataDirty = signal(false);
   protected readonly savingMetadata = signal(false);
+  protected readonly batchStateKey = batchStateKey;
+  protected readonly elementFieldKey = elementFieldKey;
+  protected readonly objectModelKey = objectModelKey;
   protected readonly currentBatch = computed(() => {
     const currentBatch = this.appState.currentBatch();
     const batchId = this.batchId();
@@ -145,7 +158,7 @@ export class Batch implements OnInit, OnDestroy {
     const batchId = this.parseBatchId(this.route.snapshot.paramMap.get('batchId'));
 
     if (batchId === null) {
-      this.error.set('Invalid batch ID.');
+      this.error.set(this.translator.instant('batchDetail.error.invalidBatchId'));
       return;
     }
 
@@ -314,6 +327,36 @@ export class Batch implements OnInit, OnDestroy {
     }
 
     return `${this.percentFormatter.format(parsedPercentage * 100)} %`;
+  }
+
+  protected isPageObject(object: ObjectInfo): boolean {
+    return object.model.toLowerCase() === 'page';
+  }
+
+  protected displayObjectValue(value: string | number | null | undefined): string {
+    if (value === null || value === undefined || value === '') {
+      return '-';
+    }
+
+    return String(value);
+  }
+
+  protected objectElementValue(
+    object: ObjectInfo,
+    field: ObjectElementInfo['field'],
+  ): string | number | null | undefined {
+    return object.elementsInfoResponse?.find((element) => element.field === field)?.value;
+  }
+
+  protected objectElementValueKey(
+    object: ObjectInfo,
+    field: ObjectElementInfo['field'],
+  ): string {
+    return metadataValueKey(field, this.objectElementValue(object, field));
+  }
+
+  protected metadataElementValueKey(element: ElementInfo, value: string | null | undefined): string {
+    return metadataValueKey(element.field, value);
   }
 
   private loadObjects(batchId: number): void {
@@ -489,7 +532,7 @@ export class Batch implements OnInit, OnDestroy {
       return error.message;
     }
 
-    return 'Unable to load batch objects.';
+    return this.translator.instant('batchDetail.error.loadObjects');
   }
 
   private revokeImageUrl(): void {

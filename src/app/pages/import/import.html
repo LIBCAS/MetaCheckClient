@@ -1,25 +1,25 @@
 <div class="app-fxLayout app-column app-fill">
   <section class="app-breadcrumbsbar app-container-fluid">
     <div class="app-fxLayout app-row app-center-v app-gap-2">
-      <a routerLink="/">Home</a>
+      <a routerLink="/">{{ 'navbar.home' | translate }}</a>
       <span class="app-separator">/</span>
-      <strong>Import</strong>
+      <strong>{{ 'navbar.import' | translate }}</strong>
     </div>
   </section>
 
   <section class="app-formbar app-container-fluid app-fxLayout app-row">
     <div class="app-fxLayout app-row app-center-v app-gap-1">
-      <strong>Adresář:</strong>
+      <strong>{{ 'import.directory' | translate }}:</strong>
       @if (selectedPath()) {
         <span>{{ selectedPath() }}</span>
-        } @else {
-        <span class="app-color-warn">No folder selected</span>
+      } @else {
+        <span class="app-color-warn">{{ 'import.noFolderSelected' | translate }}</span>
       }
     </div>
     <div class="app-fxFlex"></div>
     <div class="app-fxLayout app-row app-center-v app-gap-2">
       <mat-form-field appearance="outline" class="app-clean-bottom">
-        <mat-label>Model</mat-label>
+        <mat-label>{{ 'import.engine' | translate }}</mat-label>
         <mat-select [(ngModel)]="selectedEngine">
           <mat-option [value]="null">--</mat-option>
           @for (engine of engines(); track engine) {
@@ -27,8 +27,12 @@
           }
         </mat-select>
       </mat-form-field>
-      <button mat-flat-button type="button" [disabled]="!selectedPath()" (click)="addNewBatch()">Zpracovat</button>
-      <button mat-flat-button type="button" (click)="refresh()">Obnovit</button>
+      <button mat-flat-button type="button" [disabled]="!selectedPath()" (click)="addNewBatch()">
+        {{ 'import.process' | translate }}
+      </button>
+      <button mat-flat-button type="button" (click)="refresh()">
+        {{ 'common.refresh' | translate }}
+      </button>
     </div>
   </section>
 
@@ -36,43 +40,43 @@
     <mat-card appearance="outlined" class="app-maxh-100 app-oa-y">
       <mat-card-content class="app-p-0">
         <mat-tree [dataSource]="folders()" [levelAccessor]="levelAccessor" [trackBy]="trackByPath">
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding [matTreeNodePaddingIndent]="24" [isExpandable]="node.expandable">
-          <button mat-icon-button type="button" [disabled]="!node.expandable && !node.loading" [attr.aria-label]="node.expanded ? 'Collapse ' + node.name : 'Expand ' + node.name" [matTooltip]="node.expanded ? 'Zbalit' : 'Rozbalit'" (click)="toggleFolder(node)">
-            <mat-icon aria-hidden="true">
-              @if (node.loading) {
-                hourglass_empty
-              } @else if (node.expandable) {
-                {{ node.expanded ? 'expand_more' : 'chevron_right' }}
-              }
-            </mat-icon>
-          </button>
+          <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding [matTreeNodePaddingIndent]="24" [isExpandable]="node.expandable">
+            <button mat-icon-button type="button" [disabled]="!node.expandable && !node.loading" [attr.aria-label]="(node.expanded ? 'import.a11y.collapseFolder' : 'import.a11y.expandFolder') | translate: { name: node.name }" [matTooltip]="(node.expanded ? 'common.collapse' : 'common.expand') | translate" (click)="toggleFolder(node)">
+              <mat-icon aria-hidden="true">
+                @if (node.loading) {
+                  hourglass_empty
+                } @else if (node.expandable) {
+                  {{ node.expanded ? 'expand_more' : 'chevron_right' }}
+                }
+              </mat-icon>
+            </button>
 
-          <button mat-button type="button" [attr.aria-current]="selectedPath() === node.path ? 'true' : null" [title]="node.path" (click)="selectFolder(node)" [class.app-selected-folder]="selectedPath() === node.path">
-            <mat-icon aria-hidden="true">folder</mat-icon>
-            <span>{{ node.name }}</span>
-          </button>
+            <button mat-button type="button" [attr.aria-current]="selectedPath() === node.path ? 'true' : null" [title]="node.path" (click)="selectFolder(node)" [class.app-selected-folder]="selectedPath() === node.path">
+              <mat-icon aria-hidden="true">folder</mat-icon>
+              <span>{{ node.name }}</span>
+            </button>
 
-          @if (node.loading) {
-            <mat-progress-bar mode="indeterminate" aria-label="Loading child folders" />
-          }
+            @if (node.loading) {
+              <mat-progress-bar mode="indeterminate" [attr.aria-label]="'import.a11y.loadingChildFolders' | translate" />
+            }
 
-          @if (node.error) {
-            <mat-card class="app-alert app-error app-mb-4" appearance="outlined">
-              <mat-card-content>
-                <mat-icon></mat-icon>{{ node.error }}
-              </mat-card-content>
-            </mat-card>
-          }
-        </mat-tree-node>
-      </mat-tree>
+            @if (node.error) {
+              <mat-card class="app-alert app-error app-mb-4" appearance="outlined">
+                <mat-card-content>
+                  <mat-icon></mat-icon>{{ node.error }}
+                </mat-card-content>
+              </mat-card>
+            }
+          </mat-tree-node>
+        </mat-tree>
 
-      @if (!loading() && folders().length === 0 && !error()) {
-        <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
-          <mat-card-content>
-             <mat-icon></mat-icon>Nejsou k dispozici žádné složky.
-          </mat-card-content>
-        </mat-card>
-      }
+        @if (!loading() && folders().length === 0 && !error()) {
+          <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
+            <mat-card-content>
+              <mat-icon></mat-icon>{{ 'import.noFolders' | translate }}
+            </mat-card-content>
+          </mat-card>
+        }
       </mat-card-content>
     </mat-card>
   </section>

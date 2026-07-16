@@ -1,13 +1,13 @@
-<h2 mat-dialog-title>O aplikaci</h2>
+<h2 mat-dialog-title>{{ 'about.title' | translate }}</h2>
 <mat-dialog-content>
-  @if(info()) {
-    <div>Jméno aplikace: <strong>{{info()?.applicationName}}</strong></div>
-    <div>Verze: <strong>{{info()?.version}}</strong></div>
-    <div>Databáze: <strong>{{info()?.database}}</strong></div>
-    <div>Verze schématu databáze: <strong>{{info()?.databaseSchemaVersion}}</strong></div>
-    <div>Stav: <strong>{{info()?.status}}</strong></div>
+  @if (info()) {
+    <div>{{ 'about.applicationName' | translate }}: <strong>{{ info()?.applicationName }}</strong></div>
+    <div>{{ 'footer.version' | translate }}: <strong>{{ info()?.version }}</strong></div>
+    <div>{{ 'about.database' | translate }}: <strong>{{ info()?.database }}</strong></div>
+    <div>{{ 'about.databaseSchemaVersion' | translate }}: <strong>{{ info()?.databaseSchemaVersion }}</strong></div>
+    <div>{{ 'about.status' | translate }}: <strong>{{ info()?.status }}</strong></div>
   }
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button matButton mat-dialog-close>Zavřít</button>
+  <button matButton mat-dialog-close>{{ 'common.close' | translate }}</button>
 </mat-dialog-actions>

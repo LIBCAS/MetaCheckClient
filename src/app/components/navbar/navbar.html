@@ -5,16 +5,26 @@
   <span class="app-fxFlex" aria-hidden="true"></span>
   <nav>
     @for (item of navItems; track item.path) {
-      @if (item.label == 'O aplikaci') {
+      @if (item.dialog) {
          <a mat-button (click)="openAboutDialog()">
-           {{ item.label }}
+           {{ item.labelKey | translate }}
          </a>
       } @else {
         <a mat-button [routerLink]="item.path" routerLinkActive="app-active" [routerLinkActiveOptions]="{ exact: item.exact }" ariaCurrentWhenActive="page">
-          {{ item.label }}
+          {{ item.labelKey | translate }}
         </a>
       }  
     }
+    <a mat-button [matMenuTriggerFor]="languageMenu">
+      {{ 'navbar.lang.code.' + currentLang() | translate }}
+    </a>
+    <mat-menu #languageMenu="matMenu">
+      @for (lang of languages; track lang) {
+        <button mat-menu-item type="button" (click)="onLanguageChanged(lang)">
+          <span>{{ 'navbar.lang.desc.' + lang | translate }}</span>
+        </button>
+      }
+    </mat-menu>
   </nav>
 </mat-toolbar> 
 

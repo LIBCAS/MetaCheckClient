@@ -1,11 +1,11 @@
 <div class="app-fxLayout app-column app-fill">
   <section class="app-breadcrumbsbar app-container-fluid">
     <div class="app-fxLayout app-row app-center-v app-gap-2">
-      <a routerLink="/">Home</a>
+      <a routerLink="/">{{ 'navbar.home' | translate }}</a>
       <span class="app-separator">/</span>
-      <a routerLink="/batches">Dávky</a>
+      <a routerLink="/batches">{{ 'navbar.batches' | translate }}</a>
       <span class="app-separator">/</span>
-      <strong>Dávka {{ batchId() ?? '-' }}</strong>
+      <strong>{{ 'batchDetail.title' | translate: { id: batchId() ?? '-' } }}</strong>
     </div>
   </section>
 
@@ -13,13 +13,13 @@
     <div class="app-fxLayout app-row app-baseline-v">
       <div class="app-fxFlex">
         <mat-chip-set>
-          <mat-chip>ID dávky: <strong>{{ currentBatch()?.batchId ?? batchId() ?? '-' }}</strong></mat-chip>
-          <mat-chip [class]="'app-' + currentBatch()?.state">{{ currentBatch()?.state ?? '-' }}</mat-chip>
-          <mat-chip>Cesta: <strong>{{ currentBatchPathName() }}</strong></mat-chip>
+          <mat-chip>{{ 'batches.field.batchId' | translate }}: <strong>{{ currentBatch()?.batchId ?? batchId() ?? '-' }}</strong></mat-chip>
+          <mat-chip [class]="'app-' + currentBatch()?.state">{{ batchStateKey(currentBatch()?.state) | translate }}</mat-chip>
+          <mat-chip>{{ 'batches.field.path' | translate }}: <strong>{{ currentBatchPathName() }}</strong></mat-chip>
         </mat-chip-set>
       </div>
       <div>
-        <button matButton="filled" (click)="refreshObjects()">Obnovit</button>
+        <button matButton="filled" (click)="refreshObjects()">{{ 'common.refresh' | translate }}</button>
       </div>
     </div>
   </section>
@@ -33,30 +33,34 @@
       </mat-card>
     }
     <div class="app-fxFlex app-border-wrapper">
-      <as-split direction="horizontal" unit="percent" [gutterSize]="10" gutterAriaLabel="Resize batch sections">
+      <as-split direction="horizontal" unit="percent" [gutterSize]="10" [gutterAriaLabel]="'batchDetail.a11y.resizeSections' | translate">
         <as-split-area [size]="34" [minSize]="24">
           <div class="app-fxLayout app-column app-fill">
             <div class="app-fxLayout app-row app-center-v app-toolbar">
               <div class="app-fxFlex">
-                Objektů: <strong>{{ objects().length }} celkem</strong>
+                {{ 'batchDetail.objects' | translate }}: <strong>{{ 'batchDetail.totalCount' | translate: { count: objects().length } }}</strong>
               </div>
               <div>
-                <mat-button-toggle-group name="viewType" aria-label="View" [(ngModel)]="viewType" hideSingleSelectionIndicator="true">
-                  <mat-button-toggle value="list"><mat-icon class="material-symbols-outlined">table_rows</mat-icon></mat-button-toggle>
-                  <mat-button-toggle value="images"><mat-icon>image</mat-icon></mat-button-toggle>
+                <mat-button-toggle-group name="viewType" [attr.aria-label]="'batchDetail.a11y.viewType' | translate" [(ngModel)]="viewType" hideSingleSelectionIndicator="true">
+                  <mat-button-toggle value="list" [attr.aria-label]="'batchDetail.view.list' | translate">
+                    <mat-icon class="material-symbols-outlined">table_rows</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="images" [attr.aria-label]="'batchDetail.view.images' | translate">
+                    <mat-icon>image</mat-icon>
+                  </mat-button-toggle>
                 </mat-button-toggle-group>
               </div>
             </div>
             <div class="app-fxFlex app-oh">
               @if (loadingObjects()) {
-                <mat-progress-bar mode="indeterminate" aria-label="Loading objects" />
+                <mat-progress-bar mode="indeterminate" [attr.aria-label]="'batchDetail.a11y.loadingObjects' | translate" />
               }
               @switch (viewType) {
                 @case ('list') {
                   <div class="app-maxh-100 app-oa-y" #objectsScroll>
                     <table mat-table [dataSource]="objects()">
                       <ng-container matColumnDef="uuid">
-                        <th mat-header-cell *matHeaderCellDef>UUID</th>
+                        <th mat-header-cell *matHeaderCellDef>{{ 'metadata.field.uuid' | translate }}</th>
                         <td mat-cell *matCellDef="let object" [title]="object.uuid">
                           <div class="app-text-cutter-wrapper">
                             <div class="app-text-cutter" [matTooltip]="object.uuid">{{ object.uuid }}</div>
@@ -65,12 +69,12 @@
                       </ng-container>
 
                       <ng-container matColumnDef="model">
-                        <th mat-header-cell *matHeaderCellDef>Model</th>
-                        <td mat-cell *matCellDef="let object">{{ object.model }}</td>
+                        <th mat-header-cell *matHeaderCellDef>{{ 'batchDetail.field.model' | translate }}</th>
+                        <td mat-cell *matCellDef="let object">{{ objectModelKey(object.model) | translate }}</td>
                       </ng-container>
 
                       <ng-container matColumnDef="percentage">
-                        <th mat-header-cell *matHeaderCellDef>Důvěrnost</th>
+                        <th mat-header-cell *matHeaderCellDef>{{ 'batchDetail.field.confidence' | translate }}</th>
                         <td mat-cell *matCellDef="let object">
                           {{ formatConfidence(object.percentage) }}
                         </td>
@@ -79,7 +83,7 @@
                       <tr mat-header-row *matHeaderRowDef="displayedObjectColumns; sticky: true"></tr>
                       <tr mat-row *matRowDef="let row; columns: displayedObjectColumns" class="app-row app-cursor-pointer"
                         [ngClass]="confidenceRowClass(row.percentage)" [class.app-row-selected]="isSelectedObject(row)"
-                        [attr.aria-label]="'Select object ' + row.uuid" [attr.aria-selected]="isSelectedObject(row)" tabindex="0"
+                        [attr.aria-label]="'batchDetail.a11y.selectObject' | translate: { uuid: row.uuid }" [attr.aria-selected]="isSelectedObject(row)" tabindex="0"
                         (click)="selectObject(row)" (keydown.enter)="selectObject(row)"
                         (keydown.space)="selectObjectFromKeyboard($event, row)"></tr>
                     </table>
@@ -89,10 +93,22 @@
                   <div class="app-maxh-100 app-oa-y">
                     <div class="app-img-grid">
                       @for (img of objects(); track img) {
-                        <button type="button" class="app-img-tile" [ngClass]="confidenceRowClass(img.percentage)" [class.app-tile-selected]="isSelectedObject(img)" (click)="selectObject(img)">
-                          <img class="app-img-thumb" [src]="getThumbUrl(img.uuid)" [alt]="'no image'" [title]="img.uuid" loading="lazy"/>
+                        <button type="button" class="app-img-tile" [ngClass]="confidenceRowClass(img.percentage)" [class.app-tile-selected]="isSelectedObject(img)" (click)="selectObject(img)" [attr.aria-label]="'batchDetail.a11y.selectObject' | translate: { uuid: img.uuid }">
+                          <img class="app-img-thumb" [src]="getThumbUrl(img.uuid)" [alt]="'batchDetail.a11y.objectThumbnail' | translate: { uuid: img.uuid }" [title]="img.uuid" loading="lazy"/>
+                          @if (isPageObject(img)) {
+                            <dl class="app-img-page-info" [attr.aria-label]="'batchDetail.a11y.pageMetadata' | translate: { uuid: img.uuid }">
+                              <div>
+                                <dd>{{ objectElementValueKey(img, 'pageType') | translate }}</dd>
+                                <dd>{{ 'batchDetail.short.pageNumber' | translate }}: {{ displayObjectValue(objectElementValue(img, 'pageNumber')) }}</dd>
+                              </div>
+                              <div>
+                                <dd>{{ objectElementValueKey(img, 'side') | translate }}</dd>
+                                <dd>{{ 'batchDetail.short.pageIndex' | translate }}: {{ displayObjectValue(objectElementValue(img, 'pageIndex')) }}</dd>
+                              </div>
+                            </dl>
+                          }
                         </button>
-                      }  
+                      }
                     </div>
                   </div>
                 }
@@ -100,7 +116,7 @@
               @if (!loadingObjects() && objects().length === 0 && !error()) {
                 <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
                   <mat-card-content>
-                    <mat-icon></mat-icon>Pro tuto dávku nebyly nalezeny žádné objekty.
+                    <mat-icon></mat-icon>{{ 'batchDetail.empty.objects' | translate }}
                   </mat-card-content>
                 </mat-card>
               }
@@ -112,25 +128,25 @@
           <div class="app-fxLayout app-column app-fill">
             <div class="app-fxLayout app-row app-center-v app-toolbar">
               <div class="app-fxFlex">
-                Metadata: 
-                 @if (metadata()) {
-                  <strong>{{ metadata()?.elementsInfoResponse?.length ?? 0 }} polí</strong>
+                {{ 'batchDetail.metadata' | translate }}:
+                @if (metadata()) {
+                  <strong>{{ 'batchDetail.fieldCount' | translate: { count: metadata()?.elementsInfoResponse?.length ?? 0 } }}</strong>
                 }
               </div>
               <div>
-                <button mat-icon-button type="button" class="save-metadata-button" [class.is-active]="metadataDirty()" [disabled]="!metadataDirty() || savingMetadata()" aria-label="Save metadata" title="Save metadata" (click)="saveMetadata()">
+                <button mat-icon-button type="button" class="save-metadata-button" [class.is-active]="metadataDirty()" [disabled]="!metadataDirty() || savingMetadata()" [attr.aria-label]="'batchDetail.actions.saveMetadata' | translate" [title]="'batchDetail.actions.saveMetadata' | translate" (click)="saveMetadata()">
                   <mat-icon>save</mat-icon>
                 </button>
               </div>
             </div>
             <div class="app-fxLayout app-row app-center-v app-toolbar app-desc">
               <span>
-                {{selectedObject()?.uuid}}<span class="app-pipe"></span>{{selectedObject()?.model}}<span class="app-pipe"></span><strong>{{formatConfidence(selectedObject()?.percentage)}}</strong>
+                {{ selectedObject()?.uuid }}<span class="app-pipe"></span>{{ objectModelKey(selectedObject()?.model) | translate }}<span class="app-pipe"></span><strong>{{ formatConfidence(selectedObject()?.percentage) }}</strong>
               </span>
             </div>
             <div class="app-fxFlex app-oh">
               @if (loadingMetadata() || savingMetadata()) {
-                <mat-progress-bar mode="indeterminate" aria-label="Loading metadata" />
+                <mat-progress-bar mode="indeterminate" [attr.aria-label]="'batchDetail.a11y.loadingMetadata' | translate" />
               }
               @if (metadataError()) {
                 <mat-card class="app-alert app-error app-mb-4 app-clean-border" appearance="outlined">
@@ -143,42 +159,42 @@
                 <div class="app-maxh-100 app-oa-y">
                   <table mat-table [dataSource]="metadata.elementsInfoResponse">
                     <ng-container matColumnDef="field">
-                      <th mat-header-cell *matHeaderCellDef>Pole</th>
-                      <td mat-cell *matCellDef="let element">{{ element.field ?? '-' }}</td>
+                      <th mat-header-cell *matHeaderCellDef>{{ 'batchDetail.field.field' | translate }}</th>
+                      <td mat-cell *matCellDef="let element">{{ elementFieldKey(element.field) | translate }}</td>
                     </ng-container>
 
                     <ng-container matColumnDef="editedValue">
-                      <th mat-header-cell *matHeaderCellDef>Editován</th>
+                      <th mat-header-cell *matHeaderCellDef>{{ 'batchDetail.field.editedValue' | translate }}</th>
                       <td mat-cell *matCellDef="let element">
                         @if (metadataEditOptions(element); as options) {
-                        <select class="metadata-edit-control" [value]="element.editedValue ?? ''"
-                          (change)="updateEditedValue(element, $any($event.target).value)">
-                          @for (option of options; track option) {
-                          <option [value]="option" [selected]="option === editedValue(element)">
-                            {{ option || '-' }}
-                          </option>
-                          }
-                        </select>
+                          <select class="metadata-edit-control" [value]="element.editedValue ?? ''" [attr.aria-label]="'batchDetail.a11y.editMetadataValue' | translate: { field: (elementFieldKey(element.field) | translate) }"
+                            (change)="updateEditedValue(element, $any($event.target).value)">
+                            @for (option of options; track option) {
+                              <option [value]="option" [selected]="option === editedValue(element)">
+                                {{ metadataElementValueKey(element, option) | translate }}
+                              </option>
+                            }
+                          </select>
                         } @else {
-                        <input class="metadata-edit-control" type="text" [value]="editedValue(element)"
-                          (input)="updateEditedValue(element, $any($event.target).value)" />
+                          <input class="metadata-edit-control" type="text" [value]="editedValue(element)" [attr.aria-label]="'batchDetail.a11y.editMetadataValue' | translate: { field: (elementFieldKey(element.field) | translate) }"
+                            (input)="updateEditedValue(element, $any($event.target).value)" />
                         }
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="originalValue">
-                      <th mat-header-cell *matHeaderCellDef>Originál</th>
+                      <th mat-header-cell *matHeaderCellDef>{{ 'batchDetail.field.originalValue' | translate }}</th>
                       <td mat-cell *matCellDef="let element">
                         <div class="app-text-cutter-wrapper">
                           <div class="app-text-cutter" [matTooltip]="element.originalValue">
-                            {{ element.originalValue ?? '-' }}
+                            {{ metadataElementValueKey(element, element.originalValue) | translate }}
                           </div>
                         </div>
                       </td>
                     </ng-container>
 
                     <ng-container matColumnDef="percentage">
-                      <th mat-header-cell *matHeaderCellDef>Důvěrnost</th>
+                      <th mat-header-cell *matHeaderCellDef>{{ 'batchDetail.field.confidence' | translate }}</th>
                       <td mat-cell *matCellDef="let element">
                         {{ formatConfidence(element.percentage) }}
                       </td>
@@ -191,7 +207,7 @@
               } @else if (!loadingMetadata() && !metadataError()) {
                 <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
                   <mat-card-content>
-                    <mat-icon></mat-icon>Žádný objekt není vybrán.
+                    <mat-icon></mat-icon>{{ 'batchDetail.empty.noObjectSelected' | translate }}
                   </mat-card-content>
                 </mat-card>
               }
@@ -203,15 +219,15 @@
           <div class="app-fxLayout app-column app-fill">
             <div class="app-fxLayout app-row app-center-v app-toolbar app-pr-2">
               <div class="app-fxFlex">
-                <strong>Image</strong>
+                <strong>{{ 'batchDetail.image' | translate }}</strong>
               </div>
               <div>
-                Model: <strong>{{ selectedObject()?.model }}</strong>
+                {{ 'batchDetail.field.model' | translate }}: <strong>{{ objectModelKey(selectedObject()?.model) | translate }}</strong>
               </div>
             </div>
             <div class="app-fxFlex app-oh">
               @if (loadingImage()) {
-                <mat-progress-bar mode="indeterminate" aria-label="Loading image" />
+                <mat-progress-bar mode="indeterminate" [attr.aria-label]="'batchDetail.a11y.loadingImage' | translate" />
               }
               @if (imageError()) {
                 <mat-card class="app-alert app-error app-mb-4 app-clean-border" appearance="outlined">
@@ -222,19 +238,19 @@
               }
               @if (imageUrl(); as imageUrl) {
                 <div class="app-img-viewer app-oa-y">
-                  <img [src]="imageUrl" [alt]="'Object image ' + selectedObject()?.uuid" />
-                </div>   
+                  <img [src]="imageUrl" [alt]="'batchDetail.a11y.objectImage' | translate: { uuid: selectedObject()?.uuid }" />
+                </div>
               } @else if (!loadingImage() && !imageError()) {
                 <mat-card class="app-alert app-warn app-clean-border app-clean-border" appearance="outlined">
                   <mat-card-content>
-                    <mat-icon></mat-icon>Není vybrán žádný objekt.
+                    <mat-icon></mat-icon>{{ 'batchDetail.empty.noObjectSelected' | translate }}
                   </mat-card-content>
                 </mat-card>
               }
             </div>
-          </div>         
+          </div>
         </as-split-area>
-      </as-split> 
+      </as-split>
     </div>
   </section>
 </div>

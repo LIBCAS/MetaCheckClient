@@ -115,6 +115,12 @@ export interface ObjectInfo {
   uuid: string;
   model: string;
   percentage?: number;
+  elementsInfoResponse?: ObjectElementInfo[];
+}
+
+export interface ObjectElementInfo {
+  field?: ElementInfoType | 'uuid';
+  value?: string | number | null;
 }
 
 export interface MetadataResponse {
