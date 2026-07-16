@@ -138,7 +138,7 @@ $confidences: (
 :root {
   // --- toolbar ---
   @include mat.toolbar-overrides((
-    container-background-color: linear-gradient(90deg, var(--mat-sys-primary), color-mix(in srgb, var(--mat-sys-secondary) 82%, var(--mat-sys-secondary))),
+    container-background-color: var(--mat-sys-primary),
     container-text-color: white,
     title-text-size: 18px,
   ));
