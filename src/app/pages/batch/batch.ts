@@ -1,4 +1,3 @@
-import { NgClass } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
@@ -47,7 +46,6 @@ type ObjectViewType = 'list' | 'images';
   selector: 'app-batch',
   imports: [
     FormsModule,
-    NgClass,
     MatButtonModule,
     MatIconModule,
     MatButtonToggleModule,
@@ -77,7 +75,15 @@ export class Batch implements OnInit, OnDestroy {
 
   @ViewChild('objectsScroll') private objectsScroll?: ElementRef<HTMLElement>;
 
-  protected readonly displayedObjectColumns = ['uuid', 'model', 'percentage'];
+  protected readonly displayedObjectColumns = [
+    'model',
+    'percentage',
+    'pageType',
+    'pageNumber',
+    'pageSide',
+    'pageIndex',
+    'uuid',
+  ];
   protected readonly displayedMetadataColumns = ['field', 'editedValue', 'originalValue', 'percentage'];
   protected readonly pageTypeOptions = [
     '',
@@ -233,6 +239,17 @@ export class Batch implements OnInit, OnDestroy {
     }
 
     return 'app-confidence-perfect';
+  }
+
+  protected hasConfidenceRowClass(
+    percentage: string | number | null | undefined,
+    className: string,
+  ): boolean {
+    return this.confidenceRowClass(this.parsePercentage(percentage)) === className;
+  }
+
+  protected hasMetadataConfidenceRowClass(element: ElementInfo, className: string): boolean {
+    return this.metadataConfidenceRowClass(element) === className;
   }
 
   protected metadataConfidenceRowClass(element: ElementInfo): string | null {

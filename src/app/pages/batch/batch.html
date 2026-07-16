@@ -59,15 +59,6 @@
                 @case ('list') {
                   <div class="app-maxh-100 app-oa-y" #objectsScroll>
                     <table mat-table [dataSource]="objects()">
-                      <ng-container matColumnDef="uuid">
-                        <th mat-header-cell *matHeaderCellDef>{{ 'metadata.field.uuid' | translate }}</th>
-                        <td mat-cell *matCellDef="let object" [title]="object.uuid">
-                          <div class="app-text-cutter-wrapper">
-                            <div class="app-text-cutter" [matTooltip]="object.uuid">{{ object.uuid }}</div>
-                          </div>
-                        </td>
-                      </ng-container>
-
                       <ng-container matColumnDef="model">
                         <th mat-header-cell *matHeaderCellDef>{{ 'batchDetail.field.model' | translate }}</th>
                         <td mat-cell *matCellDef="let object">{{ objectModelKey(object.model) | translate }}</td>
@@ -80,9 +71,51 @@
                         </td>
                       </ng-container>
 
+                      <ng-container matColumnDef="pageType">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'metadata.field.pageType' | translate }}</th>
+                        <td mat-cell *matCellDef="let object">
+                          {{ objectElementValueKey(object, 'pageType') | translate }}
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="pageNumber">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'metadata.field.pageNumber' | translate }}</th>
+                        <td mat-cell *matCellDef="let object">
+                          {{ displayObjectValue(objectElementValue(object, 'pageNumber')) }}
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="pageSide">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'metadata.field.side' | translate }}</th>
+                        <td mat-cell *matCellDef="let object">
+                          {{ objectElementValueKey(object, 'side') | translate }}
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="pageIndex">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'metadata.field.pageIndex' | translate }}</th>
+                        <td mat-cell *matCellDef="let object">
+                          {{ displayObjectValue(objectElementValue(object, 'pageIndex')) }}
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="uuid">
+                        <th mat-header-cell *matHeaderCellDef>{{ 'metadata.field.uuid' | translate }}</th>
+                        <td mat-cell *matCellDef="let object" [title]="object.uuid">
+                          <div class="app-text-cutter-wrapper">
+                            <div class="app-text-cutter" [matTooltip]="object.uuid">{{ object.uuid }}</div>
+                          </div>
+                        </td>
+                      </ng-container>
+
                       <tr mat-header-row *matHeaderRowDef="displayedObjectColumns; sticky: true"></tr>
                       <tr mat-row *matRowDef="let row; columns: displayedObjectColumns" class="app-row app-cursor-pointer"
-                        [ngClass]="confidenceRowClass(row.percentage)" [class.app-row-selected]="isSelectedObject(row)"
+                        [class.app-confidence-zero]="hasConfidenceRowClass(row.percentage, 'app-confidence-zero')"
+                        [class.app-confidence-low]="hasConfidenceRowClass(row.percentage, 'app-confidence-low')"
+                        [class.app-confidence-medium]="hasConfidenceRowClass(row.percentage, 'app-confidence-medium')"
+                        [class.app-confidence-high]="hasConfidenceRowClass(row.percentage, 'app-confidence-high')"
+                        [class.app-confidence-perfect]="hasConfidenceRowClass(row.percentage, 'app-confidence-perfect')"
+                        [class.app-row-selected]="isSelectedObject(row)"
                         [attr.aria-label]="'batchDetail.a11y.selectObject' | translate: { uuid: row.uuid }" [attr.aria-selected]="isSelectedObject(row)" tabindex="0"
                         (click)="selectObject(row)" (keydown.enter)="selectObject(row)"
                         (keydown.space)="selectObjectFromKeyboard($event, row)"></tr>
@@ -93,7 +126,13 @@
                   <div class="app-maxh-100 app-oa-y">
                     <div class="app-img-grid">
                       @for (img of objects(); track img) {
-                        <button type="button" class="app-img-tile" [ngClass]="confidenceRowClass(img.percentage)" [class.app-tile-selected]="isSelectedObject(img)" (click)="selectObject(img)" [attr.aria-label]="'batchDetail.a11y.selectObject' | translate: { uuid: img.uuid }">
+                        <button type="button" class="app-img-tile"
+                          [class.app-confidence-zero]="hasConfidenceRowClass(img.percentage, 'app-confidence-zero')"
+                          [class.app-confidence-low]="hasConfidenceRowClass(img.percentage, 'app-confidence-low')"
+                          [class.app-confidence-medium]="hasConfidenceRowClass(img.percentage, 'app-confidence-medium')"
+                          [class.app-confidence-high]="hasConfidenceRowClass(img.percentage, 'app-confidence-high')"
+                          [class.app-confidence-perfect]="hasConfidenceRowClass(img.percentage, 'app-confidence-perfect')"
+                          [class.app-tile-selected]="isSelectedObject(img)" (click)="selectObject(img)" [attr.aria-label]="'batchDetail.a11y.selectObject' | translate: { uuid: img.uuid }">
                           <img class="app-img-thumb" [src]="getThumbUrl(img.uuid)" [alt]="'batchDetail.a11y.objectThumbnail' | translate: { uuid: img.uuid }" [title]="img.uuid" loading="lazy"/>
                           @if (isPageObject(img)) {
                             <dl class="app-img-page-info" [attr.aria-label]="'batchDetail.a11y.pageMetadata' | translate: { uuid: img.uuid }">
@@ -201,7 +240,12 @@
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedMetadataColumns; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedMetadataColumns" [ngClass]="metadataConfidenceRowClass(row)"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedMetadataColumns"
+                      [class.app-confidence-zero]="hasMetadataConfidenceRowClass(row, 'app-confidence-zero')"
+                      [class.app-confidence-low]="hasMetadataConfidenceRowClass(row, 'app-confidence-low')"
+                      [class.app-confidence-medium]="hasMetadataConfidenceRowClass(row, 'app-confidence-medium')"
+                      [class.app-confidence-high]="hasMetadataConfidenceRowClass(row, 'app-confidence-high')"
+                      [class.app-confidence-perfect]="hasMetadataConfidenceRowClass(row, 'app-confidence-perfect')"></tr>
                   </table>
                 </div>
               } @else if (!loadingMetadata() && !metadataError()) {
