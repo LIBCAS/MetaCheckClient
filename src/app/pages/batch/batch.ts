@@ -41,6 +41,8 @@ import {
   objectModelKey,
 } from '../../i18n/metacheck-translation-keys';
 
+type ObjectViewType = 'list' | 'images';
+
 @Component({
   selector: 'app-batch',
   imports: [
@@ -152,7 +154,7 @@ export class Batch implements OnInit, OnDestroy {
   });
   protected readonly currentBatchPathName = computed(() => this.pathName(this.currentBatch()?.path));
 
-  viewType: string = 'list'; // list || images
+  viewType: ObjectViewType = 'images';
 
   ngOnInit(): void {
     const batchId = this.parseBatchId(this.route.snapshot.paramMap.get('batchId'));
@@ -171,7 +173,7 @@ export class Batch implements OnInit, OnDestroy {
     this.revokeImageUrl();
   }
 
-  setViewType(type: string) {
+  setViewType(type: ObjectViewType): void {
     this.viewType = type;
   }
 
