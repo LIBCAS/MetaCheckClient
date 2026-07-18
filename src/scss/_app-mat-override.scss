@@ -138,8 +138,10 @@ $confidences: (
 :root {
   // --- toolbar ---
   @include mat.toolbar-overrides((
-    container-background-color: var(--mat-sys-primary),
-    container-text-color: white,
+    //container-background-color: var(--mat-sys-primary),
+    container-background-color: var(--app-color-lightnes),
+    //container-text-color: white,
+    container-text-color: var(--mat-sys-primary),
     title-text-size: 18px,
   ));
 

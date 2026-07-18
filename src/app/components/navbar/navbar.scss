@@ -1,3 +1,6 @@
+.mat-toolbar {
+  border-bottom: 1px solid var(--app-color-gray-3);
+}
 .app-logo {
   img {
     // v1
@@ -9,7 +12,7 @@
 
 .mat-mdc-button {
   &.app-active {
-    background-color: rgb(var(--app-color-lightnes));
+    background-color: #EDF3F4;
     color: var(--app-color-secondary);
   }
 }
