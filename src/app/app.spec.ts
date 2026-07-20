@@ -84,7 +84,7 @@ describe('App', () => {
     expect(compiled.querySelector('nav')?.textContent).toContain('Imports');
     expect(compiled.querySelector('nav')?.textContent).toContain('About');
     expect(compiled.querySelector('footer')?.textContent).toContain('Metacheck client');
-    expect(compiled.querySelector('footer')?.textContent).toContain('Client version: 1.0.1');
+    expect(compiled.querySelector('footer')?.textContent).toContain('Client version: 1.0.3');
     expect(compiled.querySelector('footer')?.textContent).toContain('API version: 2.0.0');
     http.verify();
   });

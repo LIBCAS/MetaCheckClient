@@ -2,9 +2,28 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable, InjectionToken, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
+interface MetacheckGlobalConfig {
+  apiUrl?: string | null;
+}
+
+declare global {
+  interface Window {
+    METACHECK_GLOBAL?: MetacheckGlobalConfig;
+  }
+}
+
+const DEFAULT_API_URL = '/api';
+
+function getConfiguredApiBaseUrl(): string {
+  const apiUrl =
+    typeof window === 'undefined' ? DEFAULT_API_URL : window.METACHECK_GLOBAL?.apiUrl;
+
+  return `${(apiUrl || DEFAULT_API_URL).replace(/\/$/, '')}/rest/v1`;
+}
+
 export const METACHECK_API_BASE_URL = new InjectionToken<string>('METACHECK_API_BASE_URL', {
   providedIn: 'root',
-  factory: () => 'https://metacheck.inovatika.dev/api/rest/v1',
+  factory: getConfiguredApiBaseUrl,
 });
 
 export type BatchState =
