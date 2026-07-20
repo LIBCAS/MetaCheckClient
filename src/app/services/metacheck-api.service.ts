@@ -37,6 +37,7 @@ export type BatchState =
   | 'FAILED';
 
 export type SortOrder = 'asc' | 'desc';
+export type ObjectImageType = 'original' | 'preview' | 'thumbnail';
 
 export type ElementInfoType =
   | 'abstrakt'
@@ -69,24 +70,24 @@ export type ElementInfoType =
 
 export interface Engine {
   name: string | null;
-  description: string | null
-  version: string | null
-  defaultEngine: boolean | null
-  active: boolean | null
+  description: string | null;
+  version: string | null;
+  defaultEngine: boolean | null;
+  active: boolean | null;
 }
 
 export interface AddBatchForm {
   path: string;
-  engine?: string | null; 
+  engine?: string | null;
   proarcBatchId?: number | null;
 }
 
 export interface ApplicationInfo {
-  applicationName: string;
-  version: string;
-  database: string ;
-  databaseSchemaVersion: string;
-  status: string;
+  applicationName: string | null;
+  version: string | null;
+  database: string | null;
+  databaseSchemaVersion: string | null;
+  status: string | null;
 }
 
 export interface ClientConfig {
@@ -115,6 +116,7 @@ export interface ListBatchesParams {
   batchId?: number;
   state?: BatchState;
   path?: string;
+  folder?: string;
   log?: string;
   proarcBatchId?: number;
   createDateFrom?: string;
@@ -141,8 +143,8 @@ export interface ObjectInfo {
 }
 
 export interface ObjectElementInfo {
-  field?: ElementInfoType | 'uuid';
-  value?: string | number | null;
+  field?: ElementInfoType;
+  value?: string | null;
 }
 
 export interface MetadataResponse {
@@ -191,7 +193,7 @@ export class MetacheckApiService {
       params: this.queryParams({
         batchId: params.batchId,
         state: params.state,
-        path: params.path,
+        folder: params.folder ?? params.path,
         log: params.log,
         proarcBatchId: params.proarcBatchId,
         createDateFrom: params.createDateFrom,
@@ -211,6 +213,7 @@ export class MetacheckApiService {
       this.url('/batch'),
       this.formBody({
         folder: form.path,
+        engine: form.engine,
         proarcBatchId: form.proarcBatchId,
       }),
       { headers: this.formHeaders },
@@ -259,26 +262,12 @@ export class MetacheckApiService {
     );
   }
 
-  stopBatch(batchId: number): Observable<MetadataResponse> {
-
-    return this.http.post<MetadataResponse>(
-      this.url('/batch/stop'),
-      this.formBody({
-        batchId: batchId
-      }),
-      { headers: this.formHeaders },
-    );
+  stopBatch(batchId: number): Observable<Batch> {
+    return this.http.post<Batch>(this.url(`/batch/${batchId}/stop`), null);
   }
 
-  restartBatch(batchId: number): Observable<MetadataResponse> {
-
-    return this.http.post<MetadataResponse>(
-      this.url('/batch/restart'),
-      this.formBody({
-        batchId: batchId
-      }),
-      { headers: this.formHeaders },
-    );
+  restartBatch(batchId: number): Observable<Batch> {
+    return this.http.post<Batch>(this.url(`/batch/${batchId}/restart`), null);
   }
 
   getObjectAlto(batchId: number, pid: string): Observable<string> {
@@ -288,11 +277,17 @@ export class MetacheckApiService {
     });
   }
 
-  getObjectImage(batchId: number, pid: string): Observable<Blob> {
+  getObjectImage(batchId: number, pid: string, typ?: ObjectImageType): Observable<Blob> {
     return this.http.get(this.url('/object/image'), {
-      params: this.queryParams({ batchId, pid }),
+      params: this.queryParams({ batchId, pid, typ }),
       responseType: 'blob',
     });
+  }
+
+  getObjectImageUrl(batchId: number, pid: string, typ?: ObjectImageType): string {
+    const params = this.queryParams({ batchId, pid, typ }).toString();
+
+    return `${this.url('/object/image')}${params ? `?${params}` : ''}`;
   }
 
   private url(path: string): string {

@@ -57,12 +57,56 @@ describe('MetacheckApiService', () => {
     const request = http.expectOne((req) => req.url === '/api/rest/v1/batch');
     expect(request.request.method).toBe('GET');
     expect(request.request.params.get('state')).toBe('GENERATED');
-    expect(request.request.params.get('path')).toBe('proarc_users/batch-1');
+    expect(request.request.params.get('folder')).toBe('proarc_users/batch-1');
     expect(request.request.params.get('_startRow')).toBe('10');
     expect(request.request.params.get('_size')).toBe('25');
     expect(request.request.params.get('_sortBy')).toBe('createDate');
     expect(request.request.params.get('_sort')).toBe('desc');
     request.flush({ status: 0, startRow: 10, endRow: 34, total: 0, data: [] });
+  });
+
+  it('should serialize new batch form parameters according to the API contract', () => {
+    service
+      .addNewBatch({
+        path: 'proarc_users/batch-1',
+        engine: 'Engine A',
+        proarcBatchId: 42,
+      })
+      .subscribe();
+
+    const request = http.expectOne('/api/rest/v1/batch');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.headers.get('Content-Type')).toBe('application/x-www-form-urlencoded');
+    expect(request.request.body.get('folder')).toBe('proarc_users/batch-1');
+    expect(request.request.body.get('engine')).toBe('Engine A');
+    expect(request.request.body.get('proarcBatchId')).toBe('42');
+    request.flush({ batchId: 1, path: 'proarc_users/batch-1' });
+  });
+
+  it('should pass batch id as a path parameter when stopping and restarting a batch', () => {
+    service.stopBatch(7).subscribe();
+    service.restartBatch(7).subscribe();
+
+    const stopRequest = http.expectOne('/api/rest/v1/batch/7/stop');
+    expect(stopRequest.request.method).toBe('POST');
+    expect(stopRequest.request.body).toBeNull();
+    stopRequest.flush({ batchId: 7, state: 'STOPPED' });
+
+    const restartRequest = http.expectOne('/api/rest/v1/batch/7/restart');
+    expect(restartRequest.request.method).toBe('POST');
+    expect(restartRequest.request.body).toBeNull();
+    restartRequest.flush({ batchId: 7, state: 'PLANNED' });
+  });
+
+  it('should pass object image type as the typ query parameter', () => {
+    service.getObjectImage(7, '6d848d9c-0879-4f84-86db-9f49ea07fb99', 'thumbnail').subscribe();
+
+    const request = http.expectOne((req) => req.url === '/api/rest/v1/object/image');
+    expect(request.request.method).toBe('GET');
+    expect(request.request.params.get('batchId')).toBe('7');
+    expect(request.request.params.get('pid')).toBe('6d848d9c-0879-4f84-86db-9f49ea07fb99');
+    expect(request.request.params.get('typ')).toBe('thumbnail');
+    request.flush(new Blob());
   });
 
   it('should serialize metadata updates as form data', () => {

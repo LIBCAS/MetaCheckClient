@@ -468,8 +468,9 @@ export class Batch implements OnInit, OnDestroy {
   }
 
   public getThumbUrl(pid: string) {
-    const url = `/object/image?typ=thumbnail&batchId=${this.batchId()}&pid=${pid}`
-    return this.api.getApiUrl(url)
+    const batchId = this.batchId();
+
+    return batchId === null ? '' : this.api.getObjectImageUrl(batchId, pid, 'thumbnail');
   }
 
   private loadObjectImage(batchId: number, pid: string): void {
