@@ -6,6 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { About } from '../../dialogs/about/about';
+import { AppStateService } from '../../services/app-state.service';
 
 interface NavItem {
   labelKey: string;
@@ -34,14 +35,23 @@ export class NavBar implements OnInit {
 
   readonly dialog = inject(MatDialog);
   readonly translator = inject(TranslateService);
+  private readonly appState = inject(AppStateService);
 
   protected readonly languages = ['cs', 'en'];
   protected readonly currentLang = computed(() => this.translator.currentLang() ?? 'cs');
-  protected readonly navItems: readonly NavItem[] = [
-    { labelKey: 'navbar.batches', path: '/batches', exact: false },
-    { labelKey: 'navbar.import', path: '/import', exact: true },
-    { labelKey: 'navbar.about', path: '/about', exact: false, dialog: true },
-  ];
+  protected readonly navItems = computed<readonly NavItem[]>(() => {
+    const items: NavItem[] = [
+      { labelKey: 'navbar.batches', path: '/batches', exact: false },
+    ];
+
+    if (this.appState.clientConfig()?.standaloneApp === true) {
+      items.push({ labelKey: 'navbar.import', path: '/import', exact: true });
+    }
+
+    items.push({ labelKey: 'navbar.about', path: '/about', exact: false, dialog: true });
+
+    return items;
+  });
 
   ngOnInit(): void {
     const savedLanguage = localStorage.getItem(NavBar.languageStorageKey);

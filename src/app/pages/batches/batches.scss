@@ -4,3 +4,8 @@
   z-index: 10;
   border-top: 1px solid var(--app-border-color-default);
 }
+
+.clear-filters-button {
+  align-self: center;
+  flex-shrink: 0;
+}

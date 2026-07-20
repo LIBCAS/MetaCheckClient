@@ -4,7 +4,7 @@
   </a>
   <span class="app-fxFlex" aria-hidden="true"></span>
   <nav>
-    @for (item of navItems; track item.path) {
+    @for (item of navItems(); track item.path) {
       @if (item.dialog) {
          <a mat-button (click)="openAboutDialog()">
            {{ item.labelKey | translate }}

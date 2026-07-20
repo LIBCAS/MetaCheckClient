@@ -39,12 +39,14 @@ type BatchSortColumn =
   | 'updateDate';
 
 interface BatchFiltersForm {
-  batchId: FormControl<string>;
+  batchId: FormControl<number | null>;
   state: FormControl<BatchState | ''>;
   path: FormControl<string>;
   log: FormControl<string>;
-  proarcBatchId: FormControl<string>;
+  proarcBatchId: FormControl<number | null>;
 }
+
+type BatchFilterKey = keyof BatchFiltersForm;
 
 @Component({
   selector: 'app-batches',
@@ -79,15 +81,17 @@ export class Batches implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
   private readonly translator = inject(TranslateService);
 
-  protected readonly displayedColumns = [
-    'batchId',
-    'state',
-    'path',
-    'proarcBatchId',
-    'createDate',
-    'updateDate',
-    'log',
-  ];
+  protected readonly displayedColumns = computed(() => {
+    const columns = ['path', 'state'];
+
+    if (this.appState.clientConfig()?.standaloneApp !== true) {
+      columns.push('proarcBatchId');
+    }
+
+    columns.push('createDate', 'updateDate', 'log');
+
+    return columns;
+  });
   protected readonly batchStates: readonly BatchState[] = [
     'EMPTY',
     'PLANNED',
@@ -99,11 +103,11 @@ export class Batches implements OnInit {
     'FAILED',
   ];
   protected readonly filterForm = new FormGroup<BatchFiltersForm>({
-    batchId: new FormControl('', { nonNullable: true }),
+    batchId: new FormControl<number | null>(null),
     state: new FormControl<BatchState | ''>('', { nonNullable: true }),
     path: new FormControl('', { nonNullable: true }),
     log: new FormControl('', { nonNullable: true }),
-    proarcBatchId: new FormControl('', { nonNullable: true }),
+    proarcBatchId: new FormControl<number | null>(null),
   });
   protected readonly batches = signal<readonly Batch[]>([]);
   protected readonly total = signal(0);
@@ -136,12 +140,21 @@ export class Batches implements OnInit {
 
   protected clearFilters(): void {
     this.filterForm.reset({
-      batchId: '',
+      batchId: null,
       state: '',
       path: '',
       log: '',
-      proarcBatchId: '',
+      proarcBatchId: null,
     });
+  }
+
+  protected clearFilter(filterKey: BatchFilterKey): void {
+    if (filterKey === 'batchId' || filterKey === 'proarcBatchId') {
+      this.filterForm.controls[filterKey].setValue(null);
+      return;
+    }
+
+    this.filterForm.controls[filterKey].setValue('');
   }
 
   protected readonly filterValues = toSignal(
@@ -155,11 +168,11 @@ export class Batches implements OnInit {
   protected readonly hasActiveFilters = computed(() => {
     const filters = this.filterValues();
     return Boolean(
-      filters.batchId.trim() ||
+      this.hasNumberParam(filters.batchId) ||
       filters.state ||
       filters.path.trim() ||
       filters.log.trim() ||
-      filters.proarcBatchId.trim()
+      this.hasNumberParam(filters.proarcBatchId)
     );
   });
 
@@ -288,24 +301,23 @@ export class Batches implements OnInit {
 
     this.filterForm.reset(
       {
-        batchId: queryParams.get('batchId') ?? '',
+        batchId: this.numberParam(queryParams.get('batchId')) ?? null,
         state: this.batchStateParam(queryParams.get('state')),
         path: queryParams.get('path') ?? '',
         log: queryParams.get('log') ?? '',
-        proarcBatchId: queryParams.get('proarcBatchId') ?? '',
+        proarcBatchId: this.numberParam(queryParams.get('proarcBatchId')) ?? null,
       },
-      { emitEvent: false },
     );
   }
 
   private syncFilterQueryParams(): void {
     const filters = this.filterForm.getRawValue();
     const queryParams: Params = {
-      batchId: this.textParam(filters.batchId) ?? null,
+      batchId: this.numberParam(filters.batchId) ?? null,
       state: filters.state || null,
       path: this.textParam(filters.path) ?? null,
       log: this.textParam(filters.log) ?? null,
-      proarcBatchId: this.textParam(filters.proarcBatchId) ?? null,
+      proarcBatchId: this.numberParam(filters.proarcBatchId) ?? null,
     };
 
     void this.router.navigate([], {
@@ -316,9 +328,12 @@ export class Batches implements OnInit {
     });
   }
 
-  private numberParam(value: string): number | undefined {
+  private numberParam(value: number | string | null): number | undefined {
+    if (value === null) {
+      return undefined;
+    }
 
-    const trimmedValue = (value+'').trim();
+    const trimmedValue = String(value).trim();
 
     if (!trimmedValue) {
       return undefined;
@@ -326,6 +341,10 @@ export class Batches implements OnInit {
 
     const numberValue = Number(trimmedValue);
     return Number.isFinite(numberValue) ? numberValue : undefined;
+  }
+
+  protected hasNumberParam(value: number | null): boolean {
+    return value !== null && Number.isFinite(value);
   }
 
   private textParam(value: string): string | undefined {

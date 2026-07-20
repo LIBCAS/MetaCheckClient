@@ -82,6 +82,7 @@
     "filters": {
       "allStates": "All states",
       "clear": "Clear all filters",
+      "clearOne": "Clear this filter",
       "label": "Batch filters"
     },
     "message": {

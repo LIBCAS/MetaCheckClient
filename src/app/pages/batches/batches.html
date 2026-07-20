@@ -9,10 +9,15 @@
 
   <section class="app-formbar app-container-fluid app-pb-1 app-fxLayout app-row">
     <form [formGroup]="filterForm" [attr.aria-label]="'batches.filters.label' | translate" class="app-fxFlex app-fxLayout app-row app-gap-2">
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'batches.field.batchId' | translate }}</mat-label>
-        <input matInput formControlName="batchId" type="number" inputmode="numeric" />
-      </mat-form-field>
+<!--      <mat-form-field appearance="outline">-->
+<!--        <mat-label>{{ 'batches.field.batchId' | translate }}</mat-label>-->
+<!--        <input matInput formControlName="batchId" type="number" inputmode="numeric" />-->
+<!--        @if (hasNumberParam(filterValues().batchId)) {-->
+<!--          <button matSuffix matIconButton type="button" (click)="clearFilter('batchId'); $event.stopPropagation()" class="app-color-warn" [matTooltip]="'batches.filters.clearOne' | translate" [attr.aria-label]="'batches.filters.clearOne' | translate">-->
+<!--            <mat-icon>close</mat-icon>-->
+<!--          </button>-->
+<!--        }-->
+<!--      </mat-form-field>-->
 
       <mat-form-field appearance="outline">
         <mat-label>{{ 'batches.field.states' | translate }}</mat-label>
@@ -22,28 +27,49 @@
             <mat-option [value]="state">{{ batchStateKey(state) | translate }}</mat-option>
           }
         </mat-select>
+        @if (filterValues().state) {
+          <button matSuffix matIconButton type="button" (click)="clearFilter('state'); $event.stopPropagation()" class="app-color-warn" [matTooltip]="'batches.filters.clearOne' | translate" [attr.aria-label]="'batches.filters.clearOne' | translate">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>{{ 'batches.field.path' | translate }}</mat-label>
         <input matInput formControlName="path" />
+        @if (filterValues().path.trim()) {
+          <button matSuffix matIconButton type="button" (click)="clearFilter('path'); $event.stopPropagation()" class="app-color-warn" [matTooltip]="'batches.filters.clearOne' | translate" [attr.aria-label]="'batches.filters.clearOne' | translate">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'batches.field.proarcBatchId' | translate }}</mat-label>
-        <input matInput formControlName="proarcBatchId" type="number" inputmode="numeric" />
-      </mat-form-field>
+<!--      <mat-form-field appearance="outline">-->
+<!--        <mat-label>{{ 'batches.field.proarcBatchId' | translate }}</mat-label>-->
+<!--        <input matInput formControlName="proarcBatchId" type="number" inputmode="numeric" />-->
+<!--        @if (hasNumberParam(filterValues().proarcBatchId)) {-->
+<!--          <button matSuffix matIconButton type="button" (click)="clearFilter('proarcBatchId'); $event.stopPropagation()" class="app-color-warn" [matTooltip]="'batches.filters.clearOne' | translate" [attr.aria-label]="'batches.filters.clearOne' | translate">-->
+<!--            <mat-icon>close</mat-icon>-->
+<!--          </button>-->
+<!--        }-->
+<!--      </mat-form-field>-->
 
-      <mat-form-field appearance="outline">
-        <mat-label>{{ 'batches.field.log' | translate }}</mat-label>
-        <input matInput formControlName="log" />
-      </mat-form-field>
-      @if (hasActiveFilters()) {
-        <button matIconButton type="button" (click)="clearFilters()" class="app-color-warn" [matTooltip]="'batches.filters.clear' | translate" [attr.aria-label]="'batches.filters.clear' | translate">
-          <mat-icon>close</mat-icon>
-        </button>
-      }
+<!--      <mat-form-field appearance="outline">-->
+<!--        <mat-label>{{ 'batches.field.log' | translate }}</mat-label>-->
+<!--        <input matInput formControlName="log" />-->
+<!--        @if (filterValues().log.trim()) {-->
+<!--          <button matSuffix matIconButton type="button" (click)="clearFilter('log'); $event.stopPropagation()" class="app-color-warn" [matTooltip]="'batches.filters.clearOne' | translate" [attr.aria-label]="'batches.filters.clearOne' | translate">-->
+<!--            <mat-icon>close</mat-icon>-->
+<!--          </button>-->
+<!--        }-->
+<!--      </mat-form-field>-->
     </form>
+    @if (hasActiveFilters()) {
+      <button matButton="outlined" type="button" (click)="clearFilters()" class="clear-filters-button app-color-warn" [matTooltip]="'batches.filters.clear' | translate" [attr.aria-label]="'batches.filters.clear' | translate">
+        <mat-icon>close</mat-icon>
+        <span>{{ 'batches.filters.clear' | translate }}</span>
+      </button>
+    }
     <button matButton="filled" (click)="refresh()">{{ 'common.refresh' | translate }}</button>
   </section>
 
@@ -129,8 +155,8 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns" [class.clickable-row]="row.batchId !== null && row.batchId !== undefined" [attr.tabindex]="row.batchId !== null && row.batchId !== undefined ? 0 : null" [attr.role]="row.batchId !== null && row.batchId !== undefined ? 'link' : null" [attr.aria-label]="row.batchId !== null && row.batchId !== undefined ? ('batches.a11y.openBatch' | translate: { id: row.batchId }) : null" (click)="openBatch(row)" (keydown.enter)="openBatch(row)" (keydown.space)="openBatchFromKeyboard($event, row)" class="app-cursor-pointer"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns()" [class.clickable-row]="row.batchId !== null && row.batchId !== undefined" [attr.tabindex]="row.batchId !== null && row.batchId !== undefined ? 0 : null" [attr.role]="row.batchId !== null && row.batchId !== undefined ? 'link' : null" [attr.aria-label]="row.batchId !== null && row.batchId !== undefined ? ('batches.a11y.openBatch' | translate: { id: row.batchId }) : null" (click)="openBatch(row)" (keydown.enter)="openBatch(row)" (keydown.space)="openBatchFromKeyboard($event, row)" class="app-cursor-pointer"></tr>
       </table>
       @if (!loading() && batches().length === 0 && !error()) {
         <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">

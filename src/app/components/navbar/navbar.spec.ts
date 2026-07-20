@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 
 import { routes } from '../../app.routes';
+import { AppStateService } from '../../services/app-state.service';
 import { NavBar } from './navbar';
 
 describe('NavBar', () => {
@@ -30,7 +31,12 @@ describe('NavBar', () => {
     fixture = TestBed.createComponent(NavBar);
   });
 
-  it('should render the brand and navigation links', () => {
+  it('should render import navigation only for standalone app', () => {
+    const appState = TestBed.inject(AppStateService);
+    appState.setClientConfig({
+      standaloneApp: true,
+    });
+
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
@@ -40,5 +46,19 @@ describe('NavBar', () => {
     expect(compiled.querySelector('nav')?.textContent).toContain('Imports');
     expect(compiled.querySelector('nav')?.textContent).toContain('About');
     expect(compiled.querySelector('nav')?.textContent).toContain('EN');
+  });
+
+  it('should hide import navigation for non-standalone app', () => {
+    const appState = TestBed.inject(AppStateService);
+    appState.setClientConfig({
+      standaloneApp: false,
+    });
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('nav')?.textContent).toContain('Batches');
+    expect(compiled.querySelector('nav')?.textContent).not.toContain('Imports');
+    expect(compiled.querySelector('nav')?.textContent).toContain('About');
   });
 });

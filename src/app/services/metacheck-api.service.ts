@@ -70,6 +70,9 @@ export interface ApplicationInfo {
   status: string;
 }
 
+export interface ClientConfig {
+  standaloneApp?: boolean | null;
+}
 
 export interface Batch {
   batchId?: number | null;
@@ -158,6 +161,10 @@ export class MetacheckApiService {
 
   getApplicationInfo(): Observable<ApplicationInfo> {
     return this.http.get<ApplicationInfo>(this.url('/application'));
+  }
+
+  getClientConfig(): Observable<ClientConfig> {
+    return this.http.get<ClientConfig>(this.url('/application/clientConfig'));
   }
 
   listBatches(params: ListBatchesParams = {}): Observable<BatchListResponse> {

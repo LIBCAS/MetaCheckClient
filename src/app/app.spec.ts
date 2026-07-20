@@ -1,14 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { App } from './app';
 import { routes } from './app.routes';
+import { METACHECK_API_BASE_URL } from './services/metacheck-api.service';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter(routes), provideTranslateService({ fallbackLang: 'en', lang: 'en' })],
+      providers: [
+        provideRouter(routes),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideTranslateService({ fallbackLang: 'en', lang: 'en' }),
+        { provide: METACHECK_API_BASE_URL, useValue: '/api/rest/v1' },
+      ],
     }).compileComponents();
 
     const translator = TestBed.inject(TranslateService);
@@ -34,11 +43,24 @@ describe('App', () => {
   it('should create the app', () => {
     const fixture = TestBed.createComponent(App);
     const app = fixture.componentInstance;
+    fixture.detectChanges();
+    const http = TestBed.inject(HttpTestingController);
+    http.expectOne('/api/rest/v1/application/clientConfig').flush({
+      standaloneApp: true,
+    });
+
     expect(app).toBeTruthy();
+    http.verify();
   });
 
   it('should render the navigation and footer', async () => {
     const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const http = TestBed.inject(HttpTestingController);
+    http.expectOne('/api/rest/v1/application/clientConfig').flush({
+      standaloneApp: true,
+    });
+
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.app-logo img')?.getAttribute('alt')).toBe('Metacheck');
@@ -46,5 +68,6 @@ describe('App', () => {
     expect(compiled.querySelector('nav')?.textContent).toContain('Imports');
     expect(compiled.querySelector('nav')?.textContent).toContain('About');
     expect(compiled.querySelector('footer')?.textContent).toContain('Metacheck client');
+    http.verify();
   });
 });

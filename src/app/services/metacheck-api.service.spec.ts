@@ -34,6 +34,14 @@ describe('MetacheckApiService', () => {
     request.flush({});
   });
 
+  it('should request client config from the API base path', () => {
+    service.getClientConfig().subscribe();
+
+    const request = http.expectOne('/api/rest/v1/application/clientConfig');
+    expect(request.request.method).toBe('GET');
+    request.flush({ standaloneApp: true });
+  });
+
   it('should encode batch filters as query parameters', () => {
     service
       .listBatches({

@@ -82,6 +82,7 @@
     "filters": {
       "allStates": "Všechny stavy",
       "clear": "Zrušit všechny filtry",
+      "clearOne": "Zrušit tento filtr",
       "label": "Filtry dávek"
     },
     "message": {
