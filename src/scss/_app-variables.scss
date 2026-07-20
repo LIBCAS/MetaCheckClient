@@ -1,7 +1,7 @@
 // --- VARIABLES ---
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'app-theme' as appTheme;
+//@use 'app-theme' as appTheme;
 
 :root {
   //--app-testik: #{map.get(appTheme.$primary-palette, secondary, 90)};
