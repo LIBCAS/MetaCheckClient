@@ -110,6 +110,7 @@
       "saveMetadata": "Uložit metadata"
     },
     "empty": {
+      "modelNoImage": "Tento model neobsahuje image.",
       "noObjectSelected": "Není vybrán žádný objekt.",
       "objects": "Pro tuto dávku nebyly nalezeny žádné objekty."
     },

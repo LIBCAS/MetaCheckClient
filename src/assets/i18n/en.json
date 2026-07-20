@@ -110,6 +110,7 @@
       "saveMetadata": "Save metadata"
     },
     "empty": {
+      "modelNoImage": "This model does not contain an image.",
       "noObjectSelected": "No object is selected.",
       "objects": "No objects were found for this batch."
     },

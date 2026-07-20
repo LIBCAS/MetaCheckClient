@@ -159,6 +159,11 @@ export class Batch implements OnInit, OnDestroy {
     return currentBatch;
   });
   protected readonly currentBatchPathName = computed(() => this.pathName(this.currentBatch()?.path));
+  protected readonly selectedObjectHasImage = computed(() => {
+    const selectedObject = this.selectedObject();
+
+    return selectedObject !== null && this.isPageObject(selectedObject);
+  });
 
   viewType: ObjectViewType = 'images';
 
@@ -204,7 +209,11 @@ export class Batch implements OnInit, OnDestroy {
     this.imageError.set(null);
     this.metadataError.set(null);
     this.revokeImageUrl();
-    this.loadObjectImage(batchId, object.uuid);
+
+    if (this.isPageObject(object)) {
+      this.loadObjectImage(batchId, object.uuid);
+    }
+
     this.loadObjectMetadata(batchId, object.uuid);
   }
 

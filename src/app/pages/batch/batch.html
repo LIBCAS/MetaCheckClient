@@ -133,8 +133,8 @@
                           [class.app-confidence-high]="hasConfidenceRowClass(img.percentage, 'app-confidence-high')"
                           [class.app-confidence-perfect]="hasConfidenceRowClass(img.percentage, 'app-confidence-perfect')"
                           [class.app-tile-selected]="isSelectedObject(img)" (click)="selectObject(img)" [attr.aria-label]="'batchDetail.a11y.selectObject' | translate: { uuid: img.uuid }">
-                          <img class="app-img-thumb" [src]="getThumbUrl(img.uuid)" [alt]="'batchDetail.a11y.objectThumbnail' | translate: { uuid: img.uuid }" [title]="img.uuid" loading="lazy"/>
                           @if (isPageObject(img)) {
+                            <img class="app-img-thumb" [src]="getThumbUrl(img.uuid)" [alt]="'batchDetail.a11y.objectThumbnail' | translate: { uuid: img.uuid }" [title]="img.uuid" loading="lazy"/>
                             <dl class="app-img-page-info" [attr.aria-label]="'batchDetail.a11y.pageMetadata' | translate: { uuid: img.uuid }">
                               <div>
                                 <dd>{{ objectElementValueKey(img, 'pageType') | translate }}</dd>
@@ -145,6 +145,10 @@
                                 <dd>{{ 'batchDetail.short.pageIndex' | translate }}: {{ displayObjectValue(objectElementValue(img, 'pageIndex')) }}</dd>
                               </div>
                             </dl>
+                          } @else {
+                            <span class="app-img-unavailable">
+                              {{ 'batchDetail.empty.modelNoImage' | translate }}
+                            </span>
                           }
                         </button>
                       }
@@ -280,7 +284,13 @@
                   </mat-card-content>
                 </mat-card>
               }
-              @if (imageUrl(); as imageUrl) {
+              @if (selectedObject() && !selectedObjectHasImage()) {
+                <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
+                  <mat-card-content>
+                    <mat-icon></mat-icon>{{ 'batchDetail.empty.modelNoImage' | translate }}
+                  </mat-card-content>
+                </mat-card>
+              } @else if (imageUrl(); as imageUrl) {
                 <div class="app-img-viewer app-oa-y">
                   <img [src]="imageUrl" [alt]="'batchDetail.a11y.objectImage' | translate: { uuid: selectedObject()?.uuid }" />
                 </div>
