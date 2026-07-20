@@ -14,7 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { debounceTime, finalize, map, startWith } from 'rxjs';
 
 import { AppStateService } from '../../services/app-state.service';
@@ -74,6 +74,7 @@ export class Batches implements OnInit {
   private readonly api = inject(MetacheckApiService);
   private readonly appState = inject(AppStateService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
   private readonly translator = inject(TranslateService);
@@ -116,10 +117,13 @@ export class Batches implements OnInit {
   private readonly editableBatchStates: readonly BatchState[] = ['GENERATED', 'EDITING', 'EDITED'];
 
   ngOnInit(): void {
+    this.applyQueryParams();
+
     this.filterForm.valueChanges
       .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.pageIndex.set(0);
+        this.syncFilterQueryParams();
         this.loadBatches();
       });
 
@@ -279,6 +283,39 @@ export class Batches implements OnInit {
     };
   }
 
+  private applyQueryParams(): void {
+    const queryParams = this.route.snapshot.queryParamMap;
+
+    this.filterForm.reset(
+      {
+        batchId: queryParams.get('batchId') ?? '',
+        state: this.batchStateParam(queryParams.get('state')),
+        path: queryParams.get('path') ?? '',
+        log: queryParams.get('log') ?? '',
+        proarcBatchId: queryParams.get('proarcBatchId') ?? '',
+      },
+      { emitEvent: false },
+    );
+  }
+
+  private syncFilterQueryParams(): void {
+    const filters = this.filterForm.getRawValue();
+    const queryParams: Params = {
+      batchId: this.textParam(filters.batchId) ?? null,
+      state: filters.state || null,
+      path: this.textParam(filters.path) ?? null,
+      log: this.textParam(filters.log) ?? null,
+      proarcBatchId: this.textParam(filters.proarcBatchId) ?? null,
+    };
+
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
   private numberParam(value: string): number | undefined {
 
     const trimmedValue = (value+'').trim();
@@ -302,6 +339,14 @@ export class Batches implements OnInit {
 
   private isBatchSortColumn(value: string): value is BatchSortColumn {
     return ['batchId', 'state', 'path', 'proarcBatchId', 'createDate', 'updateDate'].includes(value);
+  }
+
+  private batchStateParam(value: string | null): BatchState | '' {
+    return value !== null && this.isBatchState(value) ? value : '';
+  }
+
+  private isBatchState(value: string): value is BatchState {
+    return this.batchStates.includes(value as BatchState);
   }
 
   private isEditableBatch(batch: Batch): boolean {
