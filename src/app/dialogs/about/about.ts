@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
+import { APP_VERSION } from '../../app-version';
 import { ApplicationInfo, MetacheckApiService } from '../../services/metacheck-api.service';
 
 @Component({
@@ -12,23 +13,24 @@ import { ApplicationInfo, MetacheckApiService } from '../../services/metacheck-a
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class About {
-  public readonly api = inject(MetacheckApiService);
-  info = signal<ApplicationInfo | null>(null);
+  private readonly api = inject(MetacheckApiService);
+  protected readonly clientVersion = APP_VERSION;
+  protected readonly info = signal<ApplicationInfo | null>(null);
 
   ngOnInit(): void {
     this.getData();
   }
 
-   getData() {
+  private getData(): void {
     this.api
-    .getApplicationInfo()
-    .subscribe({
-      next: (info) => {
-        this.info.set(info);
-      },
-      error: (error: unknown) => {
-        console.log(error)
-      },
-    });
+      .getApplicationInfo()
+      .subscribe({
+        next: (info) => {
+          this.info.set(info);
+        },
+        error: (error: unknown) => {
+          console.error(error);
+        },
+      });
   }
 }

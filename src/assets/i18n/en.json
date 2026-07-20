@@ -23,12 +23,16 @@
     }
   },
   "footer": {
+    "apiVersion": "API",
     "client": "Metacheck client",
+    "clientVersion": "Client",
     "developedBy": "Developed by",
     "version": "Version"
   },
   "about": {
     "applicationName": "Application name",
+    "apiVersion": "API version",
+    "clientVersion": "Client version",
     "database": "Database",
     "databaseSchemaVersion": "Database schema version",
     "status": "Status",

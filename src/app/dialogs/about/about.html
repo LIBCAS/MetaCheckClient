@@ -2,7 +2,8 @@
 <mat-dialog-content>
   @if (info()) {
     <div>{{ 'about.applicationName' | translate }}: <strong>{{ info()?.applicationName }}</strong></div>
-    <div>{{ 'footer.version' | translate }}: <strong>{{ info()?.version }}</strong></div>
+    <div>{{ 'about.apiVersion' | translate }}: <strong>{{ info()?.version }}</strong></div>
+    <div>{{ 'about.clientVersion' | translate }}: <strong>{{ clientVersion }}</strong></div>
     <div>{{ 'about.database' | translate }}: <strong>{{ info()?.database }}</strong></div>
     <div>{{ 'about.databaseSchemaVersion' | translate }}: <strong>{{ info()?.databaseSchemaVersion }}</strong></div>
     <div>{{ 'about.status' | translate }}: <strong>{{ info()?.status }}</strong></div>

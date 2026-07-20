@@ -1,6 +1,9 @@
 <div class="app-fxLayout app-row app-center-v app-footer-wrapper">
   <div class="app-left">
-    {{ 'footer.client' | translate }} © {{ currentYear }}<span class="app-pipe"></span>{{ 'footer.version' | translate }}: 1.0.2
+    {{ 'footer.client' | translate }} © {{ currentYear }}<span class="app-pipe"></span>{{ 'footer.clientVersion' | translate }}: {{ clientVersion }}
+    @if (apiVersion()) {
+      <span class="app-pipe"></span>{{ 'footer.apiVersion' | translate }}: {{ apiVersion() }}
+    }
   </div>
 
   <span class="app-fxFlex" aria-hidden="true"></span>

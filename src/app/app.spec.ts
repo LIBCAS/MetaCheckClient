@@ -23,7 +23,9 @@ describe('App', () => {
     const translator = TestBed.inject(TranslateService);
     translator.setTranslation('en', {
       footer: {
+        apiVersion: 'API version',
         client: 'Metacheck client',
+        clientVersion: 'Client version',
         developedBy: 'Developed by',
         version: 'Version',
       },
@@ -48,6 +50,13 @@ describe('App', () => {
     http.expectOne('/api/rest/v1/application/clientConfig').flush({
       standaloneApp: true,
     });
+    http.expectOne('/api/rest/v1/application').flush({
+      applicationName: 'Metacheck',
+      version: '2.0.0',
+      database: 'PostgreSQL',
+      databaseSchemaVersion: '1',
+      status: 'OK',
+    });
 
     expect(app).toBeTruthy();
     http.verify();
@@ -60,6 +69,13 @@ describe('App', () => {
     http.expectOne('/api/rest/v1/application/clientConfig').flush({
       standaloneApp: true,
     });
+    http.expectOne('/api/rest/v1/application').flush({
+      applicationName: 'Metacheck',
+      version: '2.0.0',
+      database: 'PostgreSQL',
+      databaseSchemaVersion: '1',
+      status: 'OK',
+    });
 
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
@@ -68,6 +84,8 @@ describe('App', () => {
     expect(compiled.querySelector('nav')?.textContent).toContain('Imports');
     expect(compiled.querySelector('nav')?.textContent).toContain('About');
     expect(compiled.querySelector('footer')?.textContent).toContain('Metacheck client');
+    expect(compiled.querySelector('footer')?.textContent).toContain('Client version: 1.0.1');
+    expect(compiled.querySelector('footer')?.textContent).toContain('API version: 2.0.0');
     http.verify();
   });
 });

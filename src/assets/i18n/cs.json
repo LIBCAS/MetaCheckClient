@@ -23,12 +23,16 @@
     }
   },
   "footer": {
+    "apiVersion": "API",
     "client": "Metacheck klient",
+    "clientVersion": "Klient",
     "developedBy": "Vyvinula společnost",
     "version": "Verze"
   },
   "about": {
     "applicationName": "Jméno aplikace",
+    "apiVersion": "Verze API",
+    "clientVersion": "Verze klienta",
     "database": "Databáze",
     "databaseSchemaVersion": "Verze schématu databáze",
     "status": "Stav",
