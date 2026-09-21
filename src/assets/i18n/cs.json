@@ -91,6 +91,9 @@
     },
     "message": {
       "stateNotEditable": "Tento stav nepodporuje editaci."
+    },
+    "logDialog": {
+      "title": "Log {{ id }}, cesta: {{ path }}"
     }
   },
   "batchDetail": {

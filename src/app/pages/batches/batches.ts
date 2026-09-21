@@ -6,6 +6,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -29,6 +30,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { batchStateKey } from '../../i18n/metacheck-translation-keys';
+import { BatchLog } from '../../dialogs/batch-log/batch-log';
 
 type BatchSortColumn =
   | 'batchId'
@@ -55,6 +57,7 @@ type BatchFilterKey = keyof BatchFiltersForm;
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
@@ -75,6 +78,7 @@ type BatchFilterKey = keyof BatchFiltersForm;
 export class Batches implements OnInit {
   private readonly api = inject(MetacheckApiService);
   private readonly appState = inject(AppStateService);
+  private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -294,6 +298,20 @@ export class Batches implements OnInit {
       sortBy: sortDirection ? this.sortActive() : undefined,
       sort: this.sortOrder(sortDirection),
     };
+  }
+
+  protected showLog(event: Event, batch: Batch): void {
+    event.stopPropagation();
+    this.dialog.open(BatchLog, {
+      data: {
+        batchId: batch.batchId ?? null,
+        log: batch.log ?? '',
+        path: batch.path ?? '',
+      },
+      maxHeight: '80vh',
+      maxWidth: '95vw',
+      width: '1200px',
+    });
   }
 
   private applyQueryParams(): void {

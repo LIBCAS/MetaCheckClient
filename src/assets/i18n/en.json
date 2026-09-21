@@ -91,6 +91,9 @@
     },
     "message": {
       "stateNotEditable": "This state does not support editing."
+    },
+    "logDialog": {
+      "title": "Log {{ id }}, path: {{ path }}"
     }
   },
   "batchDetail": {

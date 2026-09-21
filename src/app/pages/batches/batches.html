@@ -138,8 +138,8 @@
           <th mat-header-cell *matHeaderCellDef>{{ 'batches.field.log' | translate }}</th>
           <td mat-cell *matCellDef="let batch" class="log-cell" [title]="batch.log ?? ''">
             <div class="app-fxLayout app-row app-center-v app-gap-2">
-              <button matIconButton type="button" [attr.aria-label]="'batches.actions.showLog' | translate">
-                <mat-icon [title]="batch.log ?? '-'">info</mat-icon>
+              <button matIconButton type="button" [attr.aria-label]="'batches.actions.showLog' | translate" [matTooltip]="batch.log || ('common.empty' | translate)" (click)="showLog($event, batch)">
+                <mat-icon aria-hidden="true">info</mat-icon>
               </button>
               @if (batch.state === 'GENERATED' || batch.state === 'STOPPED') {
                 <button matIconButton type="button" [attr.aria-label]="'batches.actions.restartBatch' | translate" (click)="restartBatch(batch.batchId!)">
