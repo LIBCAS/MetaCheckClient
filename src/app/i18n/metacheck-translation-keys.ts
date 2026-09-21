@@ -22,7 +22,7 @@ export function metadataValueKey(
     return 'common.empty';
   }
 
-  if (field === 'pageType' || field === 'side') {
+  if (field === 'pageType' || field === 'side' || field === 'genre') {
     return serverValueKey(`metadata.value.${field}`, value);
   }
 

@@ -163,6 +163,7 @@
       "edition": "Vydání",
       "editor": "Editor",
       "endDate": "Datum ukončení",
+      "genre": "Reprezentativní strana",
       "illustrator": "Ilustrátor",
       "keywords": "Klíčová slova",
       "manufacturePlaceTerm": "Místo výroby",
@@ -187,6 +188,10 @@
       "uuid": "PID"
     },
     "value": {
+      "genre": {
+        "page": "Ne",
+        "reprePage": "Ano"
+      },
       "pageType": {
         "Abstract": "Abstrakt",
         "Advertisement": "Reklama",

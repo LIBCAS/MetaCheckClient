@@ -163,6 +163,7 @@
       "edition": "Edition",
       "editor": "Editor",
       "endDate": "End date",
+      "genre": "Representative page",
       "illustrator": "Illustrator",
       "keywords": "Keywords",
       "manufacturePlaceTerm": "Manufacture place",
@@ -187,6 +188,10 @@
       "uuid": "UUID"
     },
     "value": {
+      "genre": {
+        "page": "No",
+        "reprePage": "Yes"
+      },
       "pageType": {
         "Abstract": "Abstract",
         "Advertisement": "Advertisement",

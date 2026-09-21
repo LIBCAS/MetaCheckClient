@@ -383,6 +383,10 @@ export class Batch implements OnInit, OnDestroy {
     return metadataValueKey(field, this.objectElementValue(object, field));
   }
 
+  protected isRepresentativePage(object: ObjectInfo): boolean {
+    return this.objectElementValue(object, 'genre') === 'reprePage';
+  }
+
   protected metadataElementValueKey(element: ElementInfo, value: string | null | undefined): string {
     return metadataValueKey(element.field, value);
   }

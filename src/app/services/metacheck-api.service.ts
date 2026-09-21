@@ -46,6 +46,7 @@ export type ElementInfoType =
   | 'edition'
   | 'editor'
   | 'endDate'
+  | 'genre'
   | 'illustrator'
   | 'keywords'
   | 'manufacturePlaceTerm'
