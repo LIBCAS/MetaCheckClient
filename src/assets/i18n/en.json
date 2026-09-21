@@ -112,8 +112,45 @@
     "actions": {
       "pinImage": "Pin image",
       "saveMetadata": "Save metadata",
+      "showConfidenceHelp": "Explanation of confidence colors and ranges",
       "unpinImage": "Unpin image",
       "useNullValue": "Use NULL value"
+    },
+    "confidenceDialog": {
+      "title": "Confidence",
+      "intro": "The color indicates the model's confidence or how the value was created.",
+      "levels": {
+        "none": {
+          "label": "No value",
+          "range": "NULL",
+          "description": "White indicates a missing value or unavailable confidence."
+        },
+        "low": {
+          "label": "Low confidence",
+          "range": "0 to < 70%",
+          "description": "Red highlights a low-confidence result that should be checked."
+        },
+        "medium": {
+          "label": "Medium confidence",
+          "range": "70 to < 90%",
+          "description": "Yellow indicates a result with medium confidence."
+        },
+        "high": {
+          "label": "High confidence",
+          "range": "90 to 100%",
+          "description": "Green indicates a result with high confidence."
+        },
+        "generated": {
+          "label": "Generated value",
+          "range": "without probability",
+          "description": "Gray indicates a value created by the model without a supplied probability."
+        },
+        "edited": {
+          "label": "Manually edited value",
+          "range": "user change",
+          "description": "Blue indicates a value manually changed by the user."
+        }
+      }
     },
     "empty": {
       "modelNoImage": "This model does not contain an image.",

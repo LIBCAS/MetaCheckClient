@@ -139,7 +139,7 @@ export interface DeleteBatchesParams {
 export interface ObjectInfo {
   uuid: string;
   model: string;
-  percentage?: number;
+  percentage?: number | null;
   elementsInfoResponse?: ObjectElementInfo[];
 }
 

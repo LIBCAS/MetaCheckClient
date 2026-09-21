@@ -112,8 +112,45 @@
     "actions": {
       "pinImage": "Připnout obrázek",
       "saveMetadata": "Uložit metadata",
+      "showConfidenceHelp": "Vysvětlení barev a rozsahů důvěryhodnosti",
       "unpinImage": "Odepnout obrázek",
       "useNullValue": "Použít hodnotu NULL"
+    },
+    "confidenceDialog": {
+      "title": "Důvěryhodnost",
+      "intro": "Barva vyjadřuje míru jistoty modelu nebo způsob vzniku hodnoty.",
+      "levels": {
+        "none": {
+          "label": "Bez hodnoty",
+          "range": "NULL",
+          "description": "Bílá označuje chybějící hodnotu nebo nedostupnou důvěryhodnost."
+        },
+        "low": {
+          "label": "Nízká důvěryhodnost",
+          "range": "0 až < 70 %",
+          "description": "Červená upozorňuje na výsledek s nízkou jistotou, který je vhodné zkontrolovat."
+        },
+        "medium": {
+          "label": "Střední důvěryhodnost",
+          "range": "70 až < 90 %",
+          "description": "Žlutá označuje výsledek se střední jistotou."
+        },
+        "high": {
+          "label": "Vysoká důvěryhodnost",
+          "range": "90 až 100 %",
+          "description": "Zelená označuje výsledek s vysokou jistotou."
+        },
+        "generated": {
+          "label": "Vygenerovaná hodnota",
+          "range": "bez pravděpodobnosti",
+          "description": "Šedá označuje hodnotu vytvořenou modelem, ke které nebyla uvedena pravděpodobnost."
+        },
+        "edited": {
+          "label": "Ručně upravená hodnota",
+          "range": "uživatelská změna",
+          "description": "Modrá označuje hodnotu, kterou uživatel ručně upravil."
+        }
+      }
     },
     "empty": {
       "modelNoImage": "Tento model neobsahuje image.",

@@ -33,12 +33,14 @@ import { FormsModule } from '@angular/forms';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltip, MatTooltipModule } from "@angular/material/tooltip";
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { ConfidenceHelp } from '../../dialogs/confidence-help/confidence-help';
 import {
   batchStateKey,
   elementFieldKey,
   metadataValueKey,
   objectModelKey,
 } from '../../i18n/metacheck-translation-keys';
+import { confidenceRowClass, EDITED_CONFIDENCE, GENERATED_CONFIDENCE } from './confidence';
 
 type ObjectViewType = 'list' | 'images';
 
@@ -57,6 +59,7 @@ type ObjectViewType = 'list' | 'images';
     SplitComponent,
     MatChipsModule,
     MatTooltipModule,
+    ConfidenceHelp,
     TranslatePipe
 ],
   templateUrl: './batch.html',
@@ -246,27 +249,7 @@ export class Batch implements OnInit, OnDestroy {
   }
 
   protected confidenceRowClass(percentage: number | null | undefined): string | null {
-    if (percentage === null || percentage === undefined) {
-      return null;
-    }
-
-    if (percentage <= 0) {
-      return 'app-confidence-zero';
-    }
-
-    if (percentage < 0.7) {
-      return 'app-confidence-low';
-    }
-
-    if (percentage < 0.9) {
-      return 'app-confidence-medium';
-    }
-
-    if (percentage < 1) {
-      return 'app-confidence-high';
-    }
-
-    return 'app-confidence-perfect';
+    return confidenceRowClass(percentage);
   }
 
   protected hasConfidenceRowClass(
@@ -282,13 +265,13 @@ export class Batch implements OnInit, OnDestroy {
 
   protected metadataConfidenceRowClass(element: ElementInfo): string | null {
     if (element.edited) {
-      return this.confidenceRowClass(1);
+      return this.confidenceRowClass(EDITED_CONFIDENCE);
     }
 
     const percentage = this.parsePercentage(element.percentage);
 
     if (percentage === null && this.hasValue(element.originalValue)) {
-      return this.confidenceRowClass(0);
+      return this.confidenceRowClass(GENERATED_CONFIDENCE);
     }
 
     return this.confidenceRowClass(percentage);
