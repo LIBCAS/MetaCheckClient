@@ -70,7 +70,14 @@
         <span>{{ 'batches.filters.clear' | translate }}</span>
       </button>
     }
-    <button matButton="filled" (click)="refresh()">{{ 'common.refresh' | translate }}</button>
+    <div class="refresh-controls app-fxLayout app-row app-center-v app-gap-2">
+      <mat-checkbox [formControl]="autoRefreshControl">
+        {{ 'batches.actions.autoRefresh' | translate }}
+      </mat-checkbox>
+      <button matButton="filled" type="button" (click)="refresh()">
+        {{ 'common.refresh' | translate }}
+      </button>
+    </div>
   </section>
 
   <section class="app-fxFlex app-container-fluid app-pt-0 app-oh">

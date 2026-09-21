@@ -64,6 +64,7 @@
       "pageSelection": "Výběr stránky dávek"
     },
     "actions": {
+      "autoRefresh": "Automatická obnova",
       "restartBatch": "Obnovit dávku",
       "showLog": "Zobrazit log",
       "stopBatch": "Zastavit dávku"

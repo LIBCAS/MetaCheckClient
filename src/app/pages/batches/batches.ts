@@ -5,6 +5,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -16,7 +17,7 @@ import { MatSortModule, Sort, SortDirection } from '@angular/material/sort';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { debounceTime, finalize, map, startWith } from 'rxjs';
+import { debounceTime, finalize, interval, map, NEVER, startWith, switchMap } from 'rxjs';
 
 import { AppStateService } from '../../services/app-state.service';
 import {
@@ -56,6 +57,7 @@ type BatchFilterKey = keyof BatchFiltersForm;
     DatePipe,
     MatButtonModule,
     MatCardModule,
+    MatCheckboxModule,
     MatChipsModule,
     MatDialogModule,
     MatFormFieldModule,
@@ -113,6 +115,7 @@ export class Batches implements OnInit {
     log: new FormControl('', { nonNullable: true }),
     proarcBatchId: new FormControl<number | null>(null),
   });
+  protected readonly autoRefreshControl = new FormControl(false, { nonNullable: true });
   protected readonly batches = signal<readonly Batch[]>([]);
   protected readonly total = signal(0);
   protected readonly loading = signal(false);
@@ -133,6 +136,17 @@ export class Batches implements OnInit {
         this.pageIndex.set(0);
         this.syncFilterQueryParams();
         this.loadBatches();
+      });
+
+    this.autoRefreshControl.valueChanges
+      .pipe(
+        switchMap((enabled) => (enabled ? interval(5000) : NEVER)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => {
+        if (!this.loading()) {
+          this.loadBatches();
+        }
       });
 
     this.loadBatches();

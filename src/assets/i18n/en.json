@@ -64,6 +64,7 @@
       "pageSelection": "Batch page selection"
     },
     "actions": {
+      "autoRefresh": "AutoRefresh",
       "restartBatch": "Restart batch",
       "showLog": "Show log",
       "stopBatch": "Stop batch"
