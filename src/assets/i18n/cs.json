@@ -110,7 +110,9 @@
       "viewType": "Zobrazení objektů"
     },
     "actions": {
+      "pinImage": "Připnout obrázek",
       "saveMetadata": "Uložit metadata",
+      "unpinImage": "Odepnout obrázek",
       "useNullValue": "Použít hodnotu NULL"
     },
     "empty": {

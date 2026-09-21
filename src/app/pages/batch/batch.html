@@ -289,8 +289,17 @@
                 <strong>{{ 'batchDetail.image' | translate }}</strong>
               </div>
               <div>
-                {{ 'batchDetail.field.model' | translate }}: <strong>{{ objectModelKey(selectedObject()?.model) | translate }}</strong>
+                {{ 'batchDetail.field.model' | translate }}: <strong>{{ objectModelKey(imageObject()?.model) | translate }}</strong>
               </div>
+              <button matIconButton type="button" class="app-image-pin"
+                [disabled]="!imagePinned() && !imageUrl()"
+                [class.app-image-pin-active]="imagePinned()"
+                [attr.aria-label]="(imagePinned() ? 'batchDetail.actions.unpinImage' : 'batchDetail.actions.pinImage') | translate"
+                [attr.aria-pressed]="imagePinned()"
+                [matTooltip]="(imagePinned() ? 'batchDetail.actions.unpinImage' : 'batchDetail.actions.pinImage') | translate"
+                (click)="toggleImagePin()">
+                <mat-icon>push_pin</mat-icon>
+              </button>
             </div>
             <div class="app-fxFlex app-oh">
               @if (loadingImage()) {
@@ -303,16 +312,16 @@
                   </mat-card-content>
                 </mat-card>
               }
-              @if (selectedObject() && !selectedObjectHasImage()) {
+              @if (imageUrl(); as imageUrl) {
+                <div class="app-img-viewer app-oa-y">
+                  <img [src]="imageUrl" [alt]="'batchDetail.a11y.objectImage' | translate: { uuid: imageObject()?.uuid }" />
+                </div>
+              } @else if (selectedObject() && !selectedObjectHasImage()) {
                 <mat-card class="app-alert app-warn app-clean-border" appearance="outlined">
                   <mat-card-content>
                     <mat-icon></mat-icon>{{ 'batchDetail.empty.modelNoImage' | translate }}
                   </mat-card-content>
                 </mat-card>
-              } @else if (imageUrl(); as imageUrl) {
-                <div class="app-img-viewer app-oa-y">
-                  <img [src]="imageUrl" [alt]="'batchDetail.a11y.objectImage' | translate: { uuid: selectedObject()?.uuid }" />
-                </div>
               } @else if (!loadingImage() && !imageError()) {
                 <mat-card class="app-alert app-warn app-clean-border app-clean-border" appearance="outlined">
                   <mat-card-content>

@@ -110,7 +110,9 @@
       "viewType": "Object view"
     },
     "actions": {
+      "pinImage": "Pin image",
       "saveMetadata": "Save metadata",
+      "unpinImage": "Unpin image",
       "useNullValue": "Use NULL value"
     },
     "empty": {

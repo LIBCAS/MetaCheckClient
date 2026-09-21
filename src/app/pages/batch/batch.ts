@@ -137,7 +137,9 @@ export class Batch implements OnInit, OnDestroy {
   protected readonly batchId = signal<number | null>(null);
   protected readonly objects = signal<readonly ObjectInfo[]>([]);
   protected readonly selectedObject = signal<ObjectInfo | null>(null);
+  protected readonly imageObject = signal<ObjectInfo | null>(null);
   protected readonly imageUrl = signal<string | null>(null);
+  protected readonly imagePinned = signal(false);
   protected readonly metadata = signal<MetadataResponse | null>(null);
   protected readonly loadingObjects = signal(false);
   protected readonly loadingImage = signal(false);
@@ -208,15 +210,30 @@ export class Batch implements OnInit, OnDestroy {
     this.selectedObject.set(object);
     this.metadata.set(null);
     this.metadataDirty.set(false);
-    this.imageError.set(null);
     this.metadataError.set(null);
-    this.revokeImageUrl();
 
-    if (this.isPageObject(object)) {
-      this.loadObjectImage(batchId, object.uuid);
+    if (!this.imagePinned()) {
+      this.showObjectImage(batchId, object);
     }
 
     this.loadObjectMetadata(batchId, object.uuid);
+  }
+
+  protected toggleImagePin(): void {
+    if (this.imagePinned()) {
+      this.imagePinned.set(false);
+
+      const batchId = this.batchId();
+      const selectedObject = this.selectedObject();
+      if (batchId !== null && selectedObject !== null) {
+        this.showObjectImage(batchId, selectedObject);
+      }
+      return;
+    }
+
+    if (this.imageUrl() !== null) {
+      this.imagePinned.set(true);
+    }
   }
 
   protected selectObjectFromKeyboard(event: Event, object: ObjectInfo): void {
@@ -516,14 +533,14 @@ export class Batch implements OnInit, OnDestroy {
       .getObjectImage(batchId, pid)
       .pipe(
         finalize(() => {
-          if (this.selectedObject()?.uuid === pid) {
+          if (this.imageObject()?.uuid === pid) {
             this.loadingImage.set(false);
           }
         }),
       )
       .subscribe({
         next: (image) => {
-          if (this.selectedObject()?.uuid !== pid) {
+          if (this.imageObject()?.uuid !== pid) {
             return;
           }
 
@@ -531,7 +548,7 @@ export class Batch implements OnInit, OnDestroy {
           this.imageUrl.set(URL.createObjectURL(image));
         },
         error: (error: unknown) => {
-          if (this.selectedObject()?.uuid !== pid) {
+          if (this.imageObject()?.uuid !== pid) {
             return;
           }
 
@@ -569,6 +586,8 @@ export class Batch implements OnInit, OnDestroy {
 
   private clearSelectedObject(): void {
     this.selectedObject.set(null);
+    this.imageObject.set(null);
+    this.imagePinned.set(false);
     this.metadata.set(null);
     this.metadataDirty.set(false);
     this.savingMetadata.set(false);
@@ -577,6 +596,17 @@ export class Batch implements OnInit, OnDestroy {
     this.loadingImage.set(false);
     this.loadingMetadata.set(false);
     this.revokeImageUrl();
+  }
+
+  private showObjectImage(batchId: number, object: ObjectInfo): void {
+    this.imageObject.set(this.isPageObject(object) ? object : null);
+    this.imageError.set(null);
+    this.loadingImage.set(false);
+    this.revokeImageUrl();
+
+    if (this.isPageObject(object)) {
+      this.loadObjectImage(batchId, object.uuid);
+    }
   }
 
   private parseBatchId(value: string | null): number | null {
