@@ -122,7 +122,7 @@
       "loadObjects": "Objekty dávky se nepodařilo načíst."
     },
     "field": {
-      "confidence": "Důvěrnost",
+      "confidence": "Důvěryhodnost",
       "editedValue": "Editováno",
       "field": "Pole",
       "model": "Model",
