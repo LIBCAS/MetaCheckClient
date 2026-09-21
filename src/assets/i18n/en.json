@@ -110,7 +110,8 @@
       "viewType": "Object view"
     },
     "actions": {
-      "saveMetadata": "Save metadata"
+      "saveMetadata": "Save metadata",
+      "useNullValue": "Use NULL value"
     },
     "empty": {
       "modelNoImage": "This model does not contain an image.",

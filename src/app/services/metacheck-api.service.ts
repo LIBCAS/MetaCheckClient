@@ -157,6 +157,7 @@ export interface MetadataResponse {
 export interface ElementInfo {
   field?: ElementInfoType;
   originalValue?: string | null;
+  edited: boolean;
   editedValue?: string | null;
   percentage?: string | null;
 }

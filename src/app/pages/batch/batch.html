@@ -217,19 +217,30 @@
                     <ng-container matColumnDef="editedValue">
                       <th mat-header-cell *matHeaderCellDef>{{ 'batchDetail.field.editedValue' | translate }}</th>
                       <td mat-cell *matCellDef="let element">
-                        @if (metadataEditOptions(element); as options) {
-                          <select class="metadata-edit-control" [value]="element.editedValue ?? ''" [attr.aria-label]="'batchDetail.a11y.editMetadataValue' | translate: { field: (elementFieldKey(element.field) | translate) }"
-                            (change)="updateEditedValue(element, $any($event.target).value)">
-                            @for (option of options; track option) {
-                              <option [value]="option" [selected]="option === editedValue(element)">
-                                {{ metadataElementValueKey(element, option) | translate }}
-                              </option>
-                            }
-                          </select>
-                        } @else {
-                          <input class="metadata-edit-control" type="text" [value]="editedValue(element)" [attr.aria-label]="'batchDetail.a11y.editMetadataValue' | translate: { field: (elementFieldKey(element.field) | translate) }"
-                            (input)="updateEditedValue(element, $any($event.target).value)" />
-                        }
+                        <div class="metadata-edit-cell">
+                          @if (metadataEditOptions(element); as options) {
+                            <select class="metadata-edit-control" [value]="element.editedValue ?? ''" [attr.aria-label]="'batchDetail.a11y.editMetadataValue' | translate: { field: (elementFieldKey(element.field) | translate) }"
+                              (change)="updateEditedValue(element, $any($event.target).value)">
+                              @for (option of options; track option) {
+                                <option [value]="option" [selected]="option === editedValue(element)">
+                                  @if (option === '') {
+                                    -
+                                  } @else {
+                                    {{ metadataElementValueKey(element, option) | translate }}
+                                  }
+                                </option>
+                              }
+                            </select>
+                          } @else {
+                            <input class="metadata-edit-control" type="text" [value]="editedValue(element)" [attr.aria-label]="'batchDetail.a11y.editMetadataValue' | translate: { field: (elementFieldKey(element.field) | translate) }"
+                              (input)="updateEditedValue(element, $any($event.target).value)" />
+                          }
+                          <div class="metadata-edit-actions">
+                            <button mat-icon-button type="button" [class.is-active]="isNullEditedValue(element)" [attr.aria-pressed]="isNullEditedValue(element)" [attr.aria-label]="'batchDetail.actions.useNullValue' | translate" [title]="'batchDetail.actions.useNullValue' | translate" (click)="setNullEditedValue(element)">
+                              <mat-icon>block</mat-icon>
+                            </button>
+                          </div>
+                        </div>
                       </td>
                     </ng-container>
 

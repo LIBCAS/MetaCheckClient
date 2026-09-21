@@ -117,7 +117,10 @@ describe('MetacheckApiService', () => {
         metadata: {
           uuid: '6d848d9c-0879-4f84-86db-9f49ea07fb99',
           model: 'page',
-          elementsInfoResponse: [{ field: 'title', editedValue: 'Updated title' }],
+          elementsInfoResponse: [
+            { field: 'title', edited: true, editedValue: 'Updated title' },
+            { field: 'subTitle', edited: true, editedValue: null },
+          ],
         },
       })
       .subscribe();
@@ -128,6 +131,7 @@ describe('MetacheckApiService', () => {
     expect(request.request.body.get('batchId')).toBe('7');
     expect(request.request.body.get('pid')).toBe('6d848d9c-0879-4f84-86db-9f49ea07fb99');
     expect(request.request.body.get('metadata')).toContain('"editedValue":"Updated title"');
+    expect(request.request.body.get('metadata')).toContain('"edited":true,"editedValue":null');
     request.flush({ uuid: '6d848d9c-0879-4f84-86db-9f49ea07fb99', model: 'page', elementsInfoResponse: [] });
   });
 });

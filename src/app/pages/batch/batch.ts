@@ -82,6 +82,7 @@ export class Batch implements OnInit, OnDestroy {
     'pageNumber',
     'pageSide',
     'pageIndex',
+    'genre',
     'uuid',
   ];
   protected readonly displayedMetadataColumns = ['field', 'editedValue', 'originalValue', 'percentage'];
@@ -132,6 +133,7 @@ export class Batch implements OnInit, OnDestroy {
     'right',
     'single_page'
   ];
+  protected readonly genreOptions = ['page', 'reprePage'] as const;
   protected readonly batchId = signal<number | null>(null);
   protected readonly objects = signal<readonly ObjectInfo[]>([]);
   protected readonly selectedObject = signal<ObjectInfo | null>(null);
@@ -147,6 +149,7 @@ export class Batch implements OnInit, OnDestroy {
   protected readonly savingMetadata = signal(false);
   protected readonly batchStateKey = batchStateKey;
   protected readonly elementFieldKey = elementFieldKey;
+  protected readonly metadataValueKey = metadataValueKey;
   protected readonly objectModelKey = objectModelKey;
   protected readonly currentBatch = computed(() => {
     const currentBatch = this.appState.currentBatch();
@@ -164,7 +167,6 @@ export class Batch implements OnInit, OnDestroy {
 
     return selectedObject !== null && this.isPageObject(selectedObject);
   });
-
   viewType: ObjectViewType = 'images';
 
   ngOnInit(): void {
@@ -262,7 +264,7 @@ export class Batch implements OnInit, OnDestroy {
   }
 
   protected metadataConfidenceRowClass(element: ElementInfo): string | null {
-    if (this.hasValue(element.editedValue)) {
+    if (element.edited) {
       return this.confidenceRowClass(1);
     }
 
@@ -276,13 +278,39 @@ export class Batch implements OnInit, OnDestroy {
   }
 
   protected updateEditedValue(element: ElementInfo, value: string): void {
-    const metadata = this.metadata();
-
-    if (metadata === null || this.editedValue(element) === value) {
+    if (value.length === 0) {
+      this.setNullEditedValue(element);
       return;
     }
 
+    const metadata = this.metadata();
+
+    if (metadata === null || (element.edited && element.editedValue === value)) {
+      return;
+    }
+
+    element.edited = true;
     element.editedValue = value;
+    this.markMetadataDirty(metadata);
+  }
+
+  protected setNullEditedValue(element: ElementInfo): void {
+    const metadata = this.metadata();
+
+    if (metadata === null || (element.edited && element.editedValue === null)) {
+      return;
+    }
+
+    element.edited = true;
+    element.editedValue = null;
+    this.markMetadataDirty(metadata);
+  }
+
+  protected isNullEditedValue(element: ElementInfo): boolean {
+    return element.edited && element.editedValue === null;
+  }
+
+  private markMetadataDirty(metadata: MetadataResponse): void {
     this.metadata.set({ ...metadata });
     this.metadataDirty.set(true);
     this.metadataError.set(null);
@@ -338,6 +366,10 @@ export class Batch implements OnInit, OnDestroy {
 
     if (element.field === 'side') {
       return this.withCurrentValue(this.sideOptions, element.editedValue);
+    }
+
+    if (element.field === 'genre') {
+      return this.withCurrentValue(this.genreOptions, element.editedValue);
     }
 
     return null;

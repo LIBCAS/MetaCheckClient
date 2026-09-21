@@ -110,7 +110,8 @@
       "viewType": "Zobrazení objektů"
     },
     "actions": {
-      "saveMetadata": "Uložit metadata"
+      "saveMetadata": "Uložit metadata",
+      "useNullValue": "Použít hodnotu NULL"
     },
     "empty": {
       "modelNoImage": "Tento model neobsahuje image.",
