@@ -131,7 +131,7 @@
                         [class.representative-page-row]="isRepresentativePage(row)"
                         [class.app-row-selected]="isSelectedObject(row)"
                         [attr.aria-label]="'batchDetail.a11y.selectObject' | translate: { uuid: row.uuid }" [attr.aria-selected]="isSelectedObject(row)" tabindex="0"
-                        (click)="selectObject(row)" (keydown.enter)="selectObject(row)"
+                        (click)="selectObject(row, $event)" (keydown.enter)="selectObject(row, $event)"
                         (keydown.space)="selectObjectFromKeyboard($event, row)"></tr>
                     </table>
                   </div>
@@ -139,7 +139,7 @@
                 @case ('images') {
                   <div class="app-maxh-100 app-oa-y">
                     <div class="app-img-grid">
-                      @for (img of objects(); track img) {
+                      @for (img of objects(); track img.uuid) {
                         <button type="button" class="app-img-tile"
                             [class.app-confidence-none]="hasConfidenceRowClass(img.percentage, 'app-confidence-none')"
                             [class.app-confidence-zero]="hasConfidenceRowClass(img.percentage, 'app-confidence-zero')"
@@ -147,7 +147,7 @@
                             [class.app-confidence-medium]="hasConfidenceRowClass(img.percentage, 'app-confidence-medium')"
                             [class.app-confidence-high]="hasConfidenceRowClass(img.percentage, 'app-confidence-high')"
                             [class.app-confidence-perfect]="hasConfidenceRowClass(img.percentage, 'app-confidence-perfect')"
-                            [class.app-tile-selected]="isSelectedObject(img)" (click)="selectObject(img)" [attr.aria-label]="'batchDetail.a11y.selectObject' | translate: { uuid: img.uuid }">
+                            [class.app-tile-selected]="isSelectedObject(img)" [attr.aria-pressed]="isSelectedObject(img)" (click)="selectObject(img, $event)" [attr.aria-label]="'batchDetail.a11y.selectObject' | translate: { uuid: img.uuid }">
                             @if (isPageObject(img)) {
                               <img class="app-img-thumb" [src]="getThumbUrl(img.uuid)" [alt]="'batchDetail.a11y.objectThumbnail' | translate: { uuid: img.uuid }" [title]="img.uuid" loading="lazy"/>
                               <dl class="app-img-page-info" [class.representative-page-info]="isRepresentativePage(img)" [attr.aria-label]="'batchDetail.a11y.pageMetadata' | translate: { uuid: img.uuid }">
@@ -183,7 +183,15 @@
         </as-split-area>
 
         <as-split-area [size]="34" [minSize]="24">
-          <div class="app-fxLayout app-column app-fill">
+          @if (isBulkPageSelection()) {
+            <app-bulk-page-edit
+              [batchId]="batchId()!"
+              [pages]="selectedPages()"
+              [pageTypeOptions]="pageTypeOptions"
+              [sideOptions]="sideOptions"
+              (saved)="refreshAfterBulkSave()" />
+          } @else {
+            <div class="app-fxLayout app-column app-fill">
             <div class="app-fxLayout app-row app-center-v app-toolbar">
               <div class="app-fxFlex">
                 {{ 'batchDetail.metadata' | translate }}:
@@ -289,7 +297,8 @@
                 </mat-card>
               }
             </div>
-          </div>
+            </div>
+          }
         </as-split-area>
 
         <as-split-area [size]="34" [minSize]="24">

@@ -107,15 +107,33 @@
       "objectThumbnail": "Náhled objektu {{ uuid }}",
       "pageMetadata": "Metadata strany {{ uuid }}",
       "resizeSections": "Změnit velikost sekcí dávky",
+      "savingBulkMetadata": "Ukládání hromadné úpravy stránek",
       "selectObject": "Vybrat objekt {{ uuid }}",
       "viewType": "Zobrazení objektů"
     },
     "actions": {
       "pinImage": "Připnout obrázek",
+      "saveBulkMetadata": "Uložit hromadnou úpravu stránek",
       "saveMetadata": "Uložit metadata",
       "showConfidenceHelp": "Vysvětlení barev a rozsahů důvěryhodnosti",
       "unpinImage": "Odepnout obrázek",
       "useNullValue": "Použít hodnotu NULL"
+    },
+    "bulk": {
+      "alternateLeftRight": "Střídat levá – pravá – levá",
+      "alternateRightLeft": "Střídat pravá – levá – pravá",
+      "brackets": "Číslo v hranatých závorkách",
+      "error": "Hromadnou úpravu stránek se nepodařilo uložit.",
+      "example": "Ukázka",
+      "increment": "Přírůstek",
+      "indexFrom": "Indexovat od čísla",
+      "noChange": "Beze změny",
+      "numberFrom": "Číslo od",
+      "prefix": "Prefix",
+      "selectedCount": "{{ count }} objektů",
+      "sequence": "Číselná řada",
+      "suffix": "Suffix",
+      "title": "Hromadná úprava stránek"
     },
     "confidenceDialog": {
       "title": "Důvěryhodnost",

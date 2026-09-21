@@ -107,15 +107,33 @@
       "objectThumbnail": "Object thumbnail {{ uuid }}",
       "pageMetadata": "Page metadata for {{ uuid }}",
       "resizeSections": "Resize batch sections",
+      "savingBulkMetadata": "Saving bulk page changes",
       "selectObject": "Select object {{ uuid }}",
       "viewType": "Object view"
     },
     "actions": {
       "pinImage": "Pin image",
+      "saveBulkMetadata": "Save bulk page changes",
       "saveMetadata": "Save metadata",
       "showConfidenceHelp": "Explanation of confidence colors and ranges",
       "unpinImage": "Unpin image",
       "useNullValue": "Use NULL value"
+    },
+    "bulk": {
+      "alternateLeftRight": "Alternate left – right – left",
+      "alternateRightLeft": "Alternate right – left – right",
+      "brackets": "Put number in square brackets",
+      "error": "Unable to save the bulk page changes.",
+      "example": "Example",
+      "increment": "Increment",
+      "indexFrom": "Index from",
+      "noChange": "No change",
+      "numberFrom": "Number from",
+      "prefix": "Prefix",
+      "selectedCount": "{{ count }} objects",
+      "sequence": "Numbering sequence",
+      "suffix": "Suffix",
+      "title": "Bulk page edit"
     },
     "confidenceDialog": {
       "title": "Confidence",

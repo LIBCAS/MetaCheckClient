@@ -1,0 +1,116 @@
+<div class="bulk-editor">
+  <div class="app-fxLayout app-row app-center-v app-toolbar">
+    <div class="app-fxFlex">
+      {{ 'batchDetail.bulk.title' | translate }}
+      <span class="app-pipe"></span>
+      <strong>{{ 'batchDetail.bulk.selectedCount' | translate: { count: pages().length } }}</strong>
+    </div>
+    <button mat-icon-button type="button" [disabled]="saving()" [attr.aria-label]="'common.refresh' | translate" [title]="'common.refresh' | translate" (click)="reset()">
+      <mat-icon>sync</mat-icon>
+    </button>
+    <button mat-icon-button type="button" [disabled]="!canSave()" [attr.aria-label]="'batchDetail.actions.saveBulkMetadata' | translate" [title]="'batchDetail.actions.saveBulkMetadata' | translate" (click)="save()">
+      <mat-icon>save</mat-icon>
+    </button>
+  </div>
+
+  @if (saving()) {
+    <mat-progress-bar mode="indeterminate" [attr.aria-label]="'batchDetail.a11y.savingBulkMetadata' | translate" />
+  }
+  @if (error()) {
+    <p class="bulk-error" role="alert">{{ error() }}</p>
+  }
+
+  <form class="bulk-form" [formGroup]="form" (ngSubmit)="save()">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'metadata.field.pageType' | translate }}</mat-label>
+      <mat-select formControlName="pageType">
+        <mat-option value="">{{ 'batchDetail.bulk.noChange' | translate }}</mat-option>
+        @for (pageType of pageTypeOptions(); track pageType) {
+          @if (pageType) {
+            <mat-option [value]="pageType">{{ ('metadata.value.pageType.' + pageType) | translate }}</mat-option>
+          }
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'batchDetail.bulk.indexFrom' | translate }}</mat-label>
+      <input matInput type="number" min="0" step="1" formControlName="pageIndex" />
+    </mat-form-field>
+
+    <fieldset class="numbering-fields">
+      <legend>{{ 'metadata.field.pageNumber' | translate }}</legend>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'batchDetail.bulk.prefix' | translate }}</mat-label>
+        <input matInput type="text" formControlName="pageNumberPrefix" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'batchDetail.bulk.suffix' | translate }}</mat-label>
+        <input matInput type="text" formControlName="pageNumberSuffix" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'batchDetail.bulk.numberFrom' | translate }}</mat-label>
+        <input matInput type="text" formControlName="pageNumberFrom" [attr.aria-invalid]="!numberStartValid()" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'batchDetail.bulk.increment' | translate }}</mat-label>
+        <input matInput type="number" min="1" step="1" formControlName="pageNumberIncrement" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'batchDetail.bulk.sequence' | translate }}</mat-label>
+        <mat-select formControlName="pageNumberSequence">
+          @for (option of numberingOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-checkbox formControlName="useBrackets">{{ 'batchDetail.bulk.brackets' | translate }}</mat-checkbox>
+      @if (numberingExample()) {
+        <p class="numbering-example"><strong>{{ 'batchDetail.bulk.example' | translate }}:</strong> {{ numberingExample() }}</p>
+      }
+    </fieldset>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'metadata.field.side' | translate }}</mat-label>
+      <mat-select formControlName="side">
+        <mat-option value="">{{ 'batchDetail.bulk.noChange' | translate }}</mat-option>
+        @for (side of sideOptions(); track side) {
+          @if (side) {
+            <mat-option [value]="side">{{ ('metadata.value.side.' + side) | translate }}</mat-option>
+          }
+        }
+        <mat-option value="ALTERNATE_LEFT_RIGHT">{{ 'batchDetail.bulk.alternateLeftRight' | translate }}</mat-option>
+        <mat-option value="ALTERNATE_RIGHT_LEFT">{{ 'batchDetail.bulk.alternateRightLeft' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'metadata.field.genre' | translate }}</mat-label>
+      <mat-select formControlName="genre">
+        <mat-option value="">{{ 'batchDetail.bulk.noChange' | translate }}</mat-option>
+        <mat-option value="page">{{ 'metadata.value.genre.page' | translate }}</mat-option>
+        <mat-option value="reprePage">{{ 'metadata.value.genre.reprePage' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+<!--    <div class="apply-fields">-->
+<!--      <mat-form-field appearance="outline">-->
+<!--        <mat-label>{{ 'batchDetail.bulk.applyTo' | translate }}</mat-label>-->
+<!--        <mat-select formControlName="applyEvery">-->
+<!--          @for (option of applyEveryOptions; track option) {-->
+<!--            <mat-option [value]="option">-->
+<!--              @if (option === 1) {-->
+<!--                {{ 'batchDetail.bulk.everyPage' | translate }}-->
+<!--              } @else {-->
+<!--                {{ 'batchDetail.bulk.everyNthPage' | translate: { count: option } }}-->
+<!--              }-->
+<!--            </mat-option>-->
+<!--          }-->
+<!--        </mat-select>-->
+<!--      </mat-form-field>-->
+<!--      @if (form.controls.applyEvery.value > 1) {-->
+<!--        <mat-checkbox formControlName="includeFirst">{{ 'batchDetail.bulk.includeFirst' | translate }}</mat-checkbox>-->
+<!--      }-->
+<!--    </div>-->
+  </form>
+</div>

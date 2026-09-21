@@ -41,6 +41,7 @@ import {
   objectModelKey,
 } from '../../i18n/metacheck-translation-keys';
 import { confidenceRowClass, EDITED_CONFIDENCE, GENERATED_CONFIDENCE } from './confidence';
+import { BulkPageEdit } from './bulk-page-edit';
 
 type ObjectViewType = 'list' | 'images';
 
@@ -60,6 +61,7 @@ type ObjectViewType = 'list' | 'images';
     MatChipsModule,
     MatTooltipModule,
     ConfidenceHelp,
+    BulkPageEdit,
     TranslatePipe
 ],
   templateUrl: './batch.html',
@@ -140,6 +142,13 @@ export class Batch implements OnInit, OnDestroy {
   protected readonly batchId = signal<number | null>(null);
   protected readonly objects = signal<readonly ObjectInfo[]>([]);
   protected readonly selectedObject = signal<ObjectInfo | null>(null);
+  protected readonly selectedObjectIds = signal<ReadonlySet<string>>(new Set());
+  protected readonly selectedPages = computed(() =>
+    this.objects().filter(
+      (object) => this.selectedObjectIds().has(object.uuid) && this.isPageObject(object),
+    ),
+  );
+  protected readonly isBulkPageSelection = computed(() => this.selectedPages().length > 1);
   protected readonly imageObject = signal<ObjectInfo | null>(null);
   protected readonly imageUrl = signal<string | null>(null);
   protected readonly imagePinned = signal(false);
@@ -173,6 +182,7 @@ export class Batch implements OnInit, OnDestroy {
     return selectedObject !== null && this.isPageObject(selectedObject);
   });
   viewType: ObjectViewType = 'images';
+  private selectionAnchorIndex = -1;
 
   ngOnInit(): void {
     const batchId = this.parseBatchId(this.route.snapshot.paramMap.get('batchId'));
@@ -203,13 +213,53 @@ export class Batch implements OnInit, OnDestroy {
     }
   }
 
-  protected selectObject(object: ObjectInfo): void {
+  protected selectObject(object: ObjectInfo, event?: Event): void {
     const batchId = this.batchId();
 
     if (batchId === null) {
       return;
     }
 
+    const objects = this.objects();
+    const index = objects.findIndex((item) => item.uuid === object.uuid);
+    let selection = new Set(this.selectedObjectIds());
+
+    const modifierEvent = event as MouseEvent | KeyboardEvent | undefined;
+    if (modifierEvent?.ctrlKey || modifierEvent?.metaKey) {
+      if (selection.has(object.uuid)) {
+        selection.delete(object.uuid);
+      } else {
+        selection.add(object.uuid);
+      }
+      this.selectionAnchorIndex = index;
+    } else if (modifierEvent?.shiftKey && this.selectionAnchorIndex >= 0 && index >= 0) {
+      selection = new Set<string>();
+      const from = Math.min(this.selectionAnchorIndex, index);
+      const to = Math.max(this.selectionAnchorIndex, index);
+      for (let current = from; current <= to; current += 1) {
+        selection.add(objects[current].uuid);
+      }
+      window.getSelection()?.removeAllRanges();
+    } else {
+      selection = new Set([object.uuid]);
+      this.selectionAnchorIndex = index;
+    }
+
+    this.selectedObjectIds.set(selection);
+    if (!selection.has(object.uuid)) {
+      const fallback = [...objects].reverse().find((item) => selection.has(item.uuid));
+      if (fallback) {
+        this.activateObject(batchId, fallback);
+      } else {
+        this.clearActiveObject();
+      }
+      return;
+    }
+
+    this.activateObject(batchId, object);
+  }
+
+  private activateObject(batchId: number, object: ObjectInfo): void {
     this.selectedObject.set(object);
     this.metadata.set(null);
     this.metadataDirty.set(false);
@@ -241,11 +291,18 @@ export class Batch implements OnInit, OnDestroy {
 
   protected selectObjectFromKeyboard(event: Event, object: ObjectInfo): void {
     event.preventDefault();
-    this.selectObject(object);
+    this.selectObject(object, event);
   }
 
   protected isSelectedObject(object: ObjectInfo): boolean {
-    return this.selectedObject()?.uuid === object.uuid;
+    return this.selectedObjectIds().has(object.uuid);
+  }
+
+  protected refreshAfterBulkSave(): void {
+    const batchId = this.batchId();
+    if (batchId !== null) {
+      this.loadObjects(batchId);
+    }
   }
 
   protected confidenceRowClass(percentage: number | null | undefined): string | null {
@@ -492,11 +549,26 @@ export class Batch implements OnInit, OnDestroy {
   }
 
   private selectInitialObject(objects: readonly ObjectInfo[]): void {
+    const availableIds = new Set(objects.map((object) => object.uuid));
+    const selection = new Set(
+      [...this.selectedObjectIds()].filter((uuid) => availableIds.has(uuid)),
+    );
     const selectedUuid = this.selectedObject()?.uuid;
-    const selectedObject = objects.find((object) => object.uuid === selectedUuid) ?? objects[0];
+    const selectedObject =
+      objects.find((object) => object.uuid === selectedUuid && selection.has(object.uuid)) ??
+      objects.find((object) => selection.has(object.uuid)) ??
+      objects[0];
 
     if (selectedObject) {
-      this.selectObject(selectedObject);
+      if (selection.size === 0) {
+        selection.add(selectedObject.uuid);
+      }
+      this.selectedObjectIds.set(selection);
+      this.selectionAnchorIndex = objects.findIndex((object) => object.uuid === selectedObject.uuid);
+      const batchId = this.batchId();
+      if (batchId !== null) {
+        this.activateObject(batchId, selectedObject);
+      }
       return;
     }
 
@@ -568,6 +640,12 @@ export class Batch implements OnInit, OnDestroy {
   }
 
   private clearSelectedObject(): void {
+    this.selectedObjectIds.set(new Set());
+    this.selectionAnchorIndex = -1;
+    this.clearActiveObject();
+  }
+
+  private clearActiveObject(): void {
     this.selectedObject.set(null);
     this.imageObject.set(null);
     this.imagePinned.set(false);

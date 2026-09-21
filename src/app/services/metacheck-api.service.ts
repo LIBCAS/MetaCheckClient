@@ -168,6 +168,16 @@ export interface UpdateObjectMetadataForm {
   metadata: MetadataResponse | string;
 }
 
+export interface BulkMetadataUpdate {
+  pid: string;
+  metadata: MetadataResponse;
+}
+
+export interface UpdateObjectMetadataBulkForm {
+  batchId: number;
+  updates: readonly BulkMetadataUpdate[];
+}
+
 type QueryPrimitive = string | number | boolean;
 type QueryValue = QueryPrimitive | readonly QueryPrimitive[] | null | undefined;
 type FormValue = string | number | null | undefined;
@@ -266,6 +276,17 @@ export class MetacheckApiService {
 
   stopBatch(batchId: number): Observable<Batch> {
     return this.http.post<Batch>(this.url(`/batch/${batchId}/stop`), null);
+  }
+
+  updateObjectMetadataBulk(form: UpdateObjectMetadataBulkForm): Observable<MetadataResponse[]> {
+    return this.http.post<MetadataResponse[]>(
+      this.url('/object/metadata/bulk'),
+      this.formBody({
+        batchId: form.batchId,
+        updates: JSON.stringify(form.updates),
+      }),
+      { headers: this.formHeaders },
+    );
   }
 
   restartBatch(batchId: number): Observable<Batch> {

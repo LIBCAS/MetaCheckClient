@@ -134,4 +134,40 @@ describe('MetacheckApiService', () => {
     expect(request.request.body.get('metadata')).toContain('"edited":true,"editedValue":null');
     request.flush({ uuid: '6d848d9c-0879-4f84-86db-9f49ea07fb99', model: 'page', elementsInfoResponse: [] });
   });
+
+  it('should serialize bulk metadata updates as one form request', () => {
+    service
+      .updateObjectMetadataBulk({
+        batchId: 7,
+        updates: [
+          {
+            pid: '11111111-1111-1111-1111-111111111111',
+            metadata: {
+              uuid: '11111111-1111-1111-1111-111111111111',
+              model: 'page',
+              elementsInfoResponse: [
+                { field: 'pageNumber', edited: true, editedValue: '10' },
+              ],
+            },
+          },
+          {
+            pid: '22222222-2222-2222-2222-222222222222',
+            metadata: {
+              uuid: '22222222-2222-2222-2222-222222222222',
+              model: 'page',
+              elementsInfoResponse: [
+                { field: 'pageNumber', edited: true, editedValue: '11' },
+              ],
+            },
+          },
+        ],
+      })
+      .subscribe();
+
+    const request = http.expectOne('/api/rest/v1/object/metadata/bulk');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body.get('batchId')).toBe('7');
+    expect(JSON.parse(request.request.body.get('updates'))).toHaveLength(2);
+    request.flush([]);
+  });
 });

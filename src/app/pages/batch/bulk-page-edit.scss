@@ -1,0 +1,75 @@
+.bulk-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  color: var(--app-color-gray-9);
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.bulk-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+  min-height: 0;
+  padding: 16px;
+  overflow-y: auto;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.numbering-fields {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 12px;
+  margin: 4px 0 8px;
+  padding: 14px 12px 6px;
+  border: 1px solid var(--app-color-gray-4);
+  border-left: 4px solid var(--mat-sys-primary);
+  border-radius: var(--app-radius-default);
+  background-color: var(--app-color-gray-1);
+  font: inherit;
+  min-width: 0;
+
+  legend {
+    padding: 0 6px;
+    color: var(--mat-sys-primary);
+    font: inherit;
+    font-weight: 700;
+  }
+}
+
+.apply-fields {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+
+.numbering-example,
+.bulk-error {
+  margin: 0;
+}
+
+.numbering-example {
+  grid-column: 1 / -1;
+  padding: 4px 0 8px;
+  color: var(--app-color-gray-7);
+  font-size: 13px;
+}
+
+.bulk-error {
+  padding: 8px 16px;
+  background-color: rgb(var(--app-color-error-lightnes));
+  color: var(--mat-sys-error);
+}
+
+@media (max-width: 540px) {
+  .bulk-form,
+  .numbering-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
